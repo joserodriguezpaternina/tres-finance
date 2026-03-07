@@ -12,7 +12,7 @@ function SoftIcon({ icon }) {
   )
 }
 
-export default function RecurringView({ recurring, onAdd, onEdit, onDelete, onToggle }) {
+export default function RecurringView({ recurring, expenses = [], onAdd, onEdit, onDelete, onToggle }) {
   const [filter, setFilter] = useState("all") // all | active | paused
 
   const active = recurring.filter(r => r.active)
@@ -81,6 +81,11 @@ export default function RecurringView({ recurring, onAdd, onEdit, onDelete, onTo
                         <span style={{ fontSize: 14, fontWeight: 700, color: T.white }}>{r.name}</span>
                         <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.surf2, color: T.muted, border: `1px solid ${T.border}` }}>{r.freq}</span>
                         {!r.active && <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.amberBg, color: T.amber }}>Pausado</span>}
+                        {(() => { const n = expenses.filter(e => e.recurringId === r.id || (e.obs && e.obs.includes(r.id))).length; return n > 0 ? (
+                          <span title={`${n} egreso${n>1?'s':''} generado${n>1?'s':''} automáticamente`} style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: "rgba(139,92,246,.15)", color: "#8B5CF6", border: "1px solid rgba(139,92,246,.25)", display:"flex", alignItems:"center", gap:3 }}>
+                            <RefreshCw size={8} />{n} egreso{n>1?'s':''}
+                          </span>
+                        ) : null })()}
                       </div>
                       <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>
                         {r.cat} · Día {r.day} · {r.method}

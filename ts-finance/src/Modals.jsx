@@ -38,15 +38,55 @@ function CalcBar({ amount, hasIVA, ivaP, colorTotal }) {
   )
 }
 
-export function IncomeModal({ initial, onSave, onClose }) {
+
+function ClientAutocomplete({ value, onChange, clients }) {
+  const [open, setOpen] = useState(false)
+  const suggestions = clients.filter(c => c.name.toLowerCase().includes(value.toLowerCase()) && value.length > 0)
+  return (
+    <div style={{ position: "relative", marginBottom: 14 }}>
+      <label style={lbl}>Cliente</label>
+      <input
+        style={inp}
+        value={value}
+        onChange={e => { onChange(e.target.value); setOpen(true) }}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setTimeout(() => setOpen(false), 150)}
+        placeholder="Escribe o selecciona un cliente..."
+        autoComplete="off"
+      />
+      {open && suggestions.length > 0 && (
+        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: T.surf2, border: `1px solid ${T.green}40`, borderRadius: 10, zIndex: 50, maxHeight: 200, overflowY: "auto", boxShadow: "0 12px 32px rgba(0,0,0,.5)", marginTop: 4 }}>
+          {suggestions.map(c => (
+            <div key={c.id} onMouseDown={() => { onChange(c.name); setOpen(false) }}
+              style={{ padding: "10px 14px", cursor: "pointer", display: "flex", alignItems: "center", gap: 10, borderBottom: `1px solid ${T.border}` }}
+              onMouseEnter={e => e.currentTarget.style.background = T.surf3}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <div style={{ width: 28, height: 28, borderRadius: 7, background: T.greenBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: T.green }}>{c.name.charAt(0).toUpperCase()}</span>
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: T.white }}>{c.name}</div>
+                {c.nit && <div style={{ fontSize: 11, color: T.muted }}>{c.nit}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function IncomeModal({ initial, onSave, onClose, clients = [] }) {
   const [f, setF] = useState(initial || { client: "", project: "", date: new Date().toISOString().split("T")[0], amount: "", hasIVA: true, ivaP: 19, status: "Pendiente", method: "Transferencia", notes: "" })
   const set = (k, v) => setF(p => ({ ...p, [k]: v }))
   const amt = parseFloat(f.amount) || 0
 
   return (
     <ModalShell title={initial ? "Editar ingreso" : "Nuevo ingreso"} sub="Registra el ingreso en Tres Studio" onClose={onClose}>
+      {/* Client autocomplete */}
+      <ClientAutocomplete value={f.client} onChange={v => set("client", v)} clients={clients} />
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-        <div><label style={lbl}>Cliente</label><input style={inp} value={f.client} onChange={e => set("client", e.target.value)} placeholder="Bancolombia" /></div>
+        <div style={{display:"none"}}></div>
         <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Proyecto / Servicio</label><input style={inp} value={f.project} onChange={e => set("project", e.target.value)} placeholder="Rediseño de marca" /></div>
         <div><label style={lbl}>Fecha</label><input style={inp} type="date" value={f.date} onChange={e => set("date", e.target.value)} /></div>
         <div><label style={lbl}>Monto total (COP)</label><input style={inp} type="number" placeholder="0" value={f.amount} onChange={e => set("amount", e.target.value)} /></div>
@@ -193,5 +233,39 @@ export function RecurringModal({ initial, onSave, onClose }) {
         </button>
       </div>
     </ModalShell>
+  )
+}
+
+export function ClientModalWrapper({ initial, onSave, onClose }) {
+  const [f, setF] = useState(initial || { name: "", nit: "", email: "", phone: "", contacto: "", notas: "" })
+  const set = (k, v) => setF(p => ({ ...p, [k]: v }))
+  return (
+    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.75)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:200, padding:20 }}>
+      <div style={{ background:T.surf, borderRadius:18, border:`1px solid ${T.border}`, padding:28, width:"100%", maxWidth:480, boxShadow:"0 32px 80px rgba(0,0,0,.6)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:22 }}>
+          <div>
+            <h2 style={{ margin:0, fontSize:17, fontWeight:800, color:T.white }}>{initial ? "Editar cliente" : "Nuevo cliente"}</h2>
+            <p style={{ margin:"4px 0 0", fontSize:12, color:T.muted }}>Información del cliente</p>
+          </div>
+          <button onClick={onClose} style={{ background:T.surf2, border:`1px solid ${T.border}`, borderRadius:9, width:34, height:34, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <X size={15} color={T.text2} />
+          </button>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+          <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Nombre / Razón social *</label><input style={inp} value={f.name} onChange={e=>set("name",e.target.value)} placeholder="Bancolombia S.A." /></div>
+          <div><label style={lbl}>NIT / Cédula</label><input style={inp} value={f.nit} onChange={e=>set("nit",e.target.value)} placeholder="900.123.456-7" /></div>
+          <div><label style={lbl}>Contacto</label><input style={inp} value={f.contacto} onChange={e=>set("contacto",e.target.value)} placeholder="Nombre del contacto" /></div>
+          <div><label style={lbl}>Email</label><input style={inp} type="email" value={f.email} onChange={e=>set("email",e.target.value)} placeholder="contacto@empresa.com" /></div>
+          <div><label style={lbl}>Teléfono</label><input style={inp} value={f.phone} onChange={e=>set("phone",e.target.value)} placeholder="+57 300 123 4567" /></div>
+          <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notas} onChange={e=>set("notas",e.target.value)} placeholder="Información adicional..." /></div>
+        </div>
+        <div style={{ display:"flex", gap:10, marginTop:20, justifyContent:"flex-end" }}>
+          <button onClick={onClose} style={btnGhost}>Cancelar</button>
+          <button onClick={() => { if(f.name.trim()) onSave({...f, id:f.id||Math.random().toString(36).slice(2,9)}) }} style={btnGreen}>
+            <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar cliente"}
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
