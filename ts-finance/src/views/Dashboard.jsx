@@ -37,7 +37,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       )}
 
       {/* Row 1 KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+      <div style={{ display: "grid", className="g4" style={{ display:undefined }}>
         <KPI title="Ingresos del mes" value={fmtS(fin.tI)} sub={`${incomes.length} facturas`} icon={TrendingUp} color={T.green} />
         <KPI title="Egresos del mes" value={fmtS(fin.tE)} sub={`${expenses.length} registros`} icon={TrendingDown} color={T.red} />
         <KPI title="Utilidad neta" value={fmtS(fin.util)} sub="Sin IVA" icon={DollarSign} color={fin.util >= 0 ? T.green : T.red} />
@@ -45,7 +45,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* Row 2 KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+      <div style={{ display: "grid", className="g4" style={{ display:undefined }}>
         <KPI title="Base ingresos" value={fmtS(fin.tIb)} sub="Sin IVA" icon={Receipt} color={T.green} />
         <KPI title="IVA cobrado" value={fmtS(fin.tIVAc)} sub="IVA ventas" icon={Layers} color={T.amber} />
         <KPI title="IVA pagado" value={fmtS(fin.tIVAp)} sub="IVA compras" icon={Layers} color={T.amber} />
@@ -54,7 +54,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* Charts row */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 14 }}>
+      <div className="gc">
         {/* Bar chart */}
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>

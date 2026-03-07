@@ -16,10 +16,10 @@ export function ReportsView({ allInc, allExp, year }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div>
-        <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Syne',sans-serif" }}>Reportes {year}</h2>
+        <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>Reportes {year}</h2>
         <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>Resumen financiero anual</p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+      <div className="g3">
         <KPI title="Ingresos totales" value={fmtS(totals.i)} sub={`Año ${year}`} icon={TrendingUp} color={T.green} />
         <KPI title="Egresos totales" value={fmtS(totals.e)} sub={`Año ${year}`} icon={TrendingDown} color={T.red} />
         <KPI title="Utilidad del año" value={fmtS(totals.u)} sub="Margen operativo" icon={TrendingUp} color={totals.u >= 0 ? T.green : T.red} />
@@ -105,7 +105,7 @@ export function CashFlowView({ allInc, allExp, year }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div>
-        <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Syne',sans-serif" }}>Flujo de caja {year}</h2>
+        <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>Flujo de caja {year}</h2>
         <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>Solo transacciones confirmadas como "Pagado"</p>
       </div>
       <div style={card}>

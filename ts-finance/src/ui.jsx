@@ -10,7 +10,7 @@ export const inp = {
   width: "100%", padding: "10px 14px", borderRadius: 10,
   border: `1.5px solid ${T.border}`, fontSize: 13, color: T.text,
   outline: "none", background: T.surf2, boxSizing: "border-box",
-  fontFamily: "'Syne', sans-serif", transition: "border-color .15s",
+  fontFamily: "'Inter', sans-serif", transition: "border-color .15s",
 }
 export const lbl = {
   display: "block", fontSize: 11, fontWeight: 700, color: T.subtle,
@@ -19,7 +19,7 @@ export const lbl = {
 export const btnGreen = {
   background: T.green, color: "#000", border: "none", borderRadius: 10,
   padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer",
-  display: "flex", alignItems: "center", gap: 6, fontFamily: "'Syne',sans-serif",
+  display: "flex", alignItems: "center", gap: 6, fontFamily: "'Inter',sans-serif",
   transition: "opacity .15s",
 }
 export const btnRed = { ...btnGreen, background: T.red, color: "#fff" }

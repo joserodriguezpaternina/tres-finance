@@ -7,7 +7,7 @@ function SoftIcon({ icon }) {
   const cfg = ICON_MAP[icon] || ICON_MAP.default
   return (
     <div style={{ width: 36, height: 36, borderRadius: 10, background: cfg.bg, border: `1px solid ${cfg.color}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <span style={{ fontSize: 12, fontWeight: 800, color: cfg.color, fontFamily: "'Syne',sans-serif" }}>{cfg.label}</span>
+      <span style={{ fontSize: 12, fontWeight: 800, color: cfg.color, fontFamily: "'Inter',sans-serif" }}>{cfg.label}</span>
     </div>
   )
 }
@@ -33,14 +33,14 @@ export default function RecurringView({ recurring, onAdd, onEdit, onDelete, onTo
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Syne',sans-serif" }}>Gastos recurrentes</h2>
+          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>Gastos recurrentes</h2>
           <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>Suscripciones, software y pagos fijos</p>
         </div>
         <button onClick={onAdd} style={btnRed}><Plus size={14} />Agregar</button>
       </div>
 
       {/* Summary cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+      <div className="g4">
         {[
           { label: "Costo mensual equivalente", val: fmtS(monthlyTotal), color: T.red },
           { label: "Base sin IVA", val: fmtS(monthlyBase), color: T.text },
@@ -60,7 +60,7 @@ export default function RecurringView({ recurring, onAdd, onEdit, onDelete, onTo
           {/* Filter tabs */}
           <div style={{ display: "flex", gap: 6 }}>
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
-              <button key={val} onClick={() => setFilter(val)} style={{ padding: "7px 14px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 700, cursor: "pointer", background: filter === val ? T.red : T.surf2, color: filter === val ? "#fff" : T.muted, fontFamily: "'Syne',sans-serif" }}>
+              <button key={val} onClick={() => setFilter(val)} style={{ padding: "7px 14px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 700, cursor: "pointer", background: filter === val ? T.red : T.surf2, color: filter === val ? "#fff" : T.muted, fontFamily: "'Inter',sans-serif" }}>
                 {label} {val === "all" ? `(${recurring.length})` : val === "active" ? `(${active.length})` : `(${paused.length})`}
               </button>
             ))}

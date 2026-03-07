@@ -8,7 +8,7 @@ function TableShell({ title, count, total, totalColor, addBtn, searchVal, onSear
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Syne',sans-serif" }}>{title}</h2>
+          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>{title}</h2>
           <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>
             {count} registros ·{" "}
             <span style={{ color: totalColor, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmt(total)}</span>
@@ -19,7 +19,7 @@ function TableShell({ title, count, total, totalColor, addBtn, searchVal, onSear
       <div style={{ ...card, padding: "12px 16px", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, background: T.surf2, borderRadius: 9, padding: "8px 12px", minWidth: 200 }}>
           <Search size={13} color={T.muted} />
-          <input placeholder="Buscar..." value={searchVal} onChange={e => onSearch(e.target.value)} style={{ border: "none", background: "transparent", fontSize: 13, color: T.text, outline: "none", width: "100%", fontFamily: "'Syne',sans-serif" }} />
+          <input placeholder="Buscar..." value={searchVal} onChange={e => onSearch(e.target.value)} style={{ border: "none", background: "transparent", fontSize: 13, color: T.text, outline: "none", width: "100%", fontFamily: "'Inter',sans-serif" }} />
         </div>
         {filterEl}
       </div>
@@ -72,7 +72,7 @@ export function IncomesView({ incomes, onAdd, onEdit, onDelete }) {
       filterEl={
         <div style={{ display: "flex", gap: 6 }}>
           {["Todos", ...STATUS_LIST].map(s => (
-            <button key={s} onClick={() => setFil(s)} style={{ padding: "7px 12px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 700, cursor: "pointer", background: fil === s ? T.green : T.surf2, color: fil === s ? "#000" : T.muted, fontFamily: "'Syne',sans-serif" }}>{s}</button>
+            <button key={s} onClick={() => setFil(s)} style={{ padding: "7px 12px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 700, cursor: "pointer", background: fil === s ? T.green : T.surf2, color: fil === s ? "#000" : T.muted, fontFamily: "'Inter',sans-serif" }}>{s}</button>
           ))}
         </div>
       }
