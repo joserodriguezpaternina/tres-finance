@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#111113"/>
+  <rect width="32" height="32" rx="8" fill="none" stroke="#22C55E" stroke-width="1.5"/>
+  <text x="50%" y="52%" font-family="sans-serif" font-weight="800" font-size="13" fill="#22C55E" text-anchor="middle" dominant-baseline="central">T3</text>
+</svg>
