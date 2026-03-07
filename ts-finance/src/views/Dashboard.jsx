@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 import { TrendingUp, TrendingDown, DollarSign, Wallet, Layers, Receipt, AlertTriangle } from 'lucide-react'
 import { BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { T, MONTHS_SHORT, fmtS, fmt, calcFin, filterM } from './constants.js'
-import { KPI, Pill, Tip, card } from './ui.jsx'
+import { T, MONTHS_SHORT, fmtS, fmt, calcFin, filterM } from '../constants.js'
+import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 const PIE_COLORS = [T.red, "#F97316", T.amber, T.violet, T.blue, T.green]
 
