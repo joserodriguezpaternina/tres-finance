@@ -46,7 +46,7 @@ export default function App() {
       expenseService.getAll(),
       recurringService.getAll(),
       clientService.getAll(),
-    ]).then(([inc, exp, rec, cli]) => {
+    ]).then(async ([inc, exp, rec, cli]) => {
       setIncomes(inc); setRecurr(rec)
       // Auto-sync recurring → expenses
       const syncedExp = await syncRecurring(rec, exp)
