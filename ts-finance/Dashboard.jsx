@@ -24,20 +24,22 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
   const totalPending = pending.reduce((s, i) => s + Number(i.amount), 0)
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
       {/* Alert banner */}
       {pending.length > 0 && (
         <div style={{ background: T.amberBg, border: `1px solid ${T.amber}30`, borderRadius: 12, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
           <AlertTriangle size={15} color={T.amber} />
           <span style={{ fontSize: 13, color: T.text, fontWeight: 500 }}>
-            <span style={{ color: T.amber, fontWeight: 700 }}>{pending.length} facturas pendientes</span> por cobrar —{" "}
+            <span style={{ color: T.amber, fontWeight: 700 }}>{pending.length} facturas pendientes</span>{" "}
+            por cobrar —{" "}
             <span style={{ fontFamily: "'DM Mono',monospace", fontWeight: 700, color: T.amber }}>{fmt(totalPending)}</span>
           </span>
         </div>
       )}
 
       {/* Row 1 KPIs */}
-      <div className="g4" style={{ display:"grid" }}>
+      <div className="g4">
         <KPI title="Ingresos del mes" value={fmtS(fin.tI)} sub={`${incomes.length} facturas`} icon={TrendingUp} color={T.green} />
         <KPI title="Egresos del mes" value={fmtS(fin.tE)} sub={`${expenses.length} registros`} icon={TrendingDown} color={T.red} />
         <KPI title="Utilidad neta" value={fmtS(fin.util)} sub="Sin IVA" icon={DollarSign} color={fin.util >= 0 ? T.green : T.red} />
@@ -45,12 +47,20 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* Row 2 KPIs */}
-      <div className="g4" style={{ display:"grid" }}>
+      <div className="g4">
         <KPI title="Base ingresos" value={fmtS(fin.tIb)} sub="Sin IVA" icon={Receipt} color={T.green} />
         <KPI title="IVA cobrado" value={fmtS(fin.tIVAc)} sub="IVA ventas" icon={Layers} color={T.amber} />
         <KPI title="IVA pagado" value={fmtS(fin.tIVAp)} sub="IVA compras" icon={Layers} color={T.amber} />
-        <KPI title="IVA neto" value={fmtS(fin.ivaN)} sub={fin.ivaN >= 0 ? "A declarar" : "A favor"} icon={Receipt} color={T.violet}
-          badge={fin.ivaN >= 0 ? { label: "A pagar", bg: T.redBg, color: T.red } : { label: "A favor", bg: T.greenBg, color: T.green }} />
+        <KPI
+          title="IVA neto"
+          value={fmtS(fin.ivaN)}
+          sub={fin.ivaN >= 0 ? "A declarar" : "A favor"}
+          icon={Receipt}
+          color={T.violet}
+          badge={fin.ivaN >= 0
+            ? { label: "A pagar", bg: T.redBg, color: T.red }
+            : { label: "A favor", bg: T.greenBg, color: T.green }}
+        />
       </div>
 
       {/* Charts row */}
@@ -62,7 +72,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
               <div style={{ fontSize: 13, fontWeight: 700, color: T.white }}>Evolución mensual</div>
               <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>Últimos 6 meses</div>
             </div>
-            <div style={{ display: "flex", gap: 14 }}>
+            <div style={{ display: "flex", gap: 12 }}>
               {[["Ingresos", T.green], ["Egresos", T.red], ["Utilidad", T.violet]].map(([l, c]) => (
                 <div key={l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <span style={{ width: 8, height: 8, borderRadius: 2, background: c, display: "inline-block" }} />
@@ -111,7 +121,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
               </div>
             </>
           ) : (
-            <div style={{ textAlign: "center", padding: "40px 0", color: T.muted, fontSize: 13 }}>Sin egresos</div>
+            <div style={{ textAlign: "center", padding: "40px 0", color: T.muted, fontSize: 13 }}>Sin egresos este mes</div>
           )}
         </div>
       </div>
@@ -120,16 +130,23 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       <div style={card}>
         <div style={{ fontSize: 13, fontWeight: 700, color: T.white, marginBottom: 16 }}>Movimientos recientes</div>
         {[...incomes.map(i => ({ ...i, tipo: "I" })), ...expenses.map(e => ({ ...e, tipo: "E" }))]
-          .sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 7)
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 7)
           .map((item, i, arr) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 0", borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none" }}>
+            <div key={item.id || i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 0", borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ width: 34, height: 34, borderRadius: 9, background: item.tipo === "I" ? T.greenBg : T.redBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  {item.tipo === "I" ? <TrendingUp size={14} color={T.green} /> : <TrendingDown size={14} color={T.red} />}
+                  {item.tipo === "I"
+                    ? <TrendingUp size={14} color={T.green} />
+                    : <TrendingDown size={14} color={T.red} />}
                 </div>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: T.white }}>{item.tipo === "I" ? item.client : (item.desc || item.description)}</div>
-                  <div style={{ fontSize: 11, color: T.muted }}>{item.tipo === "I" ? item.project : item.cat} · {item.date}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: T.white }}>
+                    {item.tipo === "I" ? item.client : (item.desc || item.description)}
+                  </div>
+                  <div style={{ fontSize: 11, color: T.muted }}>
+                    {item.tipo === "I" ? item.project : item.cat} · {item.date}
+                  </div>
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -141,6 +158,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             </div>
           ))}
       </div>
+
     </div>
   )
 }
