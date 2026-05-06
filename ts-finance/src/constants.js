@@ -34,6 +34,33 @@ export const STATUS_LIST  = ["Pagado","Pendiente","Parcial"]
 export const EXP_CATS     = ["Nómina","Honorarios","Proveedores","Arriendo","Servicios","Internet","Software y suscripciones","Publicidad","Producción","Casino","Transporte","Imprevistos","Impuestos","Otros"]
 export const RECUR_FREQ   = ["Mensual","Bimestral","Trimestral","Semestral","Anual"]
 
+/* ── Reglas de deducibilidad DIAN (renta personas naturales / SAS) ── */
+export const DIAN_DEDUCIBLES = {
+  "Nómina":                   { si: true,  label: "Deducible",   color: "#44B26B", nota: "Salarios, prestaciones y aportes parafiscales" },
+  "Honorarios":               { si: true,  label: "Deducible",   color: "#44B26B", nota: "Requiere documento soporte DIAN o factura electrónica" },
+  "Proveedores":              { si: true,  label: "Deducible",   color: "#44B26B", nota: "Con factura electrónica de venta del proveedor" },
+  "Arriendo":                 { si: true,  label: "Deducible",   color: "#44B26B", nota: "Arrendamiento de inmuebles para actividad productora de renta" },
+  "Servicios":                { si: true,  label: "Deducible",   color: "#44B26B", nota: "Requiere factura o documento soporte de adquisición" },
+  "Internet":                 { si: true,  label: "Deducible",   color: "#44B26B", nota: "Servicios de telecomunicaciones ligados a la actividad" },
+  "Software y suscripciones": { si: true,  label: "Deducible",   color: "#44B26B", nota: "Herramientas y plataformas necesarias para la actividad" },
+  "Publicidad":               { si: true,  label: "Deducible",   color: "#44B26B", nota: "Gastos de marketing y publicidad con soporte" },
+  "Producción":               { si: true,  label: "Deducible",   color: "#44B26B", nota: "Costos directos de producción y materiales" },
+  "Transporte":               { si: true,  label: "Deducible",   color: "#44B26B", nota: "Con factura o documento equivalente. Aplica si es del negocio" },
+  "Impuestos":                { si: "p",   label: "Parcial",     color: "#D97706", nota: "Solo ICA e impuesto predial del negocio. No el impuesto de renta" },
+  "Imprevistos":              { si: "c",   label: "Condicional", color: "#D97706", nota: "Solo con soporte documental válido y causalidad demostrable" },
+  "Casino":                   { si: false, label: "No deducible",color: "#D72B20", nota: "No reconocido como deducible por la DIAN" },
+  "Otros":                    { si: "c",   label: "Condicional", color: "#D97706", nota: "Depende del soporte y la relación de causalidad. Consultar contador" },
+}
+
+export const DOC_TIPOS_SOPORTE = [
+  "Factura electrónica",
+  "Documento soporte DIAN (Res. 167/2021)",
+  "Contrato de servicios",
+  "Recibo de pago",
+  "Comprobante de egreso",
+  "Otro",
+]
+
 export const uid = () => Math.random().toString(36).slice(2,9)
 
 export const fmt = (n = 0) =>

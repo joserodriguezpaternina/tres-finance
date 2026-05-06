@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { X, CheckCircle, Search, Plus, History, ArrowLeft } from 'lucide-react'
-import { T, STATUS_LIST, PAY_METHODS, EXP_CATS, uid, fmtS } from './constants.js'
+import { T, STATUS_LIST, PAY_METHODS, EXP_CATS, uid, fmtS, DIAN_DEDUCIBLES, DOC_TIPOS_SOPORTE } from './constants.js'
 import { inp, lbl, btnGreen, btnRed, btnGhost } from './ui.jsx'
 
 const today = () => new Date().toISOString().split("T")[0]
@@ -195,7 +195,8 @@ function ClientAutocomplete({ value, onChange, clients }) {
 export function IncomeModal({ initial, onSave, onClose, clients = [], incomes = [] }) {
   const isEdit = Boolean(initial)
   const [mode, setMode] = useState(isEdit ? "form" : "start")
-  const [f, setF] = useState(initial || { client: "", project: "", date: today(), amount: "", hasIVA: true, ivaP: 19, status: "Pendiente", method: "Transferencia", notes: "" })
+  const [showDoc, setShowDoc] = useState(Boolean(initial?.docTipo || initial?.docNum))
+  const [f, setF] = useState(initial || { client: "", project: "", date: today(), amount: "", hasIVA: true, ivaP: 19, status: "Pendiente", method: "Transferencia", notes: "", docTipo: "", docNum: "", docFecha: today(), docNota: "" })
   const set = (k, v) => setF(p => ({ ...p, [k]: v }))
   const amt = parseFloat(f.amount) || 0
 
@@ -254,6 +255,50 @@ export function IncomeModal({ initial, onSave, onClose, clients = [], incomes = 
             </div>
             <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notes} onChange={e => set("notes", e.target.value)} placeholder="Observaciones..." /></div>
           </div>
+
+          {/* ── Documento soporte DIAN ── */}
+          <div style={{ marginTop: 16, borderRadius: 10, border: `1px solid ${T.border}`, overflow: "hidden" }}>
+            <button
+              onClick={() => setShowDoc(v => !v)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "11px 14px", background: T.surf2, border: "none", cursor: "pointer", textAlign: "left" }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: T.text }}>Documento soporte</span>
+                {f.docTipo
+                  ? <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: T.greenBg, color: T.green, fontWeight: 600 }}>Registrado</span>
+                  : <span style={{ fontSize: 10, padding: "2px 8px", borderRadius: 20, background: T.amberBg, color: T.amber, fontWeight: 600 }}>Opcional — recomendado para deducibles</span>
+                }
+              </div>
+              <span style={{ fontSize: 14, color: T.muted }}>{showDoc ? "▲" : "▼"}</span>
+            </button>
+            {showDoc && (
+              <div style={{ padding: "14px 14px 6px", background: T.surf, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div style={{ fontSize: 11, color: T.muted, gridColumn: "1/-1", lineHeight: 1.5, marginBottom: 2 }}>
+                  Para gastos deducibles (honorarios, servicios, etc.) el pagador necesita factura electrónica o <strong>Documento Soporte DIAN</strong> (Res. 167/2021).
+                </div>
+                <div>
+                  <label style={lbl}>Tipo de documento</label>
+                  <select style={inp} value={f.docTipo} onChange={e => set("docTipo", e.target.value)}>
+                    <option value="">— Seleccionar —</option>
+                    {DOC_TIPOS_SOPORTE.map(d => <option key={d}>{d}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={lbl}>Número / Referencia</label>
+                  <input style={inp} value={f.docNum} onChange={e => set("docNum", e.target.value)} placeholder="FE-0001 / DS-2024-001" />
+                </div>
+                <div>
+                  <label style={lbl}>Fecha del documento</label>
+                  <input style={inp} type="date" value={f.docFecha} onChange={e => set("docFecha", e.target.value)} />
+                </div>
+                <div>
+                  <label style={lbl}>Observación</label>
+                  <input style={inp} value={f.docNota} onChange={e => set("docNota", e.target.value)} placeholder="Ej: Honorarios diseño marca" />
+                </div>
+              </div>
+            )}
+          </div>
+
           <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.green} />
           <div style={{ display: "flex", gap: 10, marginTop: 18, justifyContent: "flex-end", alignItems: "center" }}>
             {!isEdit && <button onClick={() => setMode("start")} style={{ ...btnGhost, fontSize: 12, padding: "6px 12px", gap: 5, marginRight: "auto" }}><ArrowLeft size={13} />Volver</button>}
@@ -312,6 +357,14 @@ export function ExpenseModal({ initial, onSave, onClose, expenses = [] }) {
               <select style={inp} value={f.cat} onChange={e => set("cat", e.target.value)}>
                 {EXP_CATS.map(c => <option key={c}>{c}</option>)}
               </select>
+              {(() => {
+                const rule = DIAN_DEDUCIBLES[f.cat] || DIAN_DEDUCIBLES["Otros"]
+                return (
+                  <div style={{ marginTop: 6, fontSize: 11, padding: "5px 10px", borderRadius: 7, background: rule.color + "12", borderLeft: `3px solid ${rule.color}`, color: rule.color, lineHeight: 1.5 }}>
+                    <strong>{rule.label}</strong> — {rule.nota}
+                  </div>
+                )
+              })()}
             </div>
             <div><label style={lbl}>Subcategoría</label><input style={inp} value={f.sub} onChange={e => set("sub", e.target.value)} placeholder="Ej: Adobe CC" /></div>
             <div><label style={lbl}>Proveedor</label><input style={inp} value={f.provider} onChange={e => set("provider", e.target.value)} placeholder="Nombre proveedor" /></div>
