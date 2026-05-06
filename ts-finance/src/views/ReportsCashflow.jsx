@@ -4,14 +4,12 @@ import {
   Wallet, BarChart2, ArrowUpRight, ArrowDownRight, Calendar
 } from 'lucide-react'
 import {
-  AreaChart, Area, BarChart, Bar, ComposedChart, Line,
+  AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine, Cell
 } from 'recharts'
-import { T, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
-import { card, Tip } from '../ui.jsx'
-
-const fmt = n => new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',minimumFractionDigits:0}).format(n)
+import { T, MONTHS, MONTHS_SHORT, fmt, fmtS, calcFin, filterM } from '../constants.js'
+import { card, KPI, Tip } from '../ui.jsx'
 
 const TRIMESTRES = [
   { label: "T1", meses: [0,1,2], vence: "May 2026" },
@@ -20,7 +18,6 @@ const TRIMESTRES = [
   { label: "T4", meses: [9,10,11], vence: "Feb 2027" },
 ]
 
-/* ── shared ──────────────────────────────────────────────── */
 const SectionHeader = ({ title, sub }) => (
   <div style={{ marginBottom: 20 }}>
     <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{title}</div>
@@ -39,8 +36,8 @@ const Legend = ({ items }) => (
   </div>
 )
 
-/* ── REPORTS ─────────────────────────────────────────────── */
-export function ReportsView({ allInc, allExp, year }) {
+/* ── Resumen financiero tab ─────────────────────────────── */
+function ReportsTab({ allInc, allExp, year }) {
   const [activeT, setActiveT] = useState(null)
 
   const data = useMemo(() => MONTHS_SHORT.map((name, m) => {
@@ -66,43 +63,15 @@ export function ReportsView({ allInc, allExp, year }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      {/* ── Page header ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Reportes</h2>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Resumen financiero anual · {year}</p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2 }}>
-            <Calendar size={14} color={T.muted} />
-            {year}
-          </div>
-        </div>
-      </div>
-
-      {/* ── KPI row ── */}
+      {/* KPI row */}
       <div className="g4">
-        {[
-          { label: "Ingresos totales",  value: totals.i,  color: T.green,  bg: "rgba(68,178,107,.07)",  icon: TrendingUp,   sub: `${allInc.length} facturas` },
-          { label: "Egresos totales",   value: totals.e,  color: T.red,    bg: "rgba(215,43,32,.07)",   icon: TrendingDown, sub: `${allExp.length} registros` },
-          { label: "Utilidad del año",  value: totals.u,  color: totals.u >= 0 ? T.green : T.red, bg: totals.u >= 0 ? "rgba(68,178,107,.07)" : "rgba(215,43,32,.07)", icon: DollarSign, sub: "Base gravable" },
-          { label: "Margen operativo",  value: `${marginAnual.toFixed(1)}%`, color: T.violet, bg: "rgba(90,62,231,.07)", icon: BarChart2, sub: "Rentabilidad anual", raw: true },
-        ].map(({ label, value, color, bg, icon: Icon, sub, raw }) => (
-          <div key={label} style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: "20px 22px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", maxWidth: 120, lineHeight: 1.4 }}>{label}</span>
-              <div style={{ width: 32, height: 32, borderRadius: 9, background: bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Icon size={15} color={color} />
-              </div>
-            </div>
-            <div style={{ fontSize: 24, fontWeight: 700, color: T.text, fontFamily: raw ? "inherit" : "'DM Mono',monospace", letterSpacing: "-.5px", lineHeight: 1.1 }}>{raw ? value : fmtS(value)}</div>
-            <div style={{ fontSize: 12, color: T.muted, marginTop: 8 }}>{sub}</div>
-            <div style={{ height: 2, borderRadius: 99, marginTop: 14, background: `linear-gradient(90deg, ${color}, transparent)`, opacity: .25 }} />
-          </div>
-        ))}
+        <KPI title="Ingresos totales" value={fmtS(totals.i)} color={T.green}  icon={TrendingUp}   sub={`${allInc.length} facturas`} />
+        <KPI title="Egresos totales"  value={fmtS(totals.e)} color={T.red}    icon={TrendingDown} sub={`${allExp.length} registros`} />
+        <KPI title="Utilidad del año" value={fmtS(totals.u)} color={totals.u >= 0 ? T.green : T.red} icon={DollarSign} sub="Base gravable" />
+        <KPI title="Margen operativo" value={`${marginAnual.toFixed(1)}%`} color={T.violet} icon={BarChart2} sub="Rentabilidad anual" />
       </div>
 
-      {/* ── Trimestres row ── */}
+      {/* Trimestres */}
       <div style={card}>
         <SectionHeader title="Resumen trimestral" sub={`Ingresos, egresos y utilidad por trimestre · ${year}`} />
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
@@ -135,7 +104,7 @@ export function ReportsView({ allInc, allExp, year }) {
                   ].map(({ label, value, color }) => (
                     <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontSize: 11, color: active ? "rgba(255,255,255,.5)" : T.muted }}>{label}</span>
-                      <span style={{ fontSize: 12, fontWeight: 700, color, fontFamily: "'DM Mono',monospace" }}>{value > 0 || value < 0 ? fmtS(value) : "—"}</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, color, fontFamily: "'DM Mono',monospace" }}>{value !== 0 ? fmtS(value) : "—"}</span>
                     </div>
                   ))}
                 </div>
@@ -153,7 +122,7 @@ export function ReportsView({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* ── IVA DIAN panel ── */}
+      {/* IVA DIAN */}
       <div style={{ borderRadius: 16, padding: "24px 28px", background: T.text, border: `1px solid ${T.border}` }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 16 }}>
           <div>
@@ -180,7 +149,9 @@ export function ReportsView({ allInc, allExp, year }) {
                 <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,.6)" }}>{t.label}</span>
                 {t.ivaN > 0 && <AlertCircle size={13} color="#f87171" />}
               </div>
-              <div style={{ fontSize: 17, fontWeight: 700, color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#4ade80" : "rgba(255,255,255,.3)", fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px" }}>
+              <div style={{ fontSize: 17, fontWeight: 700, fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px",
+                color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#4ade80" : "rgba(255,255,255,.3)"
+              }}>
                 {t.ivaN !== 0 ? fmt(Math.abs(t.ivaN)) : "—"}
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
@@ -194,9 +165,8 @@ export function ReportsView({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* ── Charts row ── */}
+      {/* Charts */}
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
-        {/* Bar chart */}
         <div style={card}>
           <SectionHeader title="Ingresos vs Egresos" sub={`Comparativo mensual ${year}`} />
           <Legend items={[["Ingresos", T.green], ["Egresos", T.red]]} />
@@ -204,12 +174,10 @@ export function ReportsView({ allInc, allExp, year }) {
             <BarChart data={data} barGap={4} barSize={14}>
               <defs>
                 <linearGradient id="rGreen" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.green} stopOpacity={1}/>
-                  <stop offset="100%" stopColor={T.green} stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor={T.green} stopOpacity={1}/><stop offset="100%" stopColor={T.green} stopOpacity={0.3}/>
                 </linearGradient>
                 <linearGradient id="rRed" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.red} stopOpacity={1}/>
-                  <stop offset="100%" stopColor={T.red} stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor={T.red} stopOpacity={1}/><stop offset="100%" stopColor={T.red} stopOpacity={0.3}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -221,16 +189,13 @@ export function ReportsView({ allInc, allExp, year }) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Utilidad area */}
         <div style={card}>
           <SectionHeader title="Utilidad neta" sub="Evolución del margen mensual" />
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="rUtil" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.violet} stopOpacity={0.2}/>
-                  <stop offset="100%" stopColor={T.violet} stopOpacity={0}/>
+                  <stop offset="0%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="100%" stopColor={T.violet} stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -244,7 +209,7 @@ export function ReportsView({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* ── Monthly table ── */}
+      {/* Monthly table */}
       <div style={{ ...card, overflowX: "auto" }}>
         <SectionHeader title="Detalle mensual" sub={`Todos los meses de ${year}`} />
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
@@ -290,7 +255,7 @@ export function ReportsView({ allInc, allExp, year }) {
               <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: totals.u >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(totals.u)}</td>
               <td style={{ padding: "13px 16px 4px 0", fontSize: 12, fontWeight: 700, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{totals.ivaN > 0 ? fmtS(totals.ivaN) : "—"}</td>
               <td style={{ padding: "13px 0 4px" }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: marginAnual > 40 ? T.green : marginAnual > 20 ? T.amber : T.red, fontFamily: "'DM Mono',monospace" }}>
+                <span style={{ fontSize: 12, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: marginAnual > 40 ? T.green : marginAnual > 20 ? T.amber : T.red }}>
                   {marginAnual.toFixed(1)}%
                 </span>
               </td>
@@ -302,8 +267,8 @@ export function ReportsView({ allInc, allExp, year }) {
   )
 }
 
-/* ── CASH FLOW ─────────────────────────────────────────────── */
-export function CashFlowView({ allInc, allExp, year }) {
+/* ── Flujo de caja tab ──────────────────────────────────── */
+function CashFlowTab({ allInc, allExp, year }) {
   const data = useMemo(() => {
     let acum = 0
     return MONTHS_SHORT.map((name, m) => {
@@ -321,83 +286,29 @@ export function CashFlowView({ allInc, allExp, year }) {
   const cajaFinal    = data[data.length - 1]?.acumulado || 0
   const netoCaja     = totalCobrado - totalPagado
   const maxVal       = Math.max(...data.map(d => Math.max(d.cobrado, d.pagado))) || 1
-
   const pendientes   = allInc.filter(i => i.status === "Pendiente")
   const totalPend    = pendientes.reduce((s, i) => s + Number(i.amount), 0)
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      {/* ── Page header ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Flujo de caja</h2>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Solo transacciones marcadas como Pagado · {year}</p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2 }}>
-            <Calendar size={14} color={T.muted} />
-            {year}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Caja banner ── */}
-      <div style={{ borderRadius: 16, background: cajaFinal >= 0 ? T.text : "#7F1D1D", padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.4)", textTransform: "uppercase", letterSpacing: ".12em", marginBottom: 8 }}>Posición de caja actual</div>
-          <div style={{ fontSize: 40, fontWeight: 700, color: "#fff", fontFamily: "'DM Mono',monospace", letterSpacing: "-2px", lineHeight: 1 }}>{fmt(cajaFinal)}</div>
-          <div style={{ fontSize: 13, color: "rgba(255,255,255,.4)", marginTop: 8 }}>
-            {cajaFinal >= 0 ? "Caja positiva — margen disponible" : "Caja negativa — revisar egresos"}
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 32 }}>
-          {[
-            { label: "Total cobrado", value: totalCobrado, color: "#4ade80" },
-            { label: "Total pagado",  value: totalPagado,  color: "#f87171" },
-            { label: "Por cobrar",    value: totalPend,    color: "#fbbf24" },
-          ].map(({ label, value, color }) => (
-            <div key={label}>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,.35)", marginBottom: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: ".07em" }}>{label}</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color, fontFamily: "'DM Mono',monospace" }}>{fmt(value)}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── KPI row ── */}
+      {/* KPI row */}
       <div className="g4">
-        {[
-          { label: "Total cobrado",  value: totalCobrado, color: T.green,  bg: "rgba(68,178,107,.07)",  icon: ArrowUpRight,   sub: `${allInc.filter(i=>i.status==="Pagado").length} pagos recibidos` },
-          { label: "Total pagado",   value: totalPagado,  color: T.red,    bg: "rgba(215,43,32,.07)",   icon: ArrowDownRight, sub: `${allExp.length} egresos` },
-          { label: "Neto del año",   value: netoCaja,     color: netoCaja >= 0 ? T.green : T.red, bg: netoCaja >= 0 ? "rgba(68,178,107,.07)" : "rgba(215,43,32,.07)", icon: Wallet, sub: "Cobrado − Pagado" },
-          { label: "Pendiente cobro",value: totalPend,    color: T.amber,  bg: "rgba(217,119,6,.07)",   icon: AlertCircle,    sub: `${pendientes.length} facturas abiertas` },
-        ].map(({ label, value, color, bg, icon: Icon, sub }) => (
-          <div key={label} style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: "20px 22px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", maxWidth: 120, lineHeight: 1.4 }}>{label}</span>
-              <div style={{ width: 32, height: 32, borderRadius: 9, background: bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Icon size={15} color={color} />
-              </div>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px", lineHeight: 1.1 }}>{fmtS(value)}</div>
-            <div style={{ fontSize: 12, color: T.muted, marginTop: 8 }}>{sub}</div>
-            <div style={{ height: 2, borderRadius: 99, marginTop: 14, background: `linear-gradient(90deg, ${color}, transparent)`, opacity: .25 }} />
-          </div>
-        ))}
+        <KPI title="Total cobrado"    value={fmtS(totalCobrado)} color={T.green}  icon={ArrowUpRight}   sub={`${allInc.filter(i=>i.status==="Pagado").length} pagos recibidos`} />
+        <KPI title="Total pagado"     value={fmtS(totalPagado)}  color={T.red}    icon={ArrowDownRight} sub={`${allExp.length} egresos`} />
+        <KPI title="Posición de caja" value={fmt(cajaFinal)}     color={cajaFinal >= 0 ? T.green : T.red} icon={Wallet} sub={cajaFinal >= 0 ? "Caja positiva" : "Caja negativa"} />
+        <KPI title="Pendiente cobro"  value={fmtS(totalPend)}    color={T.amber}  icon={AlertCircle}    sub={`${pendientes.length} facturas abiertas`} />
       </div>
 
-      {/* ── Charts row ── */}
+      {/* Charts */}
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
-        {/* Caja acumulada */}
         <div style={card}>
           <SectionHeader title="Caja acumulada" sub="Posición de liquidez mes a mes" />
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="cfAcum" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.green} stopOpacity={0.18}/>
-                  <stop offset="100%" stopColor={T.green} stopOpacity={0}/>
+                  <stop offset="0%" stopColor={T.green} stopOpacity={0.18}/><stop offset="100%" stopColor={T.green} stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -409,8 +320,6 @@ export function CashFlowView({ allInc, allExp, year }) {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Neto mensual */}
         <div style={card}>
           <SectionHeader title="Neto mensual" sub="Cobrado menos pagado por mes" />
           <ResponsiveContainer width="100%" height={220}>
@@ -428,7 +337,7 @@ export function CashFlowView({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* ── Entradas vs Salidas full-width ── */}
+      {/* Entradas vs Salidas */}
       <div style={card}>
         <SectionHeader title="Entradas vs Salidas reales" sub="Movimientos efectivamente cobrados y pagados" />
         <Legend items={[["Cobrado", T.green], ["Pagado", T.red]]} />
@@ -452,7 +361,7 @@ export function CashFlowView({ allInc, allExp, year }) {
         </ResponsiveContainer>
       </div>
 
-      {/* ── Monthly table ── */}
+      {/* Monthly table */}
       <div style={{ ...card, overflowX: "auto" }}>
         <SectionHeader title="Detalle mensual" sub="Movimientos reales de caja por mes" />
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
@@ -503,6 +412,51 @@ export function CashFlowView({ allInc, allExp, year }) {
           </tfoot>
         </table>
       </div>
+    </div>
+  )
+}
+
+/* ── Export único ───────────────────────────────────────── */
+const TABS = [
+  { id: "resumen", label: "Resumen financiero" },
+  { id: "flujo",   label: "Flujo de caja" },
+]
+
+export function ReportsView({ allInc, allExp, year }) {
+  const [tab, setTab] = useState("resumen")
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Reportes</h2>
+          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Análisis financiero anual · {year}</p>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2 }}>
+          <Calendar size={14} color={T.muted} />
+          {year}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 4, background: T.surf, border: `1px solid ${T.border}`, borderRadius: 10, padding: 4, alignSelf: "flex-start" }}>
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)} style={{
+            padding: "7px 16px", borderRadius: 7, border: "none", cursor: "pointer",
+            fontSize: 13, fontWeight: tab === t.id ? 600 : 400,
+            background: tab === t.id ? T.text : "transparent",
+            color: tab === t.id ? "#fff" : T.text2,
+            transition: "all .15s",
+          }}>{t.label}</button>
+        ))}
+      </div>
+
+      {tab === "resumen"
+        ? <ReportsTab    allInc={allInc} allExp={allExp} year={year} />
+        : <CashFlowTab   allInc={allInc} allExp={allExp} year={year} />
+      }
     </div>
   )
 }
