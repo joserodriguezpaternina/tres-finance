@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import {
   LayoutDashboard, TrendingUp, TrendingDown, BarChart2,
   RefreshCw, Plus, ChevronLeft, ChevronRight,
-  Bell, Menu, FileSpreadsheet, FileText, Users, BookOpen
+  Bell, Menu, FileSpreadsheet, FileText, Users
 } from 'lucide-react'
 import { T, MONTHS, calcFin, filterM, uid } from './constants.js'
 import { hasSupabase } from './supabase.js'
@@ -18,16 +18,14 @@ import { IncomesView, ExpensesView } from './views/IncExp.jsx'
 import RecurringView from './views/Recurring.jsx'
 import { ReportsView } from './views/ReportsCashflow.jsx'
 import { IncomeModal, ExpenseModal, RecurringModal, ClientModalWrapper } from './Modals.jsx'
-import AccountingView from './views/AccountingView.jsx'
-
 const NAV_GROUPS = [
   {
     label: "Principal",
     items: [
       { id: "dashboard",   label: "Inicio",            icon: LayoutDashboard },
-      { id: "contabilidad",label: "Contabilidad",      icon: BookOpen },
       { id: "ingresos",    label: "Ingresos",          icon: TrendingUp },
       { id: "egresos",     label: "Egresos",           icon: TrendingDown },
+      { id: "reportes",    label: "Reportes & Finanzas", icon: BarChart2 },
     ]
   },
   {
@@ -35,7 +33,6 @@ const NAV_GROUPS = [
     items: [
       { id: "recurrentes", label: "Recurrentes",       icon: RefreshCw },
       { id: "clientes",    label: "Clientes",          icon: Users },
-      { id: "reportes",    label: "Reportes",          icon: BarChart2 },
       { id: "importar",    label: "Importar",          icon: FileSpreadsheet },
     ]
   },
@@ -324,14 +321,13 @@ export default function App() {
               </div>
             ) : (
               <>
-                {view === "dashboard"      && <Dashboard fin={fin} incomes={monthInc} expenses={monthExp} allInc={incomes} allExp={expenses} month={month} year={year} onNavigate={navTo} />}
-                {view === "contabilidad"   && <AccountingView allInc={incomes} allExp={expenses} year={year} month={month} />}
-                {view === "ingresos"    && <IncomesView incomes={monthInc} onAdd={() => setModal({ type: "income" })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} />}
-                {view === "egresos"     && <ExpensesView expenses={monthExp} onAdd={() => setModal({ type: "expense" })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
+                {view === "dashboard"   && <Dashboard fin={fin} incomes={monthInc} expenses={monthExp} allInc={incomes} allExp={expenses} month={month} year={year} onNavigate={navTo} />}
+                {view === "ingresos"   && <IncomesView incomes={monthInc} onAdd={() => setModal({ type: "income" })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} />}
+                {view === "egresos"    && <ExpensesView expenses={monthExp} onAdd={() => setModal({ type: "expense" })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
                 {view === "recurrentes" && <RecurringView recurring={recurring} expenses={expenses} onAdd={() => setModal({ type: "recurring" })} onEdit={d => setModal({ type: "recurring", data: d })} onDelete={deleteRecurring} onToggle={toggleRecurring} />}
-                {view === "clientes"    && <ClientsView clients={clients} incomes={incomes} onAdd={() => setModal({ type: "client" })} onEdit={d => setModal({ type: "client", data: d })} onDelete={deleteClient} />}
-                {view === "reportes"    && <ReportsView allInc={incomes} allExp={expenses} year={year} />}
-                {view === "importar"    && <ImportView onImported={() => window.location.reload()} />}
+                {view === "clientes"   && <ClientsView clients={clients} incomes={incomes} onAdd={() => setModal({ type: "client" })} onEdit={d => setModal({ type: "client", data: d })} onDelete={deleteClient} />}
+                {view === "reportes"   && <ReportsView allInc={incomes} allExp={expenses} year={year} month={month} />}
+                {view === "importar"   && <ImportView onImported={() => window.location.reload()} />}
               </>
             )}
           </main>
