@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import {
   TrendingUp, TrendingDown, AlertCircle, DollarSign,
-  Wallet, BarChart2, ArrowUpRight, ArrowDownRight, Calendar
+  Wallet, BarChart2, ArrowUpRight, ArrowDownRight, Calendar,
+  PiggyBank
 } from 'lucide-react'
 import {
-  AreaChart, Area, BarChart, Bar,
+  AreaChart, Area, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine, Cell
 } from 'recharts'
@@ -36,7 +37,7 @@ const Legend = ({ items }) => (
   </div>
 )
 
-/* ── Resumen financiero tab ─────────────────────────────── */
+/* ── Resumen financiero ─────────────────────────────────── */
 function ReportsTab({ allInc, allExp, year }) {
   const [activeT, setActiveT] = useState(null)
 
@@ -62,8 +63,6 @@ function ReportsTab({ allInc, allExp, year }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-      {/* KPI row */}
       <div className="g4">
         <KPI title="Ingresos totales" value={fmtS(totals.i)} color={T.green}  icon={TrendingUp}   sub={`${allInc.length} facturas`} />
         <KPI title="Egresos totales"  value={fmtS(totals.e)} color={T.red}    icon={TrendingDown} sub={`${allExp.length} registros`} />
@@ -71,7 +70,6 @@ function ReportsTab({ allInc, allExp, year }) {
         <KPI title="Margen operativo" value={`${marginAnual.toFixed(1)}%`} color={T.violet} icon={BarChart2} sub="Rentabilidad anual" />
       </div>
 
-      {/* Trimestres */}
       <div style={card}>
         <SectionHeader title="Resumen trimestral" sub={`Ingresos, egresos y utilidad por trimestre · ${year}`} />
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
@@ -79,16 +77,11 @@ function ReportsTab({ allInc, allExp, year }) {
             const active = activeT === i
             const margin = t.inc > 0 ? (t.util / t.inc * 100) : 0
             return (
-              <div
-                key={i}
-                onClick={() => setActiveT(active ? null : i)}
-                style={{
-                  borderRadius: 12, padding: "18px 16px", cursor: "pointer",
-                  border: active ? `1.5px solid ${T.text}` : `1px solid ${T.border}`,
-                  background: active ? T.text : T.surf,
-                  transition: "all .15s",
-                }}
-              >
+              <div key={i} onClick={() => setActiveT(active ? null : i)} style={{
+                borderRadius: 12, padding: "18px 16px", cursor: "pointer",
+                border: active ? `1.5px solid ${T.text}` : `1px solid ${T.border}`,
+                background: active ? T.text : T.surf, transition: "all .15s",
+              }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
                   <span style={{ fontSize: 13, fontWeight: 700, color: active ? "#fff" : T.text }}>{t.label}</span>
                   <span style={{ fontSize: 10, fontWeight: 600, padding: "3px 8px", borderRadius: 20,
@@ -165,7 +158,6 @@ function ReportsTab({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* Charts */}
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
         <div style={card}>
           <SectionHeader title="Ingresos vs Egresos" sub={`Comparativo mensual ${year}`} />
@@ -209,7 +201,6 @@ function ReportsTab({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* Monthly table */}
       <div style={{ ...card, overflowX: "auto" }}>
         <SectionHeader title="Detalle mensual" sub={`Todos los meses de ${year}`} />
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 640 }}>
@@ -254,11 +245,7 @@ function ReportsTab({ allInc, allExp, year }) {
               <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: T.red,   fontFamily: "'DM Mono',monospace" }}>{fmtS(totals.e)}</td>
               <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: totals.u >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(totals.u)}</td>
               <td style={{ padding: "13px 16px 4px 0", fontSize: 12, fontWeight: 700, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{totals.ivaN > 0 ? fmtS(totals.ivaN) : "—"}</td>
-              <td style={{ padding: "13px 0 4px" }}>
-                <span style={{ fontSize: 12, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: marginAnual > 40 ? T.green : marginAnual > 20 ? T.amber : T.red }}>
-                  {marginAnual.toFixed(1)}%
-                </span>
-              </td>
+              <td />
             </tr>
           </tfoot>
         </table>
@@ -267,7 +254,7 @@ function ReportsTab({ allInc, allExp, year }) {
   )
 }
 
-/* ── Flujo de caja tab ──────────────────────────────────── */
+/* ── Flujo de caja ──────────────────────────────────────── */
 function CashFlowTab({ allInc, allExp, year }) {
   const data = useMemo(() => {
     let acum = 0
@@ -291,8 +278,6 @@ function CashFlowTab({ allInc, allExp, year }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-      {/* KPI row */}
       <div className="g4">
         <KPI title="Total cobrado"    value={fmtS(totalCobrado)} color={T.green}  icon={ArrowUpRight}   sub={`${allInc.filter(i=>i.status==="Pagado").length} pagos recibidos`} />
         <KPI title="Total pagado"     value={fmtS(totalPagado)}  color={T.red}    icon={ArrowDownRight} sub={`${allExp.length} egresos`} />
@@ -300,7 +285,6 @@ function CashFlowTab({ allInc, allExp, year }) {
         <KPI title="Pendiente cobro"  value={fmtS(totalPend)}    color={T.amber}  icon={AlertCircle}    sub={`${pendientes.length} facturas abiertas`} />
       </div>
 
-      {/* Charts */}
       <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
         <div style={card}>
           <SectionHeader title="Caja acumulada" sub="Posición de liquidez mes a mes" />
@@ -337,7 +321,6 @@ function CashFlowTab({ allInc, allExp, year }) {
         </div>
       </div>
 
-      {/* Entradas vs Salidas */}
       <div style={card}>
         <SectionHeader title="Entradas vs Salidas reales" sub="Movimientos efectivamente cobrados y pagados" />
         <Legend items={[["Cobrado", T.green], ["Pagado", T.red]]} />
@@ -361,7 +344,6 @@ function CashFlowTab({ allInc, allExp, year }) {
         </ResponsiveContainer>
       </div>
 
-      {/* Monthly table */}
       <div style={{ ...card, overflowX: "auto" }}>
         <SectionHeader title="Detalle mensual" sub="Movimientos reales de caja por mes" />
         <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
@@ -416,13 +398,346 @@ function CashFlowTab({ allInc, allExp, year }) {
   )
 }
 
-/* ── Export único ───────────────────────────────────────── */
-const TABS = [
-  { id: "resumen", label: "Resumen financiero" },
-  { id: "flujo",   label: "Flujo de caja" },
+/* ── Contabilidad ───────────────────────────────────────── */
+const SparkCard = ({ title, sub, value, sparkData, sparkColor, trend, trendUp }) => (
+  <div style={{ ...card, padding: "22px 24px" }}>
+    <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 6 }}>{title}</div>
+    <div style={{ fontSize: 11, color: T.muted, marginBottom: 8 }}>{sub}</div>
+    <div style={{ fontSize: 26, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px", marginBottom: 10 }}>{value}</div>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+      <span style={{ fontSize: 12, fontWeight: 700, color: trendUp ? T.green : T.red }}>{trendUp ? "↑" : "↓"} {trend}</span>
+    </div>
+    <div style={{ height: 56 }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={sparkData}>
+          <Line type="monotone" dataKey="v" stroke={sparkColor} strokeWidth={2} dot={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+)
+
+function AccountingTab({ allInc, allExp, year, month }) {
+  const [analyticsPeriod, setAnalyticsPeriod] = useState("12 meses")
+
+  const monthlyData = useMemo(() => Array.from({ length: 12 }, (_, i) => {
+    const f = calcFin(filterM(allInc, i, year), filterM(allExp, i, year))
+    return { name: MONTHS_SHORT[i], ingresos: f.tI, egresos: f.tE, utilidad: f.util, cobrado: f.cobr }
+  }), [allInc, allExp, year])
+
+  const last6Inc = monthlyData.slice(Math.max(0, month - 5), month + 1)
+
+  const totalInc = allInc.reduce((s, i) => s + Number(i.amount), 0)
+  const totalExp = allExp.reduce((s, e) => s + Number(e.amount), 0)
+  const totalPro = totalInc - totalExp
+
+  const incSpark = monthlyData.map(d => ({ v: d.ingresos }))
+  const expSpark = monthlyData.map(d => ({ v: d.egresos }))
+  const utlSpark = monthlyData.map(d => ({ v: d.utilidad }))
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div className="g3">
+        <SparkCard title="Total facturas de compra" sub="Egresos totales del año"  value={fmtS(totalExp)} trend="+7%" trendUp={true}          sparkData={expSpark} sparkColor={T.red}    />
+        <SparkCard title="Total pagos recibidos"    sub="Ingresos totales del año" value={fmtS(totalInc)} trend="+7%" trendUp={true}           sparkData={incSpark} sparkColor={T.green}  />
+        <SparkCard title="Utilidad total del año"   sub="Margen operativo neto"    value={fmtS(totalPro)} trend="+4%" trendUp={totalPro >= 0}   sparkData={utlSpark} sparkColor={T.violet} />
+      </div>
+
+      <div style={card}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>Analítica total</div>
+            <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
+              {[
+                { label: fmtS(totalInc), color: T.green },
+                { label: fmtS(totalExp), color: T.blue },
+                { label: fmtS(totalPro), color: T.violet },
+              ].map(({ label, color }, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: 3, background: color, display: "inline-block" }} />
+                  <span style={{ fontSize: 12, fontWeight: 600, color: T.text2, fontFamily: "'DM Mono',monospace" }}>{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 4, background: T.bg, borderRadius: 10, padding: 4 }}>
+            {["12 meses", "30 días", "24 horas"].map(p => (
+              <button key={p} onClick={() => setAnalyticsPeriod(p)} style={{
+                padding: "5px 14px", borderRadius: 7, border: "none", cursor: "pointer",
+                fontSize: 12, fontWeight: 600, fontFamily: "inherit",
+                background: analyticsPeriod === p ? T.surf : "transparent",
+                color: analyticsPeriod === p ? T.text : T.muted,
+                boxShadow: analyticsPeriod === p ? "0 1px 4px rgba(0,0,0,.06)" : "none",
+              }}>{p}</button>
+            ))}
+          </div>
+        </div>
+        <ResponsiveContainer width="100%" height={240}>
+          <AreaChart data={monthlyData}>
+            <defs>
+              <linearGradient id="aInc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={T.green} stopOpacity={0.15}/><stop offset="95%" stopColor={T.green} stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="aExp" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={T.blue} stopOpacity={0.15}/><stop offset="95%" stopColor={T.blue} stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="aUtl" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={T.violet} stopOpacity={0.15}/><stop offset="95%" stopColor={T.violet} stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false} />
+            <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={60} />
+            <Tooltip content={<Tip />} />
+            <Area type="monotone" dataKey="ingresos" name="Ingresos" stroke={T.green}  fill="url(#aInc)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="egresos"  name="Egresos"  stroke={T.blue}   fill="url(#aExp)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="utilidad" name="Utilidad" stroke={T.violet} fill="url(#aUtl)" strokeWidth={2} dot={false} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div style={card}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 6 }}>Facturas entrantes (Compras)</div>
+          <div style={{ fontSize: 11, color: T.muted, marginBottom: 14 }}>Últimos 6 meses</div>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={last6Inc}>
+              <defs>
+                <linearGradient id="aInc2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="95%" stopColor={T.violet} stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={56} />
+              <Tooltip content={<Tip />} />
+              <Area type="monotone" dataKey="egresos" name="Egresos" stroke={T.red}    fill="url(#aInc2)" strokeWidth={2} dot={false} />
+              <Area type="monotone" dataKey="cobrado" name="Cobrado" stroke={T.violet} fill="transparent" strokeWidth={2} strokeDasharray="4 2" dot={false} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+        <div style={card}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 6 }}>Facturas salientes (Ventas)</div>
+          <div style={{ fontSize: 11, color: T.muted, marginBottom: 14 }}>Todo el año</div>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={monthlyData} barSize={12}>
+              <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false} />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={56} />
+              <Tooltip content={<Tip />} />
+              <Bar dataKey="ingresos" name="Ingresos" fill={T.violet} radius={[3,3,0,0]} opacity={0.5} />
+              <Bar dataKey="cobrado"  name="Cobrado"  fill={T.violet} radius={[3,3,0,0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Provisión renta ────────────────────────────────────── */
+const RATES = [
+  { label: "25%", value: 25, desc: "Tarifa reducida" },
+  { label: "33%", value: 33, desc: "Tarifa estándar" },
+  { label: "35%", value: 35, desc: "Tarifa SAS/SA" },
 ]
 
-export function ReportsView({ allInc, allExp, year }) {
+function ProvisionTab({ allInc, allExp, year }) {
+  const [rate, setRate]     = useState(33)
+  const [custom, setCustom] = useState("")
+  const effectiveRate       = custom !== "" ? Math.min(100, Math.max(0, Number(custom))) : rate
+
+  const data = useMemo(() => {
+    let acum = 0
+    return MONTHS_SHORT.map((name, m) => {
+      const f        = calcFin(filterM(allInc, m, year), filterM(allExp, m, year))
+      const utilidad = f.util
+      const provision = utilidad > 0 ? Math.round(utilidad * effectiveRate / 100) : 0
+      acum += provision
+      return { name, month: m, ingresos: f.tI, egresos: f.tE, utilidad, provision, acumulado: acum }
+    })
+  }, [allInc, allExp, year, effectiveRate])
+
+  const totalUtil  = data.reduce((s, d) => s + Math.max(0, d.utilidad), 0)
+  const totalProv  = data[data.length - 1]?.acumulado || 0
+  const provMes    = data.filter(d => d.provision > 0).length
+  const promMensual = provMes > 0 ? totalProv / provMes : 0
+
+  /* provision by client */
+  const byClient = useMemo(() => {
+    const map = {}
+    for (const i of allInc) {
+      const key = i.client || i.project || "Sin cliente"
+      if (!map[key]) map[key] = 0
+      map[key] += Number(i.amount)
+    }
+    return Object.entries(map)
+      .map(([name, total]) => ({ name, total, provision: Math.round(total * effectiveRate / 100) }))
+      .sort((a, b) => b.provision - a.provision)
+      .slice(0, 8)
+  }, [allInc, effectiveRate])
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+      {/* Rate selector */}
+      <div style={{ ...card, padding: "20px 24px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: T.text, marginBottom: 4 }}>Tasa de provisión</div>
+            <div style={{ fontSize: 12, color: T.muted }}>Porcentaje de la utilidad neta a apartar cada mes</div>
+          </div>
+          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+            {RATES.map(r => (
+              <button key={r.value} onClick={() => { setRate(r.value); setCustom("") }} style={{
+                padding: "8px 16px", borderRadius: 8, border: `1.5px solid ${custom === "" && rate === r.value ? T.text : T.border}`,
+                background: custom === "" && rate === r.value ? T.text : T.surf,
+                color: custom === "" && rate === r.value ? "#fff" : T.text2,
+                fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
+                transition: "all .12s",
+              }}>
+                <span>{r.label}</span>
+                <span style={{ fontSize: 10, marginLeft: 6, opacity: 0.65, fontWeight: 400 }}>{r.desc}</span>
+              </button>
+            ))}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, border: `1.5px solid ${custom !== "" ? T.text : T.border}`, borderRadius: 8, padding: "6px 10px", background: T.surf }}>
+              <input
+                type="number" min="1" max="99" value={custom}
+                onChange={e => { setCustom(e.target.value); setRate(0) }}
+                placeholder="Otro %"
+                style={{ width: 56, border: "none", background: "transparent", fontSize: 13, fontWeight: 600, color: T.text, outline: "none" }}
+              />
+              <span style={{ fontSize: 12, color: T.muted }}>%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div className="g3">
+        {[
+          { title: "Total a apartar en el año", value: fmtS(totalProv), sub: `Al ${effectiveRate}% sobre utilidades`, color: T.violet, icon: PiggyBank },
+          { title: "Utilidad gravable acumulada", value: fmtS(totalUtil), sub: "Solo meses con utilidad positiva", color: T.green, icon: TrendingUp },
+          { title: "Promedio mensual a apartar", value: fmtS(promMensual), sub: `En ${provMes} meses con utilidad`, color: T.amber, icon: Calendar },
+        ].map(({ title, value, sub, color, icon: Icon }) => (
+          <KPI key={title} title={title} value={value} color={color} icon={Icon} sub={sub} />
+        ))}
+      </div>
+
+      {/* Chart */}
+      <div style={card}>
+        <SectionHeader title="Provisión acumulada" sub={`Dinero a apartar para declaración de renta ${year} · tasa ${effectiveRate}%`} />
+        <ResponsiveContainer width="100%" height={220}>
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="pAcum" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="100%" stopColor={T.violet} stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="pProv" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={T.amber} stopOpacity={0.15}/><stop offset="100%" stopColor={T.amber} stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
+            <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false}/>
+            <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={66}/>
+            <Tooltip content={<Tip />}/>
+            <Area type="monotone" dataKey="acumulado" name="Acumulado"  stroke={T.violet} strokeWidth={2.5} fill="url(#pAcum)" dot={{ r: 3, fill: T.violet, strokeWidth: 0 }} activeDot={{ r: 5 }}/>
+            <Area type="monotone" dataKey="provision" name="Este mes"   stroke={T.amber}  strokeWidth={1.5} fill="url(#pProv)" dot={false} strokeDasharray="4 2"/>
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Monthly table */}
+      <div style={{ ...card, overflowX: "auto" }}>
+        <SectionHeader title="Detalle mes a mes" sub={`Provisión sugerida al ${effectiveRate}% sobre utilidad neta`} />
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 580 }}>
+          <thead>
+            <tr>
+              {["Mes", "Ingresos", "Egresos", "Utilidad neta", `Provisión (${effectiveRate}%)`, "Acumulado"].map(h => (
+                <th key={h} style={{ textAlign: "left", fontSize: 10, fontWeight: 700, color: T.muted, padding: "0 16px 12px 0", textTransform: "uppercase", letterSpacing: ".07em", borderBottom: `1px solid ${T.border}` }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((d, i) => {
+              const empty = d.ingresos === 0 && d.egresos === 0
+              return (
+                <tr key={i} style={{ borderBottom: `1px solid ${T.border}`, background: d.provision > 0 ? T.violetBg : "transparent" }}>
+                  <td style={{ padding: "13px 16px 13px 0", fontSize: 13, fontWeight: 600, color: empty ? T.muted : T.text }}>{MONTHS[i]}</td>
+                  <td style={{ padding: "13px 16px 13px 0", fontSize: 12, color: T.green,  fontFamily: "'DM Mono',monospace" }}>{d.ingresos > 0 ? fmtS(d.ingresos) : "—"}</td>
+                  <td style={{ padding: "13px 16px 13px 0", fontSize: 12, color: T.red,    fontFamily: "'DM Mono',monospace" }}>{d.egresos  > 0 ? fmtS(d.egresos)  : "—"}</td>
+                  <td style={{ padding: "13px 16px 13px 0", fontSize: 13, fontWeight: 600, color: d.utilidad >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{empty ? "—" : fmtS(d.utilidad)}</td>
+                  <td style={{ padding: "13px 16px 13px 0" }}>
+                    {d.provision > 0 ? (
+                      <span style={{ fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace" }}>{fmtS(d.provision)}</span>
+                    ) : (
+                      <span style={{ fontSize: 11, color: T.muted }}>
+                        {d.utilidad < 0 ? "Pérdida" : "—"}
+                      </span>
+                    )}
+                  </td>
+                  <td style={{ padding: "13px 0", fontSize: 13, fontWeight: 700, color: T.text2, fontFamily: "'DM Mono',monospace" }}>{d.acumulado > 0 ? fmtS(d.acumulado) : "—"}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+          <tfoot>
+            <tr style={{ borderTop: `2px solid ${T.border}` }}>
+              <td style={{ padding: "13px 16px 4px 0", fontSize: 12, fontWeight: 700, color: T.muted, textTransform: "uppercase" }}>Total</td>
+              <td colSpan={2} />
+              <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: totalUtil >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(totalUtil)}</td>
+              <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace" }}>{fmtS(totalProv)}</td>
+              <td />
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      {/* By client */}
+      {byClient.length > 0 && (
+        <div style={card}>
+          <SectionHeader title="Provisión por cliente / proyecto" sub={`Cuánto apartar por cada fuente de ingreso · tasa ${effectiveRate}%`} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {byClient.map(({ name, total, provision }) => {
+              const pct = totalProv > 0 ? (provision / totalProv * 100) : 0
+              return (
+                <div key={name} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</span>
+                      <div style={{ display: "flex", gap: 16, alignItems: "center", flexShrink: 0 }}>
+                        <span style={{ fontSize: 11, color: T.muted, fontFamily: "'DM Mono',monospace" }}>{fmtS(total)}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace", minWidth: 80, textAlign: "right" }}>{fmtS(provision)}</span>
+                      </div>
+                    </div>
+                    <div style={{ height: 5, borderRadius: 99, background: T.border, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${Math.min(100, pct)}%`, borderRadius: 99, background: T.violet, opacity: 0.7, transition: "width .4s" }} />
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Disclaimer */}
+      <div style={{ fontSize: 12, color: T.muted, padding: "14px 18px", background: T.surf2, borderRadius: 10, border: `1px solid ${T.border}`, lineHeight: 1.7 }}>
+        <strong style={{ color: T.text2 }}>Nota:</strong> Esta provisión es un estimado orientativo basado en tu utilidad neta del período. El valor exacto del impuesto de renta lo calcula tu contador al cierre del año fiscal, considerando deducciones, rentas exentas y la tabla de tarifas vigente de la DIAN. Aparta este dinero en una cuenta separada para evitar sorpresas.
+      </div>
+    </div>
+  )
+}
+
+/* ── Export único ───────────────────────────────────────── */
+const TABS = [
+  { id: "resumen",      label: "Resumen financiero" },
+  { id: "flujo",        label: "Flujo de caja" },
+  { id: "contabilidad", label: "Contabilidad" },
+  { id: "provision",    label: "Provisión renta" },
+]
+
+export function ReportsView({ allInc, allExp, year, month }) {
   const [tab, setTab] = useState("resumen")
 
   return (
@@ -431,8 +746,8 @@ export function ReportsView({ allInc, allExp, year }) {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Reportes</h2>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Análisis financiero anual · {year}</p>
+          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Reportes & Finanzas</h2>
+          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Análisis financiero · {year}</p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2 }}>
           <Calendar size={14} color={T.muted} />
@@ -441,7 +756,7 @@ export function ReportsView({ allInc, allExp, year }) {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 4, background: T.surf, border: `1px solid ${T.border}`, borderRadius: 10, padding: 4, alignSelf: "flex-start" }}>
+      <div style={{ display: "flex", gap: 2, background: T.surf, border: `1px solid ${T.border}`, borderRadius: 10, padding: 4, alignSelf: "flex-start", flexWrap: "wrap" }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
             padding: "7px 16px", borderRadius: 7, border: "none", cursor: "pointer",
@@ -453,10 +768,10 @@ export function ReportsView({ allInc, allExp, year }) {
         ))}
       </div>
 
-      {tab === "resumen"
-        ? <ReportsTab    allInc={allInc} allExp={allExp} year={year} />
-        : <CashFlowTab   allInc={allInc} allExp={allExp} year={year} />
-      }
+      {tab === "resumen"      && <ReportsTab     allInc={allInc} allExp={allExp} year={year} />}
+      {tab === "flujo"        && <CashFlowTab    allInc={allInc} allExp={allExp} year={year} />}
+      {tab === "contabilidad" && <AccountingTab  allInc={allInc} allExp={allExp} year={year} month={month || 0} />}
+      {tab === "provision"    && <ProvisionTab   allInc={allInc} allExp={allExp} year={year} />}
     </div>
   )
 }
