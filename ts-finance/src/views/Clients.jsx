@@ -19,7 +19,7 @@ function ClientModal({ initial, onSave, onClose }) {
             <X size={15} color={T.text2} />
           </button>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div className="g2" style={{ gap: 14 }}>
           <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Nombre / Razón social *</label><input style={inp} value={f.name} onChange={e => set("name", e.target.value)} placeholder="Bancolombia S.A." /></div>
           <div><label style={lbl}>NIT / Cédula</label><input style={inp} value={f.nit} onChange={e => set("nit", e.target.value)} placeholder="900.123.456-7" /></div>
           <div><label style={lbl}>Contacto</label><input style={inp} value={f.contacto} onChange={e => set("contacto", e.target.value)} placeholder="Nombre del contacto" /></div>
@@ -71,7 +71,7 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
 
         <div style={{ overflowY: "auto", padding: "20px 28px 24px" }}>
           {/* KPIs */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, marginBottom: 20 }}>
+          <div className="g3" style={{ gap: 10, marginBottom: 20 }}>
             {[
               { label: "Total facturado", value: total, color: T.white },
               { label: "Cobrado", value: cobrado, color: T.green },

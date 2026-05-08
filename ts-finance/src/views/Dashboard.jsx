@@ -462,7 +462,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       )}
 
       {/* ── 2. KPI Cards ──────────────────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+      <div className="g4" style={{ gap: 12 }}>
         <KPI
           title="Ingresos del mes"
           value={fmtS(fin.tI)}
@@ -601,7 +601,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 5. Pending invoices + Pie + IVA ───────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+      <div className="g3" style={{ gap: 14 }}>
 
         {/* Pending invoices */}
         <div style={{ ...card, padding: "20px 22px" }}>
@@ -729,7 +729,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 6. Quick access + Recent movements ───────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: 14 }}>
+      <div className="g2" style={{ gap: 14 }}>
 
         {/* Quick access */}
         <div style={{ ...card, padding: "20px 16px" }}>

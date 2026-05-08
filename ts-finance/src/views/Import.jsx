@@ -168,7 +168,7 @@ export default function ImportView({ onImported }) {
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
       {/* Summary */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:12 }}>
+      <div className="g3" style={{ gap: 12 }}>
         {[
           { label:'Ingresos', val:ingTotal, color:T.green },
           { label:'Egresos',  val:egrTotal, color:T.red },
