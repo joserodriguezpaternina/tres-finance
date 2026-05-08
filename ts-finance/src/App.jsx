@@ -135,6 +135,15 @@ export default function App() {
 
   const navTo = id => { setView(id); setSidebarOpen(false) }
 
+  const markPaid = async id => {
+    const inc = incomes.find(i => i.id === id)
+    if (!inc) return
+    setIncomes(await incomeService.upsert({ ...inc, status: "Pagado" }))
+  }
+
+  /* Pending count for all-time (not just month) */
+  const allPending = incomes.filter(i => i.status === "Pendiente" || i.status === "Parcial").length
+
   return (
     <>
       <style>{`
@@ -143,23 +152,23 @@ export default function App() {
 @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Medium.otf') format('opentype');font-weight:500;font-display:swap}
 @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body,#root{height:100%;font-family:'Inter',sans-serif;background:${T.bg};color:${T.text}}
+        html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text}}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:${T.border2};border-radius:10px}
         input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:1px solid ${T.border}}
-        input:focus,select:focus{border-color:#101011!important;outline:none;box-shadow:0 0 0 3px rgba(16,16,17,.06)!important}
+        input:focus,select:focus{border-color:${T.text}!important;outline:none;box-shadow:0 0 0 3px rgba(16,16,17,.06)!important}
         button{transition:opacity .15s;font-family:'AcidGrotesk',sans-serif}
         button:hover{opacity:.8}
         ::placeholder{color:${T.muted}}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:216px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
+        .sidebar{width:224px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;backdrop-filter:blur(2px)}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:10px 20px;display:flex;align-items:center;gap:8px;flex-shrink:0}
-        .hactions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 20px;height:52px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+        .hactions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
@@ -167,6 +176,7 @@ export default function App() {
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
         .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
         .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
+        .nav-item:hover{background:${T.surf2}!important}
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
@@ -178,7 +188,7 @@ export default function App() {
           .sidebar.open{transform:translateX(0);animation:slideIn .25s ease}
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
-          .topbar{padding:0;flex-direction:column;align-items:stretch;gap:0}
+          .topbar{padding:0;flex-direction:column;align-items:stretch;height:auto;gap:0}
           .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid ${T.border}}
           .topbar-row2{display:flex!important;align-items:center;justify-content:space-between;padding:8px 14px;gap:8px}
           .hactions{display:none!important}
@@ -199,53 +209,60 @@ export default function App() {
 
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
-          {/* Logo */}
-          <div style={{ padding: "18px 16px 14px", borderBottom: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
+          {/* Brand */}
+          <div style={{ padding: "16px 16px 14px", borderBottom: `1px solid ${T.border}` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <TresLogo />
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#101011", letterSpacing: "-.3px" }}>tres Studio</div>
-                <div style={{ fontSize: 10, color: T.muted, letterSpacing: ".02em" }}>Finanzas {year}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
+                <div style={{ fontSize: 10, color: T.muted }}>Finanzas · {year}</div>
               </div>
             </div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "8px 8px", display: "flex", flexDirection: "column", gap: 0, overflowY: "auto" }}>
-            {NAV_GROUPS.map(group => (
-              <div key={group.label} style={{ marginBottom: 6 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".1em", padding: "8px 10px 4px" }}>{group.label}</div>
-                {group.items.map(v => {
-                  const active = view === v.id
-                  return (
-                    <button key={v.id} onClick={() => navTo(v.id)} style={{
-                      display: "flex", alignItems: "center", gap: 9, padding: "8px 10px",
-                      borderRadius: 8, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
-                      background: active ? T.text : "transparent",
-                      color: active ? "#fff" : T.text2,
-                      fontSize: 13, fontWeight: active ? 600 : 400,
-                      transition: "background .12s, color .12s",
-                    }}>
-                      <v.icon size={14} color={active ? "#fff" : T.muted} />
-                      {v.label}
-                      {v.id === "ingresos" && pending > 0 && (
-                        <span style={{ marginLeft: "auto", fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.2)" : "#FEF3C7", color: active ? "#fff" : "#92400E", padding: "2px 6px", borderRadius: 10 }}>{pending}</span>
-                      )}
-                      {v.id === "recurrentes" && (
-                        <span style={{ marginLeft: "auto", fontSize: 10, fontWeight: 600, background: active ? "rgba(255,255,255,.2)" : T.surf2, color: active ? "#fff" : T.muted, padding: "2px 6px", borderRadius: 10 }}>{recurring.filter(r => r.active).length}</span>
-                      )}
-                    </button>
-                  )
-                })}
+          <nav style={{ flex: 1, padding: "10px 8px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
+            {NAV_GROUPS.map((group, gi) => (
+              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 16 : 0 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".12em", padding: "0 10px 6px" }}>{group.label}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {group.items.map(v => {
+                    const active = view === v.id
+                    return (
+                      <button
+                        key={v.id}
+                        onClick={() => navTo(v.id)}
+                        className={active ? undefined : "nav-item"}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 9, padding: "8px 10px",
+                          borderRadius: 9, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
+                          background: active ? T.text : "transparent",
+                          color: active ? "#fff" : T.text2,
+                          fontSize: 13, fontWeight: active ? 600 : 400,
+                          transition: "background .12s, color .12s",
+                        }}
+                      >
+                        <v.icon size={14} color={active ? "#fff" : T.subtle} />
+                        <span style={{ flex: 1 }}>{v.label}</span>
+                        {v.id === "ingresos" && allPending > 0 && (
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.2)" : "#FEF9C3", color: active ? "#fff" : "#A16207", padding: "2px 7px", borderRadius: 10, minWidth: 20, textAlign: "center" }}>{allPending}</span>
+                        )}
+                        {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
+                          <span style={{ fontSize: 10, fontWeight: 600, background: active ? "rgba(255,255,255,.2)" : T.surf2, color: active ? "#fff" : T.muted, padding: "2px 7px", borderRadius: 10 }}>{recurring.filter(r => r.active).length}</span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             ))}
           </nav>
 
-          {/* Status */}
-          <div style={{ padding: "12px 16px", borderTop: `1px solid ${T.border}` }}>
+          {/* Footer status */}
+          <div style={{ padding: "12px 14px", borderTop: `1px solid ${T.border}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: hasSupabase ? "#166534" : "#92400E" }} />
-              <span style={{ fontSize: 11, color: T.muted }}>{hasSupabase ? "Supabase sync" : "Modo local"}</span>
+              <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.green : T.amber, flexShrink: 0 }} />
+              <span style={{ fontSize: 11, color: T.muted }}>{hasSupabase ? "Sincronizado · Supabase" : "Guardado localmente"}</span>
             </div>
           </div>
         </aside>
@@ -253,37 +270,45 @@ export default function App() {
         {/* ── MAIN ── */}
         <div className="main-area">
           <header className="topbar">
-            <div className="topbar-row1" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
+            <div className="topbar-row1" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, height: "100%" }}>
               <button className="menuBtn" onClick={() => setSidebarOpen(true)} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
                 <Menu size={15} color={T.text2} />
               </button>
+
+              {/* Breadcrumb */}
               <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 12, color: T.muted }}>Dashboard</span>
-                <span style={{ fontSize: 12, color: T.muted }}>›</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: "#101011" }}>
+                <span style={{ fontSize: 12, color: T.muted }}>tres Studio</span>
+                <span style={{ fontSize: 12, color: T.border2 }}>/</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>
                   {NAV.find(v => v.id === view)?.label}
                 </span>
               </div>
+
               <div className="hactions">
-                <div style={{ display: "flex", alignItems: "center", gap: 5, background: T.bg, borderRadius: 8, padding: "6px 10px", border: `1px solid ${T.border}` }}>
-                  <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 1 }}>
-                    <ChevronLeft size={13} />
+                {/* Month selector */}
+                <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "5px 10px", border: `1px solid ${T.border}` }}>
+                  <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
+                    <ChevronLeft size={12} />
                   </button>
-                  <span className="monthLabel" style={{ fontSize: 12, fontWeight: 600, color: T.text, minWidth: 96, textAlign: "center" }}>
+                  <span className="monthLabel" style={{ fontSize: 12, fontWeight: 600, color: T.text, minWidth: 92, textAlign: "center" }}>
                     {MONTHS[month]} {year}
                   </span>
-                  <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 1 }}>
-                    <ChevronRight size={13} />
+                  <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
+                    <ChevronRight size={12} />
                   </button>
                 </div>
-                <button onClick={() => exportExcel({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "6px 11px", fontSize: 12, gap: 5 }}>
+
+                {/* Export */}
+                <button onClick={() => exportExcel({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "5px 10px", fontSize: 12, gap: 4 }}>
                   <FileSpreadsheet size={13} color={T.muted} />
                   <span className="btnText">Excel</span>
                 </button>
-                <button onClick={() => exportPDF({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "6px 11px", fontSize: 12, gap: 5 }}>
+                <button onClick={() => exportPDF({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "5px 10px", fontSize: 12, gap: 4 }}>
                   <FileText size={13} color={T.muted} />
                   <span className="btnText">PDF</span>
                 </button>
+
+                {/* Quick create */}
                 <button onClick={() => setModal({ type: "income" })} style={{ ...btnGreen, padding: "6px 14px", fontSize: 12, gap: 5 }}>
                   <Plus size={13} />
                   <span className="btnText">Ingreso</span>
@@ -292,9 +317,13 @@ export default function App() {
                   <Plus size={13} />
                   <span className="btnText">Egreso</span>
                 </button>
+
+                {/* Bell */}
                 <div style={{ position: "relative", width: 34, height: 34, borderRadius: 8, background: T.bg, border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
                   <Bell size={14} color={T.muted} />
-                  {pending > 0 && <span style={{ position: "absolute", top: 7, right: 7, width: 6, height: 6, borderRadius: "50%", background: "#9B1C1C", border: `2px solid ${T.surf}` }} />}
+                  {allPending > 0 && (
+                    <span style={{ position: "absolute", top: 6, right: 6, width: 7, height: 7, borderRadius: "50%", background: T.amber, border: `2px solid ${T.surf}` }} />
+                  )}
                 </div>
               </div>
             </div>
@@ -307,8 +336,8 @@ export default function App() {
                 <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}><ChevronRight size={14} /></button>
               </div>
               <div style={{ display: "flex", gap: 6 }}>
-                <button onClick={() => setModal({ type: "income" })} style={{ ...btnGreen, padding: "0 12px", height: 36, fontSize: 12, gap: 5, borderRadius: 8 }}><Plus size={14} />Ingreso</button>
-                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnRed, padding: "0 12px", height: 36, fontSize: 12, gap: 5, borderRadius: 8 }}><Plus size={14} />Egreso</button>
+                <button onClick={() => setModal({ type: "income" })} style={{ ...btnGreen, padding: "0 12px", height: 36, fontSize: 12, gap: 4, borderRadius: 8 }}><Plus size={14} />Ingreso</button>
+                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnRed, padding: "0 12px", height: 36, fontSize: 12, gap: 4, borderRadius: 8 }}><Plus size={14} />Egreso</button>
               </div>
             </div>
           </header>
@@ -316,18 +345,18 @@ export default function App() {
           <main className="content" style={{ flex: 1, overflowY: "auto", padding: 20, background: T.bg }}>
             {loading ? (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", flexDirection: "column", gap: 12 }}>
-                <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: "#101011", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+                <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: T.text, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
                 <span style={{ color: T.muted, fontSize: 13 }}>Cargando datos...</span>
               </div>
             ) : (
               <>
                 {view === "dashboard"   && <Dashboard fin={fin} incomes={monthInc} expenses={monthExp} allInc={incomes} allExp={expenses} month={month} year={year} onNavigate={navTo} />}
-                {view === "ingresos"   && <IncomesView incomes={monthInc} onAdd={() => setModal({ type: "income" })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} />}
-                {view === "egresos"    && <ExpensesView expenses={monthExp} onAdd={() => setModal({ type: "expense" })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
+                {view === "ingresos"    && <IncomesView incomes={monthInc} allIncomes={incomes} onAdd={() => setModal({ type: "income" })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} onMarkPaid={markPaid} />}
+                {view === "egresos"     && <ExpensesView expenses={monthExp} allExpenses={expenses} onAdd={() => setModal({ type: "expense" })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
                 {view === "recurrentes" && <RecurringView recurring={recurring} expenses={expenses} onAdd={() => setModal({ type: "recurring" })} onEdit={d => setModal({ type: "recurring", data: d })} onDelete={deleteRecurring} onToggle={toggleRecurring} />}
-                {view === "clientes"   && <ClientsView clients={clients} incomes={incomes} onAdd={() => setModal({ type: "client" })} onEdit={d => setModal({ type: "client", data: d })} onDelete={deleteClient} />}
-                {view === "reportes"   && <ReportsView allInc={incomes} allExp={expenses} year={year} month={month} />}
-                {view === "importar"   && <ImportView onImported={() => window.location.reload()} />}
+                {view === "clientes"    && <ClientsView clients={clients} incomes={incomes} onAdd={() => setModal({ type: "client" })} onEdit={d => setModal({ type: "client", data: d })} onDelete={deleteClient} />}
+                {view === "reportes"    && <ReportsView allInc={incomes} allExp={expenses} year={year} month={month} />}
+                {view === "importar"    && <ImportView onImported={() => window.location.reload()} />}
               </>
             )}
           </main>
