@@ -72,7 +72,7 @@ function ReportsTab({ allInc, allExp, year }) {
 
       <div style={card}>
         <SectionHeader title="Resumen trimestral" sub={`Ingresos, egresos y utilidad por trimestre · ${year}`} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+        <div className="g4" style={{ gap: 12 }}>
           {trimestreData.map((t, i) => {
             const active = activeT === i
             const margin = t.inc > 0 ? (t.util / t.inc * 100) : 0
@@ -135,7 +135,7 @@ function ReportsTab({ allInc, allExp, year }) {
             ))}
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10 }}>
+        <div className="g4" style={{ gap: 10 }}>
           {trimestreData.map((t, i) => (
             <div key={i} style={{ background: "rgba(255,255,255,.05)", borderRadius: 10, padding: "14px 16px", border: t.ivaN > 0 ? "1px solid rgba(248,113,113,.25)" : "1px solid rgba(255,255,255,.07)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
@@ -158,7 +158,7 @@ function ReportsTab({ allInc, allExp, year }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
+      <div className="g3-2">
         <div style={card}>
           <SectionHeader title="Ingresos vs Egresos" sub={`Comparativo mensual ${year}`} />
           <Legend items={[["Ingresos", T.green], ["Egresos", T.red]]} />
@@ -285,7 +285,7 @@ function CashFlowTab({ allInc, allExp, year }) {
         <KPI title="Pendiente cobro"  value={fmtS(totalPend)}    color={T.amber}  icon={AlertCircle}    sub={`${pendientes.length} facturas abiertas`} />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16 }}>
+      <div className="g3-2">
         <div style={card}>
           <SectionHeader title="Caja acumulada" sub="Posición de liquidez mes a mes" />
           <ResponsiveContainer width="100%" height={220}>
@@ -496,7 +496,7 @@ function AccountingTab({ allInc, allExp, year, month }) {
         </ResponsiveContainer>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div className="g2">
         <div style={card}>
           <div style={{ fontSize: 13, fontWeight: 700, color: T.text, marginBottom: 6 }}>Facturas entrantes (Compras)</div>
           <div style={{ fontSize: 11, color: T.muted, marginBottom: 14 }}>Últimos 6 meses</div>

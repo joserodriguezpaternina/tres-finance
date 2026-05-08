@@ -178,29 +178,29 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       </div>
 
       {/* ── Filter bar */}
-      <div style={{ ...card, padding: '12px 16px', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-        {/* Search */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 9, padding: '8px 12px', minWidth: 200 }}>
+      <div style={{ ...card, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {/* Row 1: search */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 9, padding: '8px 12px' }}>
           <Search size={13} color={T.muted} />
           <input
             placeholder="Buscar cliente, proyecto…"
             value={q} onChange={e => setQ(e.target.value)}
-            style={{ border: 'none', background: 'transparent', fontSize: 13, color: T.text, outline: 'none', width: '100%', fontFamily: "'Inter',sans-serif" }}
+            style={{ border: 'none', background: 'transparent', fontSize: 13, color: T.text, outline: 'none', width: '100%', fontFamily: "inherit" }}
           />
         </div>
-
-        {/* Period chips */}
-        <div style={{ display: 'flex', gap: 5 }}>
-          {PERIODS.map(p => (
-            <ChipBtn key={p} active={period === p} onClick={() => setPeriod(p)}>{p}</ChipBtn>
-          ))}
-        </div>
-
-        {/* Status chips */}
-        <div style={{ display: 'flex', gap: 5, borderLeft: `1px solid ${T.border}`, paddingLeft: 10 }}>
-          {['Todos', ...STATUS_LIST].map(s => (
-            <ChipBtn key={s} active={statusFil === s} onClick={() => setStatusFil(s)}>{s}</ChipBtn>
-          ))}
+        {/* Row 2: chips scrollables */}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', overflow: 'hidden' }}>
+          <div className="chip-scroll">
+            {PERIODS.map(p => (
+              <ChipBtn key={p} active={period === p} onClick={() => setPeriod(p)}>{p}</ChipBtn>
+            ))}
+          </div>
+          <div style={{ width: 1, height: 20, background: T.border, flexShrink: 0 }} />
+          <div className="chip-scroll">
+            {['Todos', ...STATUS_LIST].map(s => (
+              <ChipBtn key={s} active={statusFil === s} onClick={() => setStatusFil(s)}>{s}</ChipBtn>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -212,8 +212,8 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       ]} />
 
       {/* ── Table */}
-      <div style={{ ...card, overflowX: 'auto', padding: 0 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 780 }}>
+      <div className="tbl-wrap" style={{ background: "white", borderRadius: 14, border: `1px solid ${T.border}` }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
               <Th>Cliente</Th>
@@ -411,8 +411,8 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       ]} />
 
       {/* ── Table */}
-      <div style={{ ...card, overflowX: 'auto', padding: 0 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 780 }}>
+      <div className="tbl-wrap" style={{ background: "white", borderRadius: 14, border: `1px solid ${T.border}` }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
               <Th sortable active dir={sortDir} onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}>Fecha</Th>

@@ -54,7 +54,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 14 }}>
+      <div className="rg">
         {/* Main list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Filter tabs */}

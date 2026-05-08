@@ -166,20 +166,31 @@ export default function App() {
         .app-layout{display:flex;height:100vh;overflow:hidden}
         .sidebar{width:224px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;backdrop-filter:blur(2px)}
-        .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+        .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
         .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 20px;height:52px;display:flex;align-items:center;gap:8px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
+        /* Grid utilities */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+        .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+        .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
         .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
         .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
         .nav-item:hover{background:${T.surf2}!important}
+        /* Scrollable chip row */
+        .chip-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;padding-bottom:2px}
+        .chip-scroll::-webkit-scrollbar{display:none}
+        /* Table scroll wrapper */
+        .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
+          .g3-2{grid-template-columns:1fr}
+          .g2-1{grid-template-columns:1fr}
           .gc{grid-template-columns:1fr}
           .rg{grid-template-columns:1fr}
         }
@@ -192,15 +203,19 @@ export default function App() {
           .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid ${T.border}}
           .topbar-row2{display:flex!important;align-items:center;justify-content:space-between;padding:8px 14px;gap:8px}
           .hactions{display:none!important}
-          .g4{grid-template-columns:1fr;gap:10px}
+          .g4{grid-template-columns:1fr 1fr;gap:10px}
           .g3{grid-template-columns:1fr 1fr;gap:10px}
+          .g2{grid-template-columns:1fr}
           main.content{padding:12px!important}
           .btnText{display:none}
         }
         @media(max-width:480px){
-          .g4{grid-template-columns:1fr;gap:8px}
-          .g3{grid-template-columns:1fr;gap:8px}
+          .g4{grid-template-columns:1fr 1fr;gap:8px}
+          .g3{grid-template-columns:1fr 1fr;gap:8px}
           .monthLabel{display:none}
+        }
+        @media(max-width:360px){
+          .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
       `}</style>
 
