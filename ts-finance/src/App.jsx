@@ -180,12 +180,15 @@ export default function App() {
         .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
         .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
         .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
+        /* Grid children must respect their column width */
+        .g4>*,.g3>*,.g2>*,.g2-1>*,.g3-2>*,.gc>*,.rg>*{min-width:0}
         .nav-item:hover{background:${T.surf2}!important}
         /* Scrollable chip row */
         .chip-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;padding-bottom:2px}
         .chip-scroll::-webkit-scrollbar{display:none}
         /* Table scroll wrapper */
         .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+        main.content{overflow-x:clip}
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
@@ -210,8 +213,8 @@ export default function App() {
           .btnText{display:none}
         }
         @media(max-width:480px){
-          .g4{grid-template-columns:1fr 1fr;gap:8px}
-          .g3{grid-template-columns:1fr 1fr;gap:8px}
+          .g4{grid-template-columns:1fr;gap:8px}
+          .g3{grid-template-columns:1fr;gap:8px}
           .monthLabel{display:none}
         }
         @media(max-width:360px){

@@ -517,7 +517,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           </div>
         </div>
         <Divider />
-        <div style={{ display: "flex", flex: 1, divideX: true }}>
+        <div style={{ display: "flex", flex: 1, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
           {[
             { label: "Ingresos totales", value: fmtS(annualFin.tI), note: `Cobrados: ${fmtS(annualFin.cobr)}`, color: T.green },
             { label: "Egresos totales", value: fmtS(annualFin.tE), color: T.red },
@@ -525,7 +525,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             { label: "IVA neto a declarar", value: fmtS(Math.abs(annualFin.ivaN)), note: annualFin.ivaN >= 0 ? "A pagar a DIAN" : "Saldo a favor", color: annualFin.ivaN >= 0 ? T.red : T.green },
           ].map(({ label, value, note, color }, i, arr) => (
             <div key={label} style={{
-              display: "flex",
+              display: "flex", flexShrink: 0, minWidth: 140,
               borderRight: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
             }}>
               <MetricStrip label={label} value={value} note={note} color={color} />
