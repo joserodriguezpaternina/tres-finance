@@ -63,17 +63,17 @@ export function KPI({ title, value, sub, icon: Icon, color, badge, spark, trend 
   const th = getTheme(color)
   return (
     <div style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, padding: "18px 20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", lineHeight: 1.3, maxWidth: 140 }}>{title}</span>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10, gap: 6 }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", lineHeight: 1.3, minWidth: 0 }}>{title}</span>
         {badge ? (
-          <span style={{ fontSize: 10, fontWeight: 600, padding: "3px 8px", borderRadius: 20, background: badge.bg || th.light, color: badge.color || th.accent, whiteSpace: "nowrap" }}>{badge.label}</span>
+          <span style={{ fontSize: 10, fontWeight: 600, padding: "3px 6px", borderRadius: 20, background: badge.bg || th.light, color: badge.color || th.accent, whiteSpace: "nowrap", flexShrink: 0 }}>{badge.label}</span>
         ) : Icon ? (
           <div style={{ width: 30, height: 30, borderRadius: 8, background: th.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <Icon size={14} color={th.accent} />
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize: 24, fontWeight: 700, color: T.text, letterSpacing: "-.5px", fontFamily: "'DM Mono',monospace", lineHeight: 1.1 }}>{value}</div>
+      <div style={{ fontSize: 24, fontWeight: 700, color: T.text, letterSpacing: "-.5px", fontFamily: "'DM Mono',monospace", lineHeight: 1.1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 12 }}>
         <div>
           {sub && <div style={{ fontSize: 11, color: T.muted }}>{sub}</div>}
