@@ -40,9 +40,9 @@ const NAV_GROUPS = [
 
 const NAV = NAV_GROUPS.flatMap(g => g.items)
 
-const TresLogo = () => (
-  <svg viewBox="0 0 1675 1675" style={{ width: 28, height: 28, flexShrink: 0 }} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fillRule="evenodd" clipRule="evenodd" d="M837.607 363.741C1048.32 363.741 1240.76 414.671 1381.48 498.375C1521.56 581.706 1615 700.811 1615 837.721C1615 974.626 1521.57 1093.73 1381.49 1177.06C1241.25 1260.49 1049.62 1311.36 839.728 1311.7C839.013 1311.75 838.293 1311.78 837.566 1311.78C626.861 1311.77 434.429 1260.82 293.723 1177.1C153.644 1093.75 60.2149 974.624 60.2148 837.721C60.2148 700.811 153.652 581.706 293.739 498.375C434.454 414.671 626.895 363.741 837.607 363.741ZM837.607 420.623C635.381 420.623 453.345 469.618 322.819 547.262C191.666 625.278 117.098 728.942 117.098 837.721C117.098 946.497 191.663 1050.18 322.81 1128.21C452.89 1205.61 634.13 1254.56 835.531 1254.9C836.23 1254.84 836.936 1254.82 837.646 1254.82C1039.86 1254.81 1221.89 1205.81 1352.41 1128.17C1483.55 1050.16 1558.12 946.495 1558.12 837.721C1558.12 728.942 1483.55 625.278 1352.39 547.262C1221.87 469.619 1039.83 420.623 837.607 420.623ZM601.944 696.784H772.853V587.68H852.841V696.784H1023.75V587.68H1103.74V696.784H1212.08V766.598H1103.74V984.806C1103.74 1011.76 1120.41 1027.02 1144.43 1027.02H1212.08V1096.83H1137.18C1063.04 1096.83 1023.75 1064.79 1023.75 989.894V766.598H852.841V984.806C852.841 1011.76 869.509 1027.02 893.538 1027.02H961.188V1096.83H886.286C812.143 1096.83 772.853 1064.79 772.853 989.894V766.598H601.944V984.806C601.944 1011.76 618.614 1027.02 642.643 1027.02H710.291V1096.83H635.391C561.247 1096.83 521.956 1064.79 521.956 989.894V766.598H456.473V696.784H521.956V587.68H601.944V696.784Z" fill="#101011"/>
+const TresLogo = ({ light = false }) => (
+  <svg viewBox="0 0 1675 1675" style={{ width: 26, height: 26, flexShrink: 0 }} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M837.607 363.741C1048.32 363.741 1240.76 414.671 1381.48 498.375C1521.56 581.706 1615 700.811 1615 837.721C1615 974.626 1521.57 1093.73 1381.49 1177.06C1241.25 1260.49 1049.62 1311.36 839.728 1311.7C839.013 1311.75 838.293 1311.78 837.566 1311.78C626.861 1311.77 434.429 1260.82 293.723 1177.1C153.644 1093.75 60.2149 974.624 60.2148 837.721C60.2148 700.811 153.652 581.706 293.739 498.375C434.454 414.671 626.895 363.741 837.607 363.741ZM837.607 420.623C635.381 420.623 453.345 469.618 322.819 547.262C191.666 625.278 117.098 728.942 117.098 837.721C117.098 946.497 191.663 1050.18 322.81 1128.21C452.89 1205.61 634.13 1254.56 835.531 1254.9C836.23 1254.84 836.936 1254.82 837.646 1254.82C1039.86 1254.81 1221.89 1205.81 1352.41 1128.17C1483.55 1050.16 1558.12 946.495 1558.12 837.721C1558.12 728.942 1483.55 625.278 1352.39 547.262C1221.87 469.619 1039.83 420.623 837.607 420.623ZM601.944 696.784H772.853V587.68H852.841V696.784H1023.75V587.68H1103.74V696.784H1212.08V766.598H1103.74V984.806C1103.74 1011.76 1120.41 1027.02 1144.43 1027.02H1212.08V1096.83H1137.18C1063.04 1096.83 1023.75 1064.79 1023.75 989.894V766.598H852.841V984.806C852.841 1011.76 869.509 1027.02 893.538 1027.02H961.188V1096.83H886.286C812.143 1096.83 772.853 1064.79 772.853 989.894V766.598H601.944V984.806C601.944 1011.76 618.614 1027.02 642.643 1027.02H710.291V1096.83H635.391C561.247 1096.83 521.956 1064.79 521.956 989.894V766.598H456.473V696.784H521.956V587.68H601.944V696.784Z" fill={light ? "#FAFAFA" : "#09090B"} />
   </svg>
 )
 
@@ -158,31 +158,34 @@ export default function App() {
     <>
       <style>{`
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Light.otf') format('opentype');font-weight:300;font-display:swap}
-@font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Regular.otf') format('opentype');font-weight:400;font-display:swap}
-@font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Medium.otf') format('opentype');font-weight:500;font-display:swap}
-@font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
+        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Medium.otf') format('opentype');font-weight:500;font-display:swap}
+        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text}}
+        html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text};-webkit-font-smoothing:antialiased}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:${T.border2};border-radius:10px}
-        input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:1px solid ${T.border}}
-        input:focus,select:focus{border-color:${T.text}!important;outline:none;box-shadow:0 0 0 3px rgba(16,16,17,.06)!important}
+        input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:1px solid ${T.border};border-radius:8px}
+        input:focus,select:focus{border-color:${T.text2}!important;outline:none;box-shadow:0 0 0 3px rgba(9,9,11,.07)!important}
         button{transition:opacity .15s;font-family:'AcidGrotesk',sans-serif}
-        button:hover{opacity:.8}
+        button:hover{opacity:.78}
         ::placeholder{color:${T.muted}}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+        /* ─ Layout ─ */
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:224px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s ease}
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;backdrop-filter:blur(2px)}
+        .sidebar{width:220px;background:${T.side};border-right:1px solid ${T.sideB};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;backdrop-filter:blur(3px)}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 20px;height:52px;display:flex;align-items:center;gap:8px;flex-shrink:0}
+        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 24px;height:54px;display:flex;align-items:center;gap:8px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* Grid utilities */
+        /* ─ Sidebar nav hover ─ */
+        .nav-item:hover{background:${T.sideHov}!important}
+        /* ─ Grid utilities ─ */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
         .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -190,15 +193,14 @@ export default function App() {
         .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
         .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
         .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
-        /* Grid children must respect their column width */
         .g4>*,.g3>*,.g2>*,.g2-1>*,.g3-2>*,.gc>*,.rg>*{min-width:0}
-        .nav-item:hover{background:${T.surf2}!important}
-        /* Scrollable chip row */
+        /* ─ Scrollable chips ─ */
         .chip-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;padding-bottom:2px}
         .chip-scroll::-webkit-scrollbar{display:none}
-        /* Table scroll wrapper */
+        /* ─ Table scroll ─ */
         .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         main.content{overflow-x:clip}
+        /* ─ Responsive ─ */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
@@ -209,7 +211,7 @@ export default function App() {
         }
         @media(max-width:768px){
           .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%)}
-          .sidebar.open{transform:translateX(0);animation:slideIn .25s ease}
+          .sidebar.open{transform:translateX(0);animation:slideIn .25s cubic-bezier(.4,0,.2,1)}
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
           .topbar{padding:0;flex-direction:column;align-items:stretch;height:auto;gap:0}
@@ -225,17 +227,20 @@ export default function App() {
           .col-hide-mobile{display:none!important}
         }
         @media(max-width:480px){
-          .g4{grid-template-columns:1fr;gap:8px}
-          .g3{grid-template-columns:1fr;gap:8px}
+          .g4{grid-template-columns:1fr;gap:10px}
+          .g3{grid-template-columns:1fr;gap:10px}
           .monthLabel{display:none}
         }
         @media(max-width:360px){
           .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:1px solid ${T.border};height:58px;align-items:stretch}
-        .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3;background:none;border:none;cursor:pointer;padding:6px 4px;font-family:inherit;transition:background .12s;min-width:0}
-        .bnav-item.active{background:${T.surf2}}
-        .quick-fab{display:none;position:fixed;bottom:66px;right:16px;z-index:201}
+        /* ─ Bottom nav (mobile) ─ */
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.side};border-top:1px solid ${T.sideB};height:60px;align-items:stretch}
+        .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 2px;font-family:inherit;transition:background .15s;min-width:0}
+        .bnav-item:hover{background:${T.sideHov}}
+        .bnav-item.active{background:${T.sideAct}}
+        /* ─ FAB ─ */
+        .quick-fab{display:none;position:fixed;bottom:68px;right:16px;z-index:201}
         @media(max-width:768px){.quick-fab{display:block}}
       `}</style>
 
@@ -245,22 +250,22 @@ export default function App() {
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           {/* Brand */}
-          <div style={{ padding: "16px 16px 14px", borderBottom: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <TresLogo />
+          <div style={{ padding: "16px 14px 14px", borderBottom: `1px solid ${T.sideB}` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+              <TresLogo light />
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
-                <div style={{ fontSize: 10, color: T.muted }}>Finanzas · {year}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: T.sideT, letterSpacing: "-.2px" }}>tres Studio</div>
+                <div style={{ fontSize: 10, color: T.sideM }}>Finanzas · {year}</div>
               </div>
             </div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "10px 8px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
+          <nav style={{ flex: 1, padding: "8px 8px", display: "flex", flexDirection: "column", overflowY: "auto" }}>
             {NAV_GROUPS.map((group, gi) => (
-              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 16 : 0 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".12em", padding: "0 10px 6px" }}>{group.label}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 14 : 0 }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.sideM, textTransform: "uppercase", letterSpacing: ".1em", padding: "0 10px 5px", opacity: .7 }}>{group.label}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                   {group.items.map(v => {
                     const active = view === v.id
                     return (
@@ -269,21 +274,21 @@ export default function App() {
                         onClick={() => navTo(v.id)}
                         className={active ? undefined : "nav-item"}
                         style={{
-                          display: "flex", alignItems: "center", gap: 9, padding: "8px 10px",
-                          borderRadius: 9, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
-                          background: active ? T.text : "transparent",
-                          color: active ? "#fff" : T.text2,
+                          display: "flex", alignItems: "center", gap: 8, padding: "7px 10px",
+                          borderRadius: 8, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
+                          background: active ? T.sideAct : "transparent",
+                          color: active ? T.sideT : T.sideM,
                           fontSize: 13, fontWeight: active ? 600 : 400,
                           transition: "background .12s, color .12s",
                         }}
                       >
-                        <v.icon size={14} color={active ? "#fff" : T.subtle} />
+                        <v.icon size={14} color={active ? T.sideT : "#71717A"} strokeWidth={active ? 2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.2)" : "#FEF9C3", color: active ? "#fff" : "#A16207", padding: "2px 7px", borderRadius: 10, minWidth: 20, textAlign: "center" }}>{allPending}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.18)" : "rgba(217,119,6,.25)", color: active ? T.sideT : "#FCD34D", padding: "1px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 600, background: active ? "rgba(255,255,255,.2)" : T.surf2, color: active ? "#fff" : T.muted, padding: "2px 7px", borderRadius: 10 }}>{recurring.filter(r => r.active).length}</span>
+                          <span style={{ fontSize: 10, fontWeight: 600, background: "rgba(255,255,255,.1)", color: T.sideM, padding: "1px 6px", borderRadius: 8 }}>{recurring.filter(r => r.active).length}</span>
                         )}
                       </button>
                     )
@@ -294,10 +299,10 @@ export default function App() {
           </nav>
 
           {/* Footer status */}
-          <div style={{ padding: "12px 14px", borderTop: `1px solid ${T.border}` }}>
+          <div style={{ padding: "10px 12px", borderTop: `1px solid ${T.sideB}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.green : T.amber, flexShrink: 0 }} />
-              <span style={{ fontSize: 11, color: T.muted }}>{hasSupabase ? "Sincronizado · Supabase" : "Guardado localmente"}</span>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: hasSupabase ? "#4ADE80" : "#FCD34D", flexShrink: 0 }} />
+              <span style={{ fontSize: 11, color: T.sideM }}>{hasSupabase ? "Sincronizado · Supabase" : "Guardado localmente"}</span>
             </div>
           </div>
         </aside>
@@ -306,15 +311,15 @@ export default function App() {
         <div className="main-area">
           <header className="topbar">
             <div className="topbar-row1" style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, height: "100%" }}>
-              <button className="menuBtn" onClick={() => setSidebarOpen(true)} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                <Menu size={15} color={T.text2} />
+              <button className="menuBtn" onClick={() => setSidebarOpen(true)} style={{ background: T.bg, border: `1px solid ${T.border}`, borderRadius: 8, width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                <Menu size={15} color={T.subtle} />
               </button>
 
               {/* Breadcrumb */}
-              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 12, color: T.muted }}>tres Studio</span>
-                <span style={{ fontSize: 12, color: T.border2 }}>/</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 5 }}>
+                <span style={{ fontSize: 12, color: T.muted, fontWeight: 500 }}>tres Studio</span>
+                <span style={{ fontSize: 12, color: T.border2, fontWeight: 300 }}>/</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: T.text, letterSpacing: "-.1px" }}>
                   {NAV.find(v => v.id === view)?.label}
                 </span>
               </div>
@@ -377,7 +382,7 @@ export default function App() {
             </div>
           </header>
 
-          <main className="content" style={{ flex: 1, overflowY: "auto", padding: 20, background: T.bg }}>
+          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "20px 24px", background: T.bg }}>
             {loading ? (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", flexDirection: "column", gap: 12 }}>
                 <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: T.text, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
@@ -414,14 +419,14 @@ export default function App() {
               onClick={() => navTo(v.id)}
               style={{ position: 'relative' }}
             >
-              <v.icon size={20} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.8} />
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? T.text : T.muted, letterSpacing: '-.1px' }}>
+              <v.icon size={20} color={active ? T.sideT : "#71717A"} strokeWidth={active ? 2.2 : 1.75} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? T.sideT : "#71717A", letterSpacing: '-.1px' }}>
                 {v.label}
               </span>
               {v.id === "ingresos" && allPending > 0 && (
                 <span style={{
-                  position: 'absolute', top: 4, right: '25%', fontSize: 9, fontWeight: 700,
-                  background: T.amber, color: '#fff', borderRadius: 8,
+                  position: 'absolute', top: 6, right: '20%', fontSize: 9, fontWeight: 700,
+                  background: "#FCD34D", color: "#78350F", borderRadius: 8,
                   padding: '1px 5px', lineHeight: 1.4,
                 }}>{allPending}</span>
               )}
@@ -435,10 +440,10 @@ export default function App() {
         {fabOpen && (
           <div style={{
             position: 'absolute', bottom: 52, right: 0,
-            background: T.surf, border: `1px solid ${T.border}`,
-            borderRadius: 14, padding: '6px', minWidth: 180,
-            boxShadow: '0 8px 32px rgba(0,0,0,.12)',
-            display: 'flex', flexDirection: 'column', gap: 4,
+            background: T.side, border: `1px solid ${T.sideB}`,
+            borderRadius: 12, padding: '6px', minWidth: 180,
+            boxShadow: '0 12px 40px rgba(0,0,0,.3)',
+            display: 'flex', flexDirection: 'column', gap: 3,
           }}>
             <button
               onClick={() => { setModal({ type: "income" }); setFabOpen(false) }}
