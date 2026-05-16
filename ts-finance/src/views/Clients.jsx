@@ -52,7 +52,7 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
         <div style={{ padding: "24px 28px 20px", borderBottom: `1px solid ${T.border}`, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
             <div style={{ width: 46, height: 46, borderRadius: 13, background: T.greenBg, border: `1px solid ${T.green}20`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: 17, fontWeight: 800, color: T.green }}>{client.name.charAt(0).toUpperCase()}</span>
+              <span style={{ fontSize: 17, fontWeight: 700, color: T.green }}>{client.name.charAt(0).toUpperCase()}</span>
             </div>
             <div>
               <div style={{ fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.2px" }}>{client.name}</div>
@@ -73,13 +73,13 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
           {/* KPIs */}
           <div className="g3" style={{ gap: 10, marginBottom: 20 }}>
             {[
-              { label: "Total facturado", value: total, color: T.white },
+              { label: "Total facturado", value: total, color: T.text },
               { label: "Cobrado", value: cobrado, color: T.green },
               { label: "Pendiente", value: pendiente + parcial, color: pendiente + parcial > 0 ? T.amber : T.muted },
             ].map(({ label, value, color }) => (
               <div key={label} style={{ background: T.surf2, borderRadius: 10, padding: "14px 16px", border: `1px solid ${T.border}` }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".6px", marginBottom: 8 }}>{label}</div>
-                <div style={{ fontSize: 16, fontWeight: 800, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-0.5px" }}>{fmtS(value)}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-0.5px" }}>{fmtS(value)}</div>
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
             clientInc.sort((a, b) => new Date(b.date) - new Date(a.date)).map((inc, i, arr) => (
               <div key={inc.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 0", borderBottom: i < arr.length - 1 ? `1px solid ${T.border}` : "none" }}>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: T.white }}>{inc.project}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{inc.project}</div>
                   <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>{inc.date} · {inc.method}</div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -174,10 +174,10 @@ export default function ClientsView({ clients, incomes, onAdd, onEdit, onDelete 
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
                   <div style={{ width: 40, height: 40, borderRadius: 11, background: T.greenBg, border: `1px solid ${T.green}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <span style={{ fontSize: 15, fontWeight: 800, color: T.green }}>{c.name.charAt(0).toUpperCase()}</span>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: T.green }}>{c.name.charAt(0).toUpperCase()}</span>
                   </div>
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: T.white, lineHeight: 1.2 }}>{c.name}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: T.text, lineHeight: 1.2 }}>{c.name}</div>
                     {c.nit && <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>{c.nit}</div>}
                   </div>
                 </div>
@@ -204,11 +204,11 @@ export default function ClientsView({ clients, incomes, onAdd, onEdit, onDelete 
               <div style={{ display: "flex", gap: 16 }}>
                 <div>
                   <div style={{ fontSize: 10, color: T.muted, textTransform: "uppercase", letterSpacing: ".5px" }}>Facturado</div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: T.white, fontFamily: "'DM Mono',monospace", letterSpacing: "-0.5px" }}>{fmtS(c.total)}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace", letterSpacing: "-0.5px" }}>{fmtS(c.total)}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: 10, color: T.muted, textTransform: "uppercase", letterSpacing: ".5px" }}>Facturas</div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: T.text }}>{c.facturas}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: T.text }}>{c.facturas}</div>
                 </div>
                 {c.lastDate && (
                   <div style={{ marginLeft: "auto", textAlign: "right" }}>

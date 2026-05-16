@@ -33,7 +33,7 @@ function CalcBar({ amount, hasIVA, ivaP, colorTotal }) {
       {[["Base", fmtS(base), T.text], ["IVA", fmtS(ivaAmt), T.amber], ["Total", fmtS(amount), colorTotal]].map(([k, v, c]) => (
         <div key={k} style={{ textAlign: "center" }}>
           <div style={{ fontSize: 10, color: T.subtle, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".6px" }}>{k}</div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: c, fontFamily: "'DM Mono',monospace", marginTop: 3 }}>{v}</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: c, fontFamily: "'DM Mono',monospace", marginTop: 3 }}>{v}</div>
         </div>
       ))}
     </div>
@@ -177,7 +177,7 @@ function ClientAutocomplete({ value, onChange, clients }) {
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
               <div style={{ width: 28, height: 28, borderRadius: 7, background: T.greenBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: T.green }}>{c.name.charAt(0).toUpperCase()}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: T.green }}>{c.name.charAt(0).toUpperCase()}</span>
               </div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{c.name}</div>
