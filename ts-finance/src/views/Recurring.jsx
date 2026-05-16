@@ -31,12 +31,12 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="page-hdr">
         <div>
-          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>Gastos recurrentes</h2>
-          <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>Suscripciones, software y pagos fijos</p>
+          <div className="page-title">Gastos recurrentes</div>
+          <div className="page-sub">Suscripciones, software y pagos fijos</div>
         </div>
-        <button onClick={onAdd} style={btnRed}><Plus size={14} />Agregar</button>
+        <button onClick={onAdd} style={{ ...btnRed, flexShrink: 0 }}><Plus size={14} />Agregar</button>
       </div>
 
       {/* Summary cards */}

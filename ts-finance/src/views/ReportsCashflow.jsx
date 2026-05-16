@@ -745,13 +745,13 @@ export function ReportsView({ allInc, allExp, year, month }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="page-hdr">
         <div>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px" }}>Reportes & Finanzas</h2>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: T.muted }}>Análisis financiero · {year}</p>
+          <div className="page-title">Reportes &amp; Finanzas</div>
+          <div className="page-sub">Análisis financiero · {year}</div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2 }}>
-          <Calendar size={14} color={T.muted} />
+        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 14px", borderRadius: 9, background: T.surf, border: `1px solid ${T.border}`, fontSize: 13, fontWeight: 600, color: T.text2, flexShrink: 0 }}>
+          <Calendar size={13} color={T.muted} />
           {year}
         </div>
       </div>

@@ -73,7 +73,7 @@ function SectionHeader({ title, subtitle, action, onAction }) {
           onClick={onAction}
           style={{
             display: "flex", alignItems: "center", gap: 4,
-            fontSize: 12, fontWeight: 600, color: T.blue,
+            fontSize: 12, fontWeight: 600, color: T.subtle,
             background: "none", border: "none", cursor: "pointer",
             fontFamily: "inherit", padding: "3px 0",
           }}
