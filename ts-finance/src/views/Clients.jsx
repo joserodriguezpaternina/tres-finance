@@ -8,15 +8,15 @@ function ClientModal({ initial, onSave, onClose }) {
   const [f, setF] = useState(initial || { name: "", nit: "", email: "", phone: "", contacto: "", notas: "" })
   const set = (k, v) => setF(p => ({ ...p, [k]: v }))
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.75)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
-      <div style={{ background: T.surf, borderRadius: 18, border: `1px solid ${T.border}`, padding: 28, width: "100%", maxWidth: 480, boxShadow: "0 32px 80px rgba(0,0,0,.6)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 22 }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
+      <div style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: 28, width: "100%", maxWidth: 480, boxShadow: "0 24px 64px rgba(0,0,0,.22), 0 8px 24px rgba(0,0,0,.12)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>{initial ? "Editar cliente" : "Nuevo cliente"}</h2>
-            <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>Información del cliente de Tres Studio</p>
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.2px" }}>{initial ? "Editar cliente" : "Nuevo cliente"}</h2>
+            <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>Información del cliente</p>
           </div>
-          <button onClick={onClose} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 9, width: 34, height: 34, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <X size={15} color={T.text2} />
+          <button onClick={onClose} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <X size={14} color={T.subtle} />
           </button>
         </div>
         <div className="g2" style={{ gap: 14 }}>
@@ -46,8 +46,8 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
   const parcial   = clientInc.filter(i => i.status === "Parcial").reduce((s, i) => s + Number(i.amount), 0)
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.75)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
-      <div style={{ background: T.surf, borderRadius: 18, border: `1px solid ${T.border}`, padding: 0, width: "100%", maxWidth: 580, maxHeight: "88vh", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 32px 80px rgba(0,0,0,.6)" }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
+      <div style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: 0, width: "100%", maxWidth: 580, maxHeight: "88vh", overflow: "hidden", display: "flex", flexDirection: "column", boxShadow: "0 24px 64px rgba(0,0,0,.22), 0 8px 24px rgba(0,0,0,.12)" }}>
         {/* Header */}
         <div style={{ padding: "24px 28px 20px", borderBottom: `1px solid ${T.border}`, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -55,7 +55,7 @@ function ClientDetail({ client, incomes, onEdit, onClose }) {
               <span style={{ fontSize: 17, fontWeight: 800, color: T.green }}>{client.name.charAt(0).toUpperCase()}</span>
             </div>
             <div>
-              <div style={{ fontSize: 17, fontWeight: 800, color: T.white }}>{client.name}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.2px" }}>{client.name}</div>
               {client.nit && <div style={{ fontSize: 12, color: T.muted, marginTop: 2 }}>NIT: {client.nit}</div>}
             </div>
           </div>
@@ -139,16 +139,16 @@ export default function ClientsView({ clients, incomes, onAdd, onEdit, onDelete 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="page-hdr">
         <div>
-          <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white }}>Clientes</h2>
-          <p style={{ margin: "3px 0 0", fontSize: 12, color: T.muted }}>
+          <div className="page-title">Clientes</div>
+          <div className="page-sub">
             {clients.length} clientes · facturado{" "}
             <span style={{ color: T.green, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmtS(totalFacturado)}</span>
             {totalPendiente > 0 && <> · pendiente <span style={{ color: T.amber, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmtS(totalPendiente)}</span></>}
-          </p>
+          </div>
         </div>
-        <button onClick={onAdd} style={btnGreen}><Plus size={14} />Nuevo cliente</button>
+        <button onClick={onAdd} style={{ ...btnGreen, flexShrink: 0 }}><Plus size={14} />Nuevo cliente</button>
       </div>
 
       {/* Search */}

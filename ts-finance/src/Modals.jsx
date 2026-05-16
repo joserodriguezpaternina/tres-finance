@@ -7,15 +7,15 @@ const today = () => new Date().toISOString().split("T")[0]
 
 function ModalShell({ title, sub, onClose, children }) {
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.75)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
-      <div style={{ background: T.surf, borderRadius: 18, border: `1px solid ${T.border}`, padding: 28, width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 32px 80px rgba(0,0,0,.6)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22 }}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
+      <div style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: 28, width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 24px 64px rgba(0,0,0,.22), 0 8px 24px rgba(0,0,0,.12)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: T.white, fontFamily: "'Inter',sans-serif" }}>{title}</h2>
-            <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.2px" }}>{title}</h2>
+            {sub && <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>}
           </div>
-          <button onClick={onClose} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 9, width: 34, height: 34, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <X size={15} color={T.text2} />
+          <button onClick={onClose} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginLeft: 12 }}>
+            <X size={14} color={T.subtle} />
           </button>
         </div>
         {children}

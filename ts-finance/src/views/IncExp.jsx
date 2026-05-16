@@ -119,16 +119,16 @@ function KpiStrip({ items }) {
       {items.map((k, i) => (
         <div key={i} style={{
           flex: '1 1 160px', background: T.surf, border: `1px solid ${T.border}`,
-          borderRadius: 12, padding: '13px 16px',
-          borderTop: `3px solid ${k.accent}`,
+          borderRadius: 12, padding: '14px 18px',
+          boxShadow: '0 1px 3px rgba(0,0,0,.03)',
         }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 6 }}>
+          <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 8 }}>
             {k.label}
           </div>
-          <div style={{ fontSize: 17, fontWeight: 800, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-.3px' }}>
+          <div style={{ fontSize: 20, fontWeight: 700, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-.5px', lineHeight: 1 }}>
             {fmt(k.value)}
           </div>
-          {k.sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 3 }}>{k.sub}</div>}
+          {k.sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 5 }}>{k.sub}</div>}
         </div>
       ))}
     </div>
@@ -213,20 +213,18 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* ── Page header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+      <div className="page-hdr">
         <div>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, letterSpacing: '-.3px' }}>
-            Ingresos
-          </h2>
-          <p style={{ margin: '4px 0 0', fontSize: 12, color: T.muted }}>
-            {filtered.length} {filtered.length === 1 ? 'registro' : 'registros'} ·{' '}
+          <div className="page-title">Ingresos</div>
+          <div className="page-sub">
+            {filtered.length} {filtered.length === 1 ? 'registro' : 'registros'} · total{' '}
             <span style={{ color: T.green, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmt(totalFact)}</span>
-          </p>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '6px 12px', fontSize: 12, gap: 5 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', flexShrink: 0 }}>
+          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '7px 13px', fontSize: 12, gap: 5 }}>
             <Download size={13} color={T.muted} />
-            <span>Exportar CSV</span>
+            <span className="btnText">Exportar</span>
           </button>
           <button onClick={() => onAdd()} style={btnGreen}>
             <Plus size={14} />Nuevo ingreso
@@ -442,20 +440,18 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* ── Page header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+      <div className="page-hdr">
         <div>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, letterSpacing: '-.3px' }}>
-            Egresos
-          </h2>
-          <p style={{ margin: '4px 0 0', fontSize: 12, color: T.muted }}>
-            {filtered.length} {filtered.length === 1 ? 'registro' : 'registros'} ·{' '}
+          <div className="page-title">Egresos</div>
+          <div className="page-sub">
+            {filtered.length} {filtered.length === 1 ? 'registro' : 'registros'} · total{' '}
             <span style={{ color: T.red, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmt(total)}</span>
-          </p>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '6px 12px', fontSize: 12, gap: 5 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', flexShrink: 0 }}>
+          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '7px 13px', fontSize: 12, gap: 5 }}>
             <Download size={13} color={T.muted} />
-            <span>Exportar CSV</span>
+            <span className="btnText">Exportar</span>
           </button>
           <button onClick={() => onAdd()} style={btnRed}>
             <Plus size={14} />Nuevo egreso
