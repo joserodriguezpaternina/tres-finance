@@ -1,45 +1,52 @@
 /* ── DESIGN TOKENS — tres Studio ────────────────────── */
 export const T = {
-  /* Backgrounds */
-  bg:       "#F4F4F5",   /* Zinc-100 — content bg */
-  surf:     "#FFFFFF",   /* Card / panel surface */
-  surf2:    "#F4F4F5",   /* Secondary surface */
-  surf3:    "#E4E4E7",   /* Tertiary / dividers */
+  /* ── Backgrounds ── */
+  bg:       "#F1F5F9",   /* Slate-100  — content area  */
+  surf:     "#FFFFFF",   /* Card / panel — pure white  */
+  surf2:    "#F8FAFC",   /* Slate-50   — secondary     */
+  surf3:    "#F1F5F9",   /* Slate-100  — tertiary      */
 
-  /* Borders */
-  border:   "#E4E4E7",   /* Zinc-200 */
-  border2:  "#D4D4D8",   /* Zinc-300 */
+  /* ── Borders ── */
+  border:   "#E2E8F0",   /* Slate-200  */
+  border2:  "#CBD5E1",   /* Slate-300  */
 
-  /* Text */
-  muted:    "#71717A",   /* Zinc-500 */
-  subtle:   "#52525B",   /* Zinc-600 */
-  text2:    "#3F3F46",   /* Zinc-700 */
-  text:     "#09090B",   /* Zinc-950 */
-  white:    "#09090B",   /* backward-compat alias */
+  /* ── Text ── */
+  muted:    "#94A3B8",   /* Slate-400  */
+  subtle:   "#64748B",   /* Slate-500  */
+  text2:    "#475569",   /* Slate-600  */
+  text:     "#0F172A",   /* Slate-900  */
+  white:    "#0F172A",   /* backward-compat alias */
 
-  /* Sidebar (dark shell) */
-  side:     "#18181B",   /* Zinc-900 */
-  sideB:    "#27272A",   /* Zinc-800 — sidebar border */
-  sideT:    "#FAFAFA",   /* Sidebar primary text */
-  sideM:    "#A1A1AA",   /* Zinc-400 — sidebar muted */
-  sideHov:  "rgba(255,255,255,.06)",
-  sideAct:  "rgba(255,255,255,.11)",
+  /* ── Primary accent (Indigo) ── */
+  accent:    "#6366F1",  /* Indigo-500 */
+  accentD:   "#4F46E5",  /* Indigo-600 */
+  accentBg:  "rgba(99,102,241,.07)",
+  accentBg2: "rgba(99,102,241,.14)",
+  accentText:"#4338CA",  /* Indigo-700 — text on light */
 
-  /* Semantic */
-  green:    "#16A34A",   /* Green-600 */
+  /* ── Sidebar (light, premium) ── */
+  side:    "#FFFFFF",
+  sideB:   "#E2E8F0",
+  sideT:   "#0F172A",
+  sideM:   "#94A3B8",
+  sideHov: "#F8FAFC",
+  sideAct: "rgba(99,102,241,.08)",
+
+  /* ── Semantic ── */
+  green:    "#16A34A",   /* Green-600  */
   greenD:   "#15803D",
   greenBg:  "rgba(22,163,74,.07)",
   greenBg2: "rgba(22,163,74,.14)",
-  red:      "#DC2626",   /* Red-600 */
+  red:      "#DC2626",   /* Red-600    */
   redD:     "#B91C1C",
   redBg:    "rgba(220,38,38,.07)",
   redBg2:   "rgba(220,38,38,.14)",
   amber:    "#D97706",
   amberBg:  "rgba(217,119,6,.07)",
-  blue:     "#2563EB",
-  blueBg:   "rgba(37,99,235,.07)",
-  violet:   "#7C3AED",   /* Violet-600 */
-  violetBg: "rgba(124,58,237,.07)",
+  blue:     "#3B82F6",   /* Blue-500   */
+  blueBg:   "rgba(59,130,246,.07)",
+  violet:   "#8B5CF6",   /* Violet-500 */
+  violetBg: "rgba(139,92,246,.07)",
 }
 
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
@@ -49,7 +56,7 @@ export const STATUS_LIST  = ["Pagado","Pendiente","Parcial"]
 export const EXP_CATS     = ["Nómina","Honorarios","Proveedores","Arriendo","Servicios","Internet","Software y suscripciones","Publicidad","Producción","Casino","Transporte","Imprevistos","Impuestos","Otros"]
 export const RECUR_FREQ   = ["Mensual","Bimestral","Trimestral","Semestral","Anual"]
 
-/* ── Reglas de deducibilidad DIAN (renta personas naturales / SAS) ── */
+/* ── Reglas de deducibilidad DIAN ── */
 export const DIAN_DEDUCIBLES = {
   "Nómina":                   { si: true,  label: "Deducible",   color: "#16A34A", nota: "Salarios, prestaciones y aportes parafiscales" },
   "Honorarios":               { si: true,  label: "Deducible",   color: "#16A34A", nota: "Requiere documento soporte DIAN o factura electrónica" },
