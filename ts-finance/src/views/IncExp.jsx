@@ -107,7 +107,7 @@ function ChipBtn({ active, onClick, children }) {
       padding: '6px 13px', borderRadius: 8, border: active ? 'none' : `1px solid ${T.border}`,
       fontSize: 11, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
       background: active ? T.text : T.surf, color: active ? '#fff' : T.muted,
-      fontFamily: "'Inter',sans-serif", transition: 'all .15s',
+      transition: 'all .15s',
     }}>{children}</button>
   )
 }

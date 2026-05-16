@@ -7,7 +7,7 @@ function SoftIcon({ icon }) {
   const cfg = ICON_MAP[icon] || ICON_MAP.default
   return (
     <div style={{ width: 36, height: 36, borderRadius: 10, background: cfg.bg, border: `1px solid ${cfg.color}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <span style={{ fontSize: 12, fontWeight: 800, color: cfg.color, fontFamily: "'Inter',sans-serif" }}>{cfg.label}</span>
+      <span style={{ fontSize: 12, fontWeight: 700, color: cfg.color }}>{cfg.label}</span>
     </div>
   )
 }
@@ -49,7 +49,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
         ].map(({ label, val, color }) => (
           <div key={label} style={{ ...card, padding: "16px 18px" }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: "uppercase", letterSpacing: ".7px", marginBottom: 10 }}>{label}</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1px" }}>{val}</div>
+            <div style={{ fontSize: 22, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1px" }}>{val}</div>
           </div>
         ))}
       </div>
@@ -60,7 +60,12 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           {/* Filter tabs */}
           <div style={{ display: "flex", gap: 6 }}>
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
-              <button key={val} onClick={() => setFilter(val)} style={{ padding: "7px 14px", borderRadius: 8, border: "none", fontSize: 11, fontWeight: 700, cursor: "pointer", background: filter === val ? T.red : T.surf2, color: filter === val ? "#fff" : T.muted, fontFamily: "'Inter',sans-serif" }}>
+              <button key={val} onClick={() => setFilter(val)} style={{
+                padding: "6px 13px", borderRadius: 8, border: filter === val ? "none" : `1px solid ${T.border}`,
+                fontSize: 11, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap",
+                background: filter === val ? T.text : T.surf, color: filter === val ? "#fff" : T.muted,
+                fontFamily: "inherit", transition: "all .15s",
+              }}>
                 {label} {val === "all" ? `(${recurring.length})` : val === "active" ? `(${active.length})` : `(${paused.length})`}
               </button>
             ))}
@@ -78,7 +83,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                     <SoftIcon icon={r.icon} />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: T.white }}>{r.name}</span>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{r.name}</span>
                         <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.surf2, color: T.muted, border: `1px solid ${T.border}` }}>{r.freq}</span>
                         {!r.active && <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.amberBg, color: T.amber }}>Pausado</span>}
                         {(() => { const n = expenses.filter(e => e.recurringId === r.id || (e.obs && e.obs.includes(r.id))).length; return n > 0 ? (
@@ -95,7 +100,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
 
                     {/* Amounts */}
                     <div style={{ textAlign: "right", marginRight: 14 }}>
-                      <div style={{ fontSize: 16, fontWeight: 800, color: r.active ? T.red : T.muted, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</div>
+                      <div style={{ fontSize: 16, fontWeight: 700, color: r.active ? T.red : T.muted, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</div>
                       <div style={{ fontSize: 11, color: T.muted }}>
                         Base {fmtS(base)} {r.hasIVA && `· IVA ${fmtS(ivaAmt)}`}
                       </div>
@@ -138,10 +143,10 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
             ) : upcoming.map((r, i) => (
               <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < upcoming.length - 1 ? `1px solid ${T.border}` : "none" }}>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: T.surf2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${T.border}` }}>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{r.day}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{r.day}</span>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: T.white }}>{r.name}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: T.text }}>{r.name}</div>
                 </div>
                 <span style={{ fontSize: 12, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</span>
               </div>

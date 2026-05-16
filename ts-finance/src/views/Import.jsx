@@ -137,7 +137,7 @@ export default function ImportView({ onImported }) {
         onDragOver={e=>e.preventDefault()}
         onDrop={e=>{e.preventDefault(); processFile(e.dataTransfer.files[0])}}>
         <div style={{ fontSize:36, marginBottom:12 }}>📄</div>
-        <div style={{ fontSize:15, fontWeight:700, color:T.white, marginBottom:6 }}>Sube tu extracto de Bancolombia</div>
+        <div style={{ fontSize:15, fontWeight:700, color:T.text, marginBottom:6 }}>Sube tu extracto de Bancolombia</div>
         <div style={{ fontSize:13, color:T.muted, marginBottom:20 }}>Arrastra el archivo aquí o haz clic para seleccionar</div>
         <div style={{ display:'inline-block', background:T.surf2, border:`1px solid ${T.border}`, borderRadius:8, padding:'8px 20px', fontSize:13, color:T.text }}>Seleccionar .xlsx</div>
         <input ref={fileRef} type="file" accept=".xlsx,.xls" style={{display:'none'}} onChange={e=>processFile(e.target.files[0])} />
@@ -159,7 +159,7 @@ export default function ImportView({ onImported }) {
   if (step === 'done') return (
     <div style={{ textAlign:'center', padding:'60px 20px' }}>
       <div style={{ fontSize:32, marginBottom:12 }}>✅</div>
-      <div style={{ fontSize:16, fontWeight:700, color:T.white, marginBottom:6 }}>{active.length} transacciones importadas</div>
+      <div style={{ fontSize:16, fontWeight:700, color:T.text, marginBottom:6 }}>{active.length} transacciones importadas</div>
       <div style={{ fontSize:13, color:T.muted, marginBottom:24 }}>Ya puedes verlas en Ingresos y Egresos</div>
       <button onClick={()=>setStep('upload')} style={{ background:T.surf2, border:`1px solid ${T.border}`, borderRadius:8, padding:'8px 20px', fontSize:13, color:T.text, cursor:'pointer' }}>Importar otro extracto</button>
     </div>
