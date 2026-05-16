@@ -282,16 +282,16 @@ export default function App() {
                         style={{
                           display: "flex", alignItems: "center", gap: 9, padding: "9px 12px",
                           borderRadius: 10, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
-                          background: active ? T.accentBg : "transparent",
-                          color: active ? T.accentText : T.text2,
+                          background: active ? T.sideAct : "transparent",
+                          color: active ? "#FFFFFF" : T.text2,
                           fontSize: 13, fontWeight: active ? 600 : 400,
                           transition: "background .15s, color .15s",
                         }}
                       >
-                        <v.icon size={15} color={active ? T.accent : T.subtle} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={15} color={active ? "#FFFFFF" : T.subtle} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? T.accentBg2 : "#FEF3C7", color: active ? T.accentText : "#92400E", padding: "2px 7px", borderRadius: 10, minWidth: 20, textAlign: "center" }}>{allPending}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.15)" : "#FEF3C7", color: active ? "#FFFFFF" : "#92400E", padding: "2px 7px", borderRadius: 10, minWidth: 20, textAlign: "center" }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
                           <span style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 7px", borderRadius: 10 }}>{recurring.filter(r => r.active).length}</span>
