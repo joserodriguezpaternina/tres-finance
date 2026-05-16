@@ -62,7 +62,7 @@ function getTheme(color) {
 export function KPI({ title, value, sub, icon: Icon, color, badge, spark, trend }) {
   const th = getTheme(color)
   return (
-    <div style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, padding: "18px 20px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+    <div style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, padding: "14px 16px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10, gap: 6 }}>
         <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", lineHeight: 1.3, minWidth: 0 }}>{title}</span>
         {badge ? (

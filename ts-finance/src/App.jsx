@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import {
   LayoutDashboard, TrendingUp, TrendingDown, BarChart2,
   RefreshCw, Plus, ChevronLeft, ChevronRight,
-  Bell, Menu, FileSpreadsheet, FileText, Users
+  Bell, Menu, FileSpreadsheet, FileText, Users, X
 } from 'lucide-react'
 import { T, MONTHS, calcFin, filterM, uid } from './constants.js'
 import { hasSupabase } from './supabase.js'
@@ -56,7 +56,17 @@ export default function App() {
   const [month, setMonth]         = useState(new Date().getMonth())
   const [clients, setClients]     = useState([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [fabOpen, setFabOpen]         = useState(false)
   const year = 2026
+
+  // Bottom nav: 5 most-used items
+  const BOTTOM_NAV = [
+    { id: "dashboard",   label: "Inicio",    icon: LayoutDashboard },
+    { id: "ingresos",    label: "Ingresos",  icon: TrendingUp },
+    { id: "egresos",     label: "Egresos",   icon: TrendingDown },
+    { id: "reportes",    label: "Reportes",  icon: BarChart2 },
+    { id: "clientes",    label: "Clientes",  icon: Users },
+  ]
 
   useEffect(() => {
     Promise.all([
@@ -209,8 +219,10 @@ export default function App() {
           .g4{grid-template-columns:1fr 1fr;gap:10px}
           .g3{grid-template-columns:1fr 1fr;gap:10px}
           .g2{grid-template-columns:1fr}
-          main.content{padding:12px!important}
+          main.content{padding:12px!important;padding-bottom:72px!important}
           .btnText{display:none}
+          .bottom-nav{display:flex!important}
+          .col-hide-mobile{display:none!important}
         }
         @media(max-width:480px){
           .g4{grid-template-columns:1fr;gap:8px}
@@ -220,6 +232,11 @@ export default function App() {
         @media(max-width:360px){
           .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:1px solid ${T.border};height:58px;align-items:stretch}
+        .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3;background:none;border:none;cursor:pointer;padding:6px 4px;font-family:inherit;transition:background .12s;min-width:0}
+        .bnav-item.active{background:${T.surf2}}
+        .quick-fab{display:none;position:fixed;bottom:66px;right:16px;z-index:201}
+        @media(max-width:768px){.quick-fab{display:block}}
       `}</style>
 
       <div className="app-layout">
@@ -369,8 +386,8 @@ export default function App() {
             ) : (
               <>
                 {view === "dashboard"   && <Dashboard fin={fin} incomes={monthInc} expenses={monthExp} allInc={incomes} allExp={expenses} month={month} year={year} onNavigate={navTo} />}
-                {view === "ingresos"    && <IncomesView incomes={monthInc} allIncomes={incomes} onAdd={() => setModal({ type: "income" })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} onMarkPaid={markPaid} />}
-                {view === "egresos"     && <ExpensesView expenses={monthExp} allExpenses={expenses} onAdd={() => setModal({ type: "expense" })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
+                {view === "ingresos"    && <IncomesView incomes={monthInc} allIncomes={incomes} onAdd={d => setModal({ type: "income", data: (d && typeof d === 'object') ? d : undefined })} onEdit={d => setModal({ type: "income", data: d })} onDelete={deleteItem} onMarkPaid={markPaid} />}
+                {view === "egresos"     && <ExpensesView expenses={monthExp} allExpenses={expenses} onAdd={d => setModal({ type: "expense", data: (d && typeof d === 'object') ? d : undefined })} onEdit={d => setModal({ type: "expense", data: d })} onDelete={deleteItem} />}
                 {view === "recurrentes" && <RecurringView recurring={recurring} expenses={expenses} onAdd={() => setModal({ type: "recurring" })} onEdit={d => setModal({ type: "recurring", data: d })} onDelete={deleteRecurring} onToggle={toggleRecurring} />}
                 {view === "clientes"    && <ClientsView clients={clients} incomes={incomes} onAdd={() => setModal({ type: "client" })} onEdit={d => setModal({ type: "client", data: d })} onDelete={deleteClient} />}
                 {view === "reportes"    && <ReportsView allInc={incomes} allExp={expenses} year={year} month={month} />}
@@ -385,6 +402,78 @@ export default function App() {
       {modal?.type === "expense"   && <ExpenseModal   initial={modal.data} onSave={saveExpense}   onClose={() => setModal(null)} expenses={expenses} />}
       {modal?.type === "recurring" && <RecurringModal initial={modal.data} onSave={saveRecurring} onClose={() => setModal(null)} />}
       {modal?.type === "client"    && <ClientModalWrapper initial={modal.data} onSave={saveClient} onClose={() => setModal(null)} />}
+
+      {/* ── MOBILE BOTTOM NAV ── */}
+      <nav className="bottom-nav">
+        {BOTTOM_NAV.map(v => {
+          const active = view === v.id
+          return (
+            <button
+              key={v.id}
+              className={`bnav-item${active ? " active" : ""}`}
+              onClick={() => navTo(v.id)}
+              style={{ position: 'relative' }}
+            >
+              <v.icon size={20} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.8} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? T.text : T.muted, letterSpacing: '-.1px' }}>
+                {v.label}
+              </span>
+              {v.id === "ingresos" && allPending > 0 && (
+                <span style={{
+                  position: 'absolute', top: 4, right: '25%', fontSize: 9, fontWeight: 700,
+                  background: T.amber, color: '#fff', borderRadius: 8,
+                  padding: '1px 5px', lineHeight: 1.4,
+                }}>{allPending}</span>
+              )}
+            </button>
+          )
+        })}
+      </nav>
+
+      {/* ── MOBILE QUICK ACTION FAB ── */}
+      <div className="quick-fab">
+        {fabOpen && (
+          <div style={{
+            position: 'absolute', bottom: 52, right: 0,
+            background: T.surf, border: `1px solid ${T.border}`,
+            borderRadius: 14, padding: '6px', minWidth: 180,
+            boxShadow: '0 8px 32px rgba(0,0,0,.12)',
+            display: 'flex', flexDirection: 'column', gap: 4,
+          }}>
+            <button
+              onClick={() => { setModal({ type: "income" }); setFabOpen(false) }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 9, border: 'none', background: 'transparent', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', width: '100%' }}
+            >
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: T.greenBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingUp size={14} color={T.green} />
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>+ Ingreso</span>
+            </button>
+            <button
+              onClick={() => { setModal({ type: "expense" }); setFabOpen(false) }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 9, border: 'none', background: 'transparent', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', width: '100%' }}
+            >
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: T.redBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <TrendingDown size={14} color={T.red} />
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: T.text }}>+ Egreso</span>
+            </button>
+          </div>
+        )}
+        <button
+          onClick={() => setFabOpen(o => !o)}
+          style={{
+            width: 44, height: 44, borderRadius: '50%',
+            background: T.text, border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(0,0,0,.18)',
+            transition: 'transform .15s',
+            transform: fabOpen ? 'rotate(45deg)' : 'none',
+          }}
+        >
+          <Plus size={20} color="#fff" />
+        </button>
+      </div>
     </>
   )
 }
