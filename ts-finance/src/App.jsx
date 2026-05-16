@@ -163,7 +163,7 @@ export default function App() {
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text};-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar{width:5px;height:5px}
         ::-webkit-scrollbar-track{background:transparent}
         ::-webkit-scrollbar-thumb{background:${T.border2};border-radius:10px}
         input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:1px solid ${T.border};border-radius:10px}
@@ -173,21 +173,20 @@ export default function App() {
         ::placeholder{color:${T.muted}}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
         /* ─── Layout ─── */
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:220px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;backdrop-filter:blur(3px)}
+        .sidebar{width:232px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:99;backdrop-filter:blur(4px)}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 32px;height:58px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 28px;height:58px;display:flex;align-items:center;gap:10px;flex-shrink:0;box-shadow:0 1px 0 ${T.border}}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* ─── Nav item hover ─── */
-        .nav-item:hover{background:${T.sideHov}!important;color:${T.text}!important}
-        /* ─── Nav active: left border indicator, no fill ─── */
-        .nav-active{background:${T.accentBg}!important;color:${T.text}!important;border-left:2px solid ${T.text};padding-left:8px!important}
+        /* ─── Nav interactions ─── */
+        .nav-item:hover{background:${T.sideHov}!important;color:${T.text2}!important}
+        .nav-item:hover svg{color:${T.subtle}!important}
         /* ─── Grid utilities ─── */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -203,19 +202,10 @@ export default function App() {
         /* ─── Table scroll ─── */
         .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         main.content{overflow-x:clip}
-        /* ─── Page header ─── */
-        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
-        .page-title{font-size:22px;font-weight:700;color:${T.text};letter-spacing:-.5px;line-height:1.2}
-        .page-sub{font-size:13px;color:${T.muted};margin-top:4px;letter-spacing:-.1px}
-        /* ─── Dashboard KPI hero grid ─── */
-        .kpi-hero-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:16px}
-        .kpi-hero-grid>*:first-child{grid-column:1/2}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
-          .kpi-hero-grid{grid-template-columns:1fr 1fr}
-          .kpi-hero-grid>*:first-child{grid-column:1/-1}
           .g3-2{grid-template-columns:1fr}
           .g2-1{grid-template-columns:1fr}
           .gc{grid-template-columns:1fr}
@@ -224,38 +214,35 @@ export default function App() {
         /* ─── Responsive 768px (mobile) ─── */
         @media(max-width:768px){
           .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%);box-shadow:none}
-          .sidebar.open{transform:translateX(0);animation:slideIn .28s cubic-bezier(.4,0,.2,1);box-shadow:20px 0 60px rgba(0,0,0,.12)}
+          .sidebar.open{transform:translateX(0);animation:slideIn .28s cubic-bezier(.4,0,.2,1);box-shadow:16px 0 48px rgba(15,23,42,.12)}
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
-          .topbar{padding:0;flex-direction:column;align-items:stretch;height:auto;gap:0}
+          .topbar{padding:0;flex-direction:column;align-items:stretch;height:auto;gap:0;box-shadow:none}
           .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid ${T.border}}
           .topbar-row2{display:flex!important;align-items:center;justify-content:space-between;padding:8px 16px;gap:8px;background:${T.bg}}
           .hactions{display:none!important}
-          .g4{grid-template-columns:1fr 1fr;gap:10px}
-          .g3{grid-template-columns:1fr 1fr;gap:10px}
+          .g4{grid-template-columns:1fr 1fr;gap:12px}
+          .g3{grid-template-columns:1fr 1fr;gap:12px}
           .g2{grid-template-columns:1fr}
-          .kpi-hero-grid{grid-template-columns:1fr 1fr;gap:10px}
-          .kpi-hero-grid>*:first-child{grid-column:1/-1}
           main.content{padding:16px!important;padding-bottom:76px!important}
           .btnText{display:none}
           .bottom-nav{display:flex!important}
           .col-hide-mobile{display:none!important}
-          .page-hdr{margin-bottom:16px}
-          .page-title{font-size:17px}
         }
         @media(max-width:480px){
-          .g4{grid-template-columns:1fr;gap:10px}
-          .g3{grid-template-columns:1fr;gap:10px}
+          .g4{grid-template-columns:1fr;gap:12px}
+          .g3{grid-template-columns:1fr;gap:12px}
           .monthLabel{display:none}
         }
         @media(max-width:360px){
-          .g4,.g3{grid-template-columns:1fr;gap:8px}
+          .g4,.g3{grid-template-columns:1fr;gap:10px}
         }
         /* ─── Bottom nav ─── */
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:1px solid ${T.border};height:62px;align-items:stretch;box-shadow:0 -1px 16px rgba(0,0,0,.06)}
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:1px solid ${T.border};height:62px;align-items:stretch;box-shadow:0 -1px 12px rgba(15,23,42,.06)}
         .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 2px;font-family:inherit;transition:background .15s;min-width:0;position:relative}
         .bnav-item:hover{background:${T.surf2}}
-        .bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;background:${T.accent};border-radius:0 0 3px 3px}
+        .bnav-item.active{background:${T.accentBg}}
+        .bnav-item.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:${T.accent};border-radius:0 0 2px 2px}
         /* ─── FAB ─── */
         .quick-fab{display:none;position:fixed;bottom:70px;right:16px;z-index:201}
         @media(max-width:768px){.quick-fab{display:block}}
@@ -267,50 +254,47 @@ export default function App() {
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           {/* Brand */}
-          <div style={{ padding: "18px 16px 14px", borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ padding: "20px 18px 16px", borderBottom: `1px solid ${T.border}` }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 30, height: 30, borderRadius: 9, background: T.text, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg viewBox="0 0 1675 1675" style={{ width: 16, height: 16 }} fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M837.607 363.741C1048.32 363.741 1240.76 414.671 1381.48 498.375C1521.56 581.706 1615 700.811 1615 837.721C1615 974.626 1521.57 1093.73 1381.49 1177.06C1241.25 1260.49 1049.62 1311.36 839.728 1311.7C839.013 1311.75 838.293 1311.78 837.566 1311.78C626.861 1311.77 434.429 1260.82 293.723 1177.1C153.644 1093.75 60.2149 974.624 60.2148 837.721C60.2148 700.811 153.652 581.706 293.739 498.375C434.454 414.671 626.895 363.741 837.607 363.741ZM601.944 696.784H772.853V587.68H852.841V696.784H1023.75V587.68H1103.74V696.784H1212.08V766.598H1103.74V984.806C1103.74 1011.76 1120.41 1027.02 1144.43 1027.02H1212.08V1096.83H1137.18C1063.04 1096.83 1023.75 1064.79 1023.75 989.894V766.598H852.841V984.806C852.841 1011.76 869.509 1027.02 893.538 1027.02H961.188V1096.83H886.286C812.143 1096.83 772.853 1064.79 772.853 989.894V766.598H601.944V984.806C601.944 1011.76 618.614 1027.02 642.643 1027.02H710.291V1096.83H635.391C561.247 1096.83 521.956 1064.79 521.956 989.894V766.598H456.473V696.784H521.956V587.68H601.944V696.784Z" fill="white" />
-                </svg>
+              <div style={{ width: 32, height: 32, borderRadius: 10, background: T.accentBg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <TresLogo />
               </div>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
                 <div style={{ fontSize: 11, color: T.muted }}>Finanzas · {year}</div>
               </div>
             </div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "10px 8px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 1 }}>
+          <nav style={{ flex: 1, padding: "12px 10px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 2 }}>
             {NAV_GROUPS.map((group, gi) => (
-              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 16 : 0 }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 10px 5px" }}>{group.label}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 20 : 0 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".1em", padding: "0 10px 6px" }}>{group.label}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {group.items.map(v => {
                     const active = view === v.id
                     return (
                       <button
                         key={v.id}
                         onClick={() => navTo(v.id)}
-                        className={active ? "nav-active" : "nav-item"}
+                        className={active ? undefined : "nav-item"}
                         style={{
-                          display: "flex", alignItems: "center", gap: 9, padding: "8px 10px",
-                          borderRadius: 9, border: "none", borderLeft: active ? undefined : "2px solid transparent",
-                          cursor: "pointer", width: "100%", textAlign: "left",
-                          background: "transparent",
-                          color: active ? T.text : T.subtle,
+                          display: "flex", alignItems: "center", gap: 9, padding: "9px 12px",
+                          borderRadius: 10, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
+                          background: active ? T.sideAct : "transparent",
+                          color: active ? "#FFFFFF" : T.text2,
                           fontSize: 13, fontWeight: active ? 600 : 400,
                           transition: "background .15s, color .15s",
                         }}
                       >
-                        <v.icon size={14} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={15} color={active ? "#FFFFFF" : T.subtle} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.18)" : "#FEF3C7", color: active ? "#FFFFFF" : "#92400E", padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.15)" : "#FEF3C7", color: active ? "#FFFFFF" : "#92400E", padding: "2px 7px", borderRadius: 10, minWidth: 20, textAlign: "center" }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 600, background: active ? "rgba(255,255,255,.15)" : T.surf2, color: active ? "rgba(255,255,255,.7)" : T.muted, padding: "2px 6px", borderRadius: 8 }}>{recurring.filter(r => r.active).length}</span>
+                          <span style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 7px", borderRadius: 10 }}>{recurring.filter(r => r.active).length}</span>
                         )}
                       </button>
                     )
@@ -404,7 +388,7 @@ export default function App() {
             </div>
           </header>
 
-          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "28px 32px", background: T.bg }}>
+          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "24px 28px", background: T.bg }}>
             {loading ? (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", flexDirection: "column", gap: 12 }}>
                 <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: T.text, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
