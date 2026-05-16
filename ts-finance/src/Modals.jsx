@@ -474,32 +474,21 @@ export function ClientModalWrapper({ initial, onSave, onClose }) {
   const [f, setF] = useState(initial || { name: "", nit: "", email: "", phone: "", contacto: "", notas: "" })
   const set = (k, v) => setF(p => ({ ...p, [k]: v }))
   return (
-    <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,.75)", backdropFilter:"blur(6px)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:200, padding:20 }}>
-      <div style={{ background:T.surf, borderRadius:18, border:`1px solid ${T.border}`, padding:28, width:"100%", maxWidth:480, boxShadow:"0 32px 80px rgba(0,0,0,.6)" }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:22 }}>
-          <div>
-            <h2 style={{ margin:0, fontSize:17, fontWeight:800, color:T.white }}>{initial ? "Editar cliente" : "Nuevo cliente"}</h2>
-            <p style={{ margin:"4px 0 0", fontSize:12, color:T.muted }}>Información del cliente</p>
-          </div>
-          <button onClick={onClose} style={{ background:T.surf2, border:`1px solid ${T.border}`, borderRadius:9, width:34, height:34, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
-            <X size={15} color={T.text2} />
-          </button>
-        </div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-          <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Nombre / Razón social *</label><input style={inp} value={f.name} onChange={e=>set("name",e.target.value)} placeholder="Bancolombia S.A." /></div>
-          <div><label style={lbl}>NIT / Cédula</label><input style={inp} value={f.nit} onChange={e=>set("nit",e.target.value)} placeholder="900.123.456-7" /></div>
-          <div><label style={lbl}>Contacto</label><input style={inp} value={f.contacto} onChange={e=>set("contacto",e.target.value)} placeholder="Nombre del contacto" /></div>
-          <div><label style={lbl}>Email</label><input style={inp} type="email" value={f.email} onChange={e=>set("email",e.target.value)} placeholder="contacto@empresa.com" /></div>
-          <div><label style={lbl}>Teléfono</label><input style={inp} value={f.phone} onChange={e=>set("phone",e.target.value)} placeholder="+57 300 123 4567" /></div>
-          <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notas} onChange={e=>set("notas",e.target.value)} placeholder="Información adicional..." /></div>
-        </div>
-        <div style={{ display:"flex", gap:10, marginTop:20, justifyContent:"flex-end" }}>
-          <button onClick={onClose} style={btnGhost}>Cancelar</button>
-          <button onClick={() => { if(f.name.trim()) onSave({...f, id:f.id||uid()}) }} style={btnGreen}>
-            <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar cliente"}
-          </button>
-        </div>
+    <ModalShell title={initial ? "Editar cliente" : "Nuevo cliente"} sub="Información del cliente" onClose={onClose}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+        <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Nombre / Razón social *</label><input style={inp} value={f.name} onChange={e=>set("name",e.target.value)} placeholder="Bancolombia S.A." /></div>
+        <div><label style={lbl}>NIT / Cédula</label><input style={inp} value={f.nit} onChange={e=>set("nit",e.target.value)} placeholder="900.123.456-7" /></div>
+        <div><label style={lbl}>Contacto</label><input style={inp} value={f.contacto} onChange={e=>set("contacto",e.target.value)} placeholder="Nombre del contacto" /></div>
+        <div><label style={lbl}>Email</label><input style={inp} type="email" value={f.email} onChange={e=>set("email",e.target.value)} placeholder="contacto@empresa.com" /></div>
+        <div><label style={lbl}>Teléfono</label><input style={inp} value={f.phone} onChange={e=>set("phone",e.target.value)} placeholder="+57 300 123 4567" /></div>
+        <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notas} onChange={e=>set("notas",e.target.value)} placeholder="Información adicional..." /></div>
       </div>
-    </div>
+      <div style={{ display:"flex", gap:10, marginTop:20, justifyContent:"flex-end" }}>
+        <button onClick={onClose} style={btnGhost}>Cancelar</button>
+        <button onClick={() => { if(f.name.trim()) onSave({...f, id:f.id||uid()}) }} style={btnGreen}>
+          <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar cliente"}
+        </button>
+      </div>
+    </ModalShell>
   )
 }
