@@ -2,10 +2,33 @@ import { useState, useMemo } from 'react'
 import {
   Plus, Search, Edit2, Trash2, CheckCircle, ArrowUp, ArrowDown,
   TrendingUp, TrendingDown, AlertCircle, RefreshCw, Clock, DollarSign,
-  BarChart2, FileText, Inbox
+  BarChart2, FileText, Inbox, Download, Copy
 } from 'lucide-react'
-import { T, EXP_CATS, STATUS_LIST, fmtS, fmt, getIVA, getBase } from '../constants.js'
+import { T, EXP_CATS, STATUS_LIST, fmtS, fmt, getIVA, getBase, MONTHS_SHORT } from '../constants.js'
 import { card, inp, btnGreen, btnRed, btnGhost, Pill, lbl } from '../ui.jsx'
+
+/* ── CSV Export utility ───────────────────────────────── */
+function exportCSV(rows, filename) {
+  if (!rows.length) return
+  const headers = Object.keys(rows[0])
+  const escape = v => {
+    const s = String(v ?? '')
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s
+  }
+  const csv = [headers.join(','), ...rows.map(r => headers.map(h => escape(r[h])).join(','))].join('\n')
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href = url; a.download = filename; a.click()
+  URL.revokeObjectURL(url)
+}
+
+/* ── Date formatter: "15 may" ─────────────────────────── */
+function fmtDateCompact(dateStr) {
+  if (!dateStr) return '—'
+  const d = new Date(dateStr)
+  return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()].toLowerCase()}`
+}
 
 /* ── helpers ─────────────────────────────────────────────── */
 const isOverdue = (item) => {
@@ -32,8 +55,15 @@ const CAT_COLORS = {
 }
 
 /* ── shared primitives ───────────────────────────────────── */
-const thCell = { textAlign: 'left', fontSize: 10, fontWeight: 700, color: T.muted, padding: '0 14px 13px', textTransform: 'uppercase', letterSpacing: '.7px', borderBottom: `1px solid ${T.border}`, whiteSpace: 'nowrap' }
-const tdBase = { padding: '12px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap' }
+const thCell = {
+  textAlign: 'left', fontSize: 10, fontWeight: 700, color: T.muted,
+  padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '.7px',
+  borderBottom: `1px solid ${T.border}`, whiteSpace: 'nowrap',
+  background: T.surf2, position: 'sticky', top: 0, zIndex: 1,
+}
+const thRight = { ...thCell, textAlign: 'right' }
+const tdBase = { padding: '11px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap' }
+const tdMono = { ...tdBase, fontFamily: "'DM Mono',monospace", textAlign: 'right' }
 
 function Th({ children, sortable, active, dir, onClick }) {
   return (
@@ -53,9 +83,14 @@ function Th({ children, sortable, active, dir, onClick }) {
   )
 }
 
-function ActionBtns({ onEdit, onDelete }) {
+function ActionBtns({ onEdit, onDelete, onDuplicate }) {
   return (
     <div style={{ display: 'flex', gap: 5 }}>
+      {onDuplicate && (
+        <button onClick={onDuplicate} title="Duplicar" style={{ background: T.surf2, border: 'none', borderRadius: 7, padding: '5px 8px', cursor: 'pointer' }}>
+          <Copy size={11} color={T.muted} />
+        </button>
+      )}
       <button onClick={onEdit} title="Editar" style={{ background: T.blueBg, border: 'none', borderRadius: 7, padding: '5px 8px', cursor: 'pointer' }}>
         <Edit2 size={11} color={T.blue} />
       </button>
@@ -131,6 +166,7 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
   const [statusFil, setStatusFil] = useState('Todos')
   const [period, setPeriod] = useState('Este mes')
   const [sortDir, setSortDir] = useState('desc')
+  const [hoveredRow, setHoveredRow] = useState(null)
 
   const PERIODS = ['Este mes', 'Todo', 'Solo pendientes']
 
@@ -159,12 +195,27 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
   const totalCobrado = filtered.filter(i => i.status === 'Pagado').reduce((s, i) => s + Number(i.amount), 0)
   const totalPend    = filtered.filter(i => i.status === 'Pendiente' || i.status === 'Parcial').reduce((s, i) => s + Number(i.amount), 0)
 
+  const handleExportCSV = () => {
+    const rows = filtered.map(i => ({
+      Fecha:    i.date,
+      Cliente:  i.client,
+      Proyecto: i.project,
+      Monto:    Number(i.amount),
+      Base:     Math.round(getBase(i)),
+      IVA:      i.hasIVA ? Math.round(getIVA(i)) : 0,
+      Estado:   i.status,
+      Método:   i.method || '',
+      Notas:    i.notes  || '',
+    }))
+    exportCSV(rows, `ingresos-${new Date().toISOString().slice(0,10)}.csv`)
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* ── Page header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, fontFamily: "'Inter',sans-serif", letterSpacing: '-.3px' }}>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, letterSpacing: '-.3px' }}>
             Ingresos
           </h2>
           <p style={{ margin: '4px 0 0', fontSize: 12, color: T.muted }}>
@@ -172,9 +223,15 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
             <span style={{ color: T.green, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmt(totalFact)}</span>
           </p>
         </div>
-        <button onClick={onAdd} style={btnGreen}>
-          <Plus size={14} />Nuevo ingreso
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '6px 12px', fontSize: 12, gap: 5 }}>
+            <Download size={13} color={T.muted} />
+            <span>Exportar CSV</span>
+          </button>
+          <button onClick={() => onAdd()} style={btnGreen}>
+            <Plus size={14} />Nuevo ingreso
+          </button>
+        </div>
       </div>
 
       {/* ── Filter bar */}
@@ -212,19 +269,19 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       ]} />
 
       {/* ── Table */}
-      <div className="tbl-wrap" style={{ background: "white", borderRadius: 14, border: `1px solid ${T.border}` }}>
+      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
               <Th>Cliente</Th>
-              <Th>Proyecto</Th>
+              <th className="col-hide-mobile" style={thCell}>Proyecto</th>
               <Th sortable active dir={sortDir} onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}>Fecha</Th>
-              <Th>Monto</Th>
-              <Th>Base</Th>
-              <Th>IVA</Th>
+              <th style={thRight}>Monto</th>
+              <th className="col-hide-mobile" style={thRight}>Base</th>
+              <th className="col-hide-mobile" style={thRight}>IVA</th>
               <Th>Estado</Th>
-              <Th>Método</Th>
-              <Th></Th>
+              <th className="col-hide-mobile" style={thCell}>Método</th>
+              <th style={thCell}></th>
             </tr>
           </thead>
           <tbody>
@@ -239,38 +296,42 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
               : filtered.map(i => {
                   const overdue = isOverdue(i)
                   const canPay  = i.status === 'Pendiente' || i.status === 'Parcial'
+                  const isHovered = hoveredRow === i.id
                   return (
-                    <tr key={i.id} style={{
-                      borderBottom: `1px solid ${T.border}`,
-                      borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
-                      background: overdue ? 'rgba(215,43,32,.025)' : 'transparent',
-                      transition: 'background .15s',
-                    }}>
+                    <tr key={i.id}
+                      onMouseEnter={() => setHoveredRow(i.id)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                      style={{
+                        borderBottom: `1px solid ${T.border}`,
+                        borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
+                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : 'transparent',
+                        transition: 'background .1s',
+                      }}>
                       {/* Cliente */}
                       <td style={{ ...tdBase, paddingLeft: overdue ? 11 : 14 }}>
-                        <span style={{ fontWeight: 700, color: T.text }}>{i.client}</span>
+                        <span style={{ fontWeight: 600, color: T.text }}>{i.client}</span>
                       </td>
 
                       {/* Proyecto */}
-                      <td style={{ ...tdBase, color: T.text2 }}>{i.project}</td>
+                      <td className="col-hide-mobile" style={{ ...tdBase, color: T.text2, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>{i.project}</td>
 
                       {/* Fecha */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.muted }}>
-                        {i.date}
+                      <td style={{ ...tdBase, fontSize: 12, color: T.muted, minWidth: 60 }}>
+                        {fmtDateCompact(i.date)}
                       </td>
 
                       {/* Monto */}
-                      <td style={{ ...tdBase, fontWeight: 700, color: T.green, fontFamily: "'DM Mono',monospace" }}>
+                      <td style={{ ...tdMono, fontWeight: 700, color: T.green }}>
                         {fmtS(i.amount)}
                       </td>
 
                       {/* Base */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.text2, fontFamily: "'DM Mono',monospace" }}>
+                      <td className="col-hide-mobile" style={{ ...tdMono, fontSize: 12, color: T.text2 }}>
                         {fmtS(getBase(i))}
                       </td>
 
                       {/* IVA */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.amber, fontFamily: "'DM Mono',monospace" }}>
+                      <td className="col-hide-mobile" style={{ ...tdMono, fontSize: 12, color: T.amber }}>
                         {i.hasIVA ? fmtS(getIVA(i)) : '—'}
                       </td>
 
@@ -291,7 +352,7 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
                       </td>
 
                       {/* Método */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.muted }}>{i.method}</td>
+                      <td className="col-hide-mobile" style={{ ...tdBase, fontSize: 12, color: T.muted }}>{i.method}</td>
 
                       {/* Acciones */}
                       <td style={{ ...tdBase }}>
@@ -307,7 +368,11 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
                               <CheckCircle size={11} color={T.green} />
                             </button>
                           )}
-                          <ActionBtns onEdit={() => onEdit(i)} onDelete={() => onDelete(i.id, 'ingreso')} />
+                          <ActionBtns
+                            onEdit={() => onEdit(i)}
+                            onDelete={() => onDelete(i.id, 'ingreso')}
+                            onDuplicate={() => onAdd({ ...i, id: undefined, status: 'Pendiente', date: new Date().toISOString().slice(0,10) })}
+                          />
                         </div>
                       </td>
                     </tr>
@@ -328,6 +393,7 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
   const [cat, setCat] = useState('Todos')
   const [typeFilter, setTypeFilter] = useState('Todos') // 'Todos' | 'Recurrentes' | 'Manuales'
   const [sortDir, setSortDir] = useState('desc')
+  const [hoveredRow, setHoveredRow] = useState(null)
 
   const filtered = useMemo(() => {
     return expenses
@@ -358,12 +424,27 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
   }, [filtered])
   const topCat = catTotals[0]
 
+  const handleExportCSV = () => {
+    const rows = filtered.map(e => ({
+      Fecha:        e.date,
+      Categoría:    e.cat || '',
+      Descripción:  e.desc || e.description || '',
+      Proveedor:    e.provider || '',
+      Monto:        Number(e.amount),
+      Base:         Math.round(getBase(e)),
+      IVA:          e.hasIVA ? Math.round(getIVA(e)) : 0,
+      Método:       e.method || '',
+      Recurrente:   e.autoGenerated ? 'Sí' : 'No',
+    }))
+    exportCSV(rows, `egresos-${new Date().toISOString().slice(0,10)}.csv`)
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* ── Page header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, fontFamily: "'Inter',sans-serif", letterSpacing: '-.3px' }}>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: T.text, letterSpacing: '-.3px' }}>
             Egresos
           </h2>
           <p style={{ margin: '4px 0 0', fontSize: 12, color: T.muted }}>
@@ -371,9 +452,15 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
             <span style={{ color: T.red, fontFamily: "'DM Mono',monospace", fontWeight: 700 }}>{fmt(total)}</span>
           </p>
         </div>
-        <button onClick={onAdd} style={btnRed}>
-          <Plus size={14} />Nuevo egreso
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button onClick={handleExportCSV} style={{ ...btnGhost, padding: '6px 12px', fontSize: 12, gap: 5 }}>
+            <Download size={13} color={T.muted} />
+            <span>Exportar CSV</span>
+          </button>
+          <button onClick={() => onAdd()} style={btnRed}>
+            <Plus size={14} />Nuevo egreso
+          </button>
+        </div>
       </div>
 
       {/* ── Filter bar */}
@@ -384,7 +471,7 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
           <input
             placeholder="Buscar descripción, proveedor…"
             value={q} onChange={e => setQ(e.target.value)}
-            style={{ border: 'none', background: 'transparent', fontSize: 13, color: T.text, outline: 'none', width: '100%', fontFamily: "'Inter',sans-serif" }}
+            style={{ border: 'none', background: 'transparent', fontSize: 13, color: T.text, outline: 'none', width: '100%', fontFamily: "inherit" }}
           />
         </div>
 
@@ -411,19 +498,19 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       ]} />
 
       {/* ── Table */}
-      <div className="tbl-wrap" style={{ background: "white", borderRadius: 14, border: `1px solid ${T.border}` }}>
+      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
               <Th sortable active dir={sortDir} onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}>Fecha</Th>
-              <Th>Categoría</Th>
+              <th className="col-hide-mobile" style={thCell}>Categoría</th>
               <Th>Descripción</Th>
-              <Th>Proveedor</Th>
-              <Th>Monto</Th>
-              <Th>Base</Th>
-              <Th>IVA</Th>
-              <Th>Método</Th>
-              <Th></Th>
+              <th className="col-hide-mobile" style={thCell}>Proveedor</th>
+              <th style={thRight}>Monto</th>
+              <th className="col-hide-mobile" style={thRight}>Base</th>
+              <th className="col-hide-mobile" style={thRight}>IVA</th>
+              <th className="col-hide-mobile" style={thCell}>Método</th>
+              <th style={thCell}></th>
             </tr>
           </thead>
           <tbody>
@@ -438,21 +525,25 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
               : filtered.map(e => {
                   const catTheme = CAT_COLORS[e.cat] || { bg: T.surf2, c: T.text2 }
                   const overdue  = e.status && e.status !== 'Pagado' && isOverdue(e)
+                  const isHovered = hoveredRow === e.id
                   return (
-                    <tr key={e.id} style={{
-                      borderBottom: `1px solid ${T.border}`,
-                      borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
-                      background: overdue ? 'rgba(215,43,32,.025)' : 'transparent',
-                      opacity: e.autoGenerated ? 0.93 : 1,
-                      transition: 'background .15s',
-                    }}>
+                    <tr key={e.id}
+                      onMouseEnter={() => setHoveredRow(e.id)}
+                      onMouseLeave={() => setHoveredRow(null)}
+                      style={{
+                        borderBottom: `1px solid ${T.border}`,
+                        borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
+                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : 'transparent',
+                        opacity: e.autoGenerated ? 0.93 : 1,
+                        transition: 'background .1s',
+                      }}>
                       {/* Fecha */}
-                      <td style={{ ...tdBase, paddingLeft: overdue ? 11 : 14, fontSize: 12, color: T.muted }}>
-                        {e.date}
+                      <td style={{ ...tdBase, paddingLeft: overdue ? 11 : 14, fontSize: 12, color: T.muted, minWidth: 60 }}>
+                        {fmtDateCompact(e.date)}
                       </td>
 
                       {/* Categoría */}
-                      <td style={{ ...tdBase }}>
+                      <td className="col-hide-mobile" style={{ ...tdBase }}>
                         <span style={{
                           fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 6,
                           background: catTheme.bg, color: catTheme.c,
@@ -480,25 +571,25 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
                       </td>
 
                       {/* Proveedor */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.text2 }}>{e.provider}</td>
+                      <td className="col-hide-mobile" style={{ ...tdBase, fontSize: 12, color: T.text2 }}>{e.provider}</td>
 
                       {/* Monto */}
-                      <td style={{ ...tdBase, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>
+                      <td style={{ ...tdMono, fontWeight: 700, color: T.red }}>
                         {fmtS(e.amount)}
                       </td>
 
                       {/* Base */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.text2, fontFamily: "'DM Mono',monospace" }}>
+                      <td className="col-hide-mobile" style={{ ...tdMono, fontSize: 12, color: T.text2 }}>
                         {fmtS(getBase(e))}
                       </td>
 
                       {/* IVA */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.amber, fontFamily: "'DM Mono',monospace" }}>
+                      <td className="col-hide-mobile" style={{ ...tdMono, fontSize: 12, color: T.amber }}>
                         {e.hasIVA ? fmtS(getIVA(e)) : '—'}
                       </td>
 
                       {/* Método */}
-                      <td style={{ ...tdBase, fontSize: 12, color: T.muted }}>{e.method}</td>
+                      <td className="col-hide-mobile" style={{ ...tdBase, fontSize: 12, color: T.muted }}>{e.method}</td>
 
                       {/* Acciones */}
                       <td style={{ ...tdBase }}>
@@ -509,7 +600,11 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
                             }}>
                               <RefreshCw size={8} />Recurrente
                             </span>
-                          : <ActionBtns onEdit={() => onEdit(e)} onDelete={() => onDelete(e.id, 'egreso')} />
+                          : <ActionBtns
+                              onEdit={() => onEdit(e)}
+                              onDelete={() => onDelete(e.id, 'egreso')}
+                              onDuplicate={() => onAdd({ ...e, id: undefined, date: new Date().toISOString().slice(0,10) })}
+                            />
                         }
                       </td>
                     </tr>

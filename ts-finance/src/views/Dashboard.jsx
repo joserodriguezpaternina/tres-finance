@@ -555,18 +555,18 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 3, background: T.bg, borderRadius: 10, padding: 3 }}>
+            <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}` }}>
               {["Anual", "Mensual"].map(p => (
                 <button
                   key={p}
                   onClick={() => setPeriod(p)}
                   style={{
-                    padding: "5px 14px", borderRadius: 8, border: "none", cursor: "pointer",
-                    fontSize: 12, fontWeight: 600, fontFamily: "inherit",
-                    background: period === p ? T.surf : "transparent",
+                    padding: "6px 14px", border: "none", cursor: "pointer", background: "transparent",
+                    fontSize: 12, fontWeight: period === p ? 600 : 400, fontFamily: "inherit",
                     color: period === p ? T.text : T.muted,
-                    boxShadow: period === p ? "0 1px 4px rgba(0,0,0,.07)" : "none",
-                    transition: "all .15s",
+                    borderBottom: period === p ? `2px solid ${T.text}` : "2px solid transparent",
+                    marginBottom: -1,
+                    transition: "color .12s, border-color .12s",
                   }}
                 >
                   {p}

@@ -460,14 +460,15 @@ function AccountingTab({ allInc, allExp, year, month }) {
               ))}
             </div>
           </div>
-          <div style={{ display: "flex", gap: 4, background: T.bg, borderRadius: 10, padding: 4 }}>
+          <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}` }}>
             {["12 meses", "30 días", "24 horas"].map(p => (
               <button key={p} onClick={() => setAnalyticsPeriod(p)} style={{
-                padding: "5px 14px", borderRadius: 7, border: "none", cursor: "pointer",
-                fontSize: 12, fontWeight: 600, fontFamily: "inherit",
-                background: analyticsPeriod === p ? T.surf : "transparent",
+                padding: "6px 14px", border: "none", cursor: "pointer", background: "transparent",
+                fontSize: 12, fontWeight: analyticsPeriod === p ? 600 : 400, fontFamily: "inherit",
                 color: analyticsPeriod === p ? T.text : T.muted,
-                boxShadow: analyticsPeriod === p ? "0 1px 4px rgba(0,0,0,.06)" : "none",
+                borderBottom: analyticsPeriod === p ? `2px solid ${T.text}` : "2px solid transparent",
+                marginBottom: -1,
+                transition: "color .12s, border-color .12s",
               }}>{p}</button>
             ))}
           </div>
@@ -755,15 +756,18 @@ export function ReportsView({ allInc, allExp, year, month }) {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: 2, background: T.surf, border: `1px solid ${T.border}`, borderRadius: 10, padding: 4, alignSelf: "flex-start", flexWrap: "wrap" }}>
+      {/* Tabs — Stripe underline style */}
+      <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${T.border}`, alignSelf: "stretch", overflowX: "auto" }}>
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)} style={{
-            padding: "7px 16px", borderRadius: 7, border: "none", cursor: "pointer",
+            padding: "10px 18px", border: "none", cursor: "pointer", background: "transparent",
             fontSize: 13, fontWeight: tab === t.id ? 600 : 400,
-            background: tab === t.id ? T.text : "transparent",
-            color: tab === t.id ? "#fff" : T.text2,
-            transition: "all .15s",
+            color: tab === t.id ? T.text : T.muted,
+            borderBottom: tab === t.id ? `2px solid ${T.text}` : "2px solid transparent",
+            marginBottom: -1,
+            fontFamily: "inherit",
+            transition: "color .12s, border-color .12s",
+            whiteSpace: "nowrap",
           }}>{t.label}</button>
         ))}
       </div>
