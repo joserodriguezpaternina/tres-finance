@@ -646,7 +646,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Expense pie */}
-        <div style={{ ...card, padding: "20px 22px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader
             title="Distribución de egresos"
             subtitle="Por categoría este mes"
@@ -698,7 +698,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* IVA fiscal */}
-        <div style={{ ...card, padding: "20px 22px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader title="Resumen fiscal" subtitle="IVA del período" />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -751,10 +751,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 6. Quick access + Recent movements ───────────────────────── */}
-      <div className="g2" style={{ gap: 14 }}>
+      <div className="g2" style={{ gap: 16 }}>
 
         {/* Quick access */}
-        <div style={{ ...card, padding: "20px 16px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 18px" }}>
           <div style={{ paddingLeft: 4, paddingRight: 4 }}>
             <SectionHeader title="Accesos rápidos" />
           </div>
@@ -780,7 +780,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Recent movements */}
-        <div style={{ ...card, padding: "20px 24px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader
             title="Movimientos recientes"
             subtitle="Últimos 8 registros de ingresos y egresos"

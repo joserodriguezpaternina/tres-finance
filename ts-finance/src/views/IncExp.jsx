@@ -56,13 +56,14 @@ const CAT_COLORS = {
 
 /* ── shared primitives ───────────────────────────────────── */
 const thCell = {
-  textAlign: 'left', fontSize: 10, fontWeight: 700, color: T.muted,
-  padding: '10px 14px', textTransform: 'uppercase', letterSpacing: '.7px',
+  textAlign: 'left', fontSize: 10, fontWeight: 700, color: T.subtle,
+  padding: '12px 14px', textTransform: 'uppercase', letterSpacing: '.06em',
   borderBottom: `1px solid ${T.border}`, whiteSpace: 'nowrap',
   background: T.surf2, position: 'sticky', top: 0, zIndex: 1,
 }
 const thRight = { ...thCell, textAlign: 'right' }
-const tdBase = { padding: '11px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap' }
+/* rows ~44px height via padding */
+const tdBase = { padding: '13px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap' }
 const tdMono = { ...tdBase, fontFamily: "'DM Mono',monospace", textAlign: 'right' }
 
 function Th({ children, sortable, active, dir, onClick }) {
@@ -104,31 +105,33 @@ function ActionBtns({ onEdit, onDelete, onDuplicate }) {
 function ChipBtn({ active, onClick, children }) {
   return (
     <button onClick={onClick} style={{
-      padding: '6px 13px', borderRadius: 8, border: active ? 'none' : `1px solid ${T.border}`,
-      fontSize: 11, fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
-      background: active ? T.text : T.surf, color: active ? '#fff' : T.muted,
-      transition: 'all .15s',
+      padding: '6px 13px', borderRadius: 8,
+      border: active ? `1px solid ${T.text}` : `1px solid ${T.border}`,
+      fontSize: 11, fontWeight: active ? 700 : 500, cursor: 'pointer', whiteSpace: 'nowrap',
+      background: active ? T.text : T.surf,
+      color: active ? '#fff' : T.subtle,
+      fontFamily: "inherit", transition: 'all .15s',
     }}>{children}</button>
   )
 }
 
-/* KPI strip — compact horizontal cards */
+/* KPI strip — compact horizontal cards — flat, no shadow */
 function KpiStrip({ items }) {
   return (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
       {items.map((k, i) => (
         <div key={i} style={{
           flex: '1 1 160px', background: T.surf, border: `1px solid ${T.border}`,
-          borderRadius: 12, padding: '14px 18px',
-          boxShadow: '0 1px 3px rgba(0,0,0,.03)',
+          borderRadius: 12, padding: '16px 20px',
+          /* NO box-shadow */
         }}>
-          <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 8 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 10 }}>
             {k.label}
           </div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-.5px', lineHeight: 1 }}>
+          <div style={{ fontSize: 22, fontWeight: 700, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-1px', lineHeight: 1 }}>
             {fmt(k.value)}
           </div>
-          {k.sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 5 }}>{k.sub}</div>}
+          {k.sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 6 }}>{k.sub}</div>}
         </div>
       ))}
     </div>
@@ -233,9 +236,9 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       </div>
 
       {/* ── Filter bar */}
-      <div style={{ ...card, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {/* Row 1: search */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 9, padding: '8px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', border: `1px solid ${T.border}` }}>
           <Search size={13} color={T.muted} />
           <input
             placeholder="Buscar cliente, proyecto…"
@@ -250,7 +253,7 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
               <ChipBtn key={p} active={period === p} onClick={() => setPeriod(p)}>{p}</ChipBtn>
             ))}
           </div>
-          <div style={{ width: 1, height: 20, background: T.border, flexShrink: 0 }} />
+          <div style={{ width: 1, height: 18, background: T.border, flexShrink: 0 }} />
           <div className="chip-scroll">
             {['Todos', ...STATUS_LIST].map(s => (
               <ChipBtn key={s} active={statusFil === s} onClick={() => setStatusFil(s)}>{s}</ChipBtn>
@@ -460,9 +463,9 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       </div>
 
       {/* ── Filter bar */}
-      <div style={{ ...card, padding: '12px 16px', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Search */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 9, padding: '8px 12px', minWidth: 200 }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', minWidth: 200, border: `1px solid ${T.border}` }}>
           <Search size={13} color={T.muted} />
           <input
             placeholder="Buscar descripción, proveedor…"
