@@ -10,7 +10,7 @@ import {
   PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { T, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
+import { T, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
 import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 /* ── Constants ─────────────────────────────────────────────────────────── */
@@ -429,71 +429,68 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
     [allInc, allExp, year]
   )
 
-  const greetHour = new Date().getHours()
-  const greet = greetHour < 12 ? "Buenos días" : greetHour < 19 ? "Buenas tardes" : "Buenas noches"
+  /* ── Greeting ── */
+  const hour = NOW.getHours()
+  const greeting = hour < 12 ? "Buenos días" : hour < 19 ? "Buenas tardes" : "Buenas noches"
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      {/* ── 0. Greeting header ────────────────────────────────────────── */}
-      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", paddingBottom: 4 }}>
-        <div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
-            {greet}, tres Studio
-          </div>
-          <div style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>
-            {MONTHS[month]} {year} · Aquí está tu resumen financiero
-          </div>
+      {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
+      <div style={{ paddingBottom: 4 }}>
+        <div style={{ fontSize: 26, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
+          {greeting}, tres Studio
         </div>
-        {allPendingInc.length > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 12px", borderRadius: 20, background: "#FFFBEB", border: "1px solid #FDE68A", cursor: "pointer" }}
-            onClick={() => onNavigate?.("ingresos")}>
-            <div style={{ width: 7, height: 7, borderRadius: "50%", background: T.amber }} />
-            <span style={{ fontSize: 12, fontWeight: 600, color: "#92400E" }}>
-              {allPendingInc.length} cobro{allPendingInc.length !== 1 ? "s" : ""} pendiente{allPendingInc.length !== 1 ? "s" : ""}
-            </span>
-          </div>
-        )}
+        <div style={{ fontSize: 14, color: T.muted, marginTop: 5 }}>
+          Aquí está el resumen financiero de tu estudio.
+        </div>
       </div>
 
       {/* ── 1. Acciones pendientes ─────────────────────────────────────── */}
       {alerts.length > 0 && (
         <div style={{
-          background: "#FFFBEB", border: "1px solid #FDE68A",
-          borderRadius: 12, padding: "14px 18px",
-          display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap",
+          background: T.surf, borderRadius: 12,
+          border: `1px solid ${T.border}`,
+          borderLeft: `3px solid ${T.red}`,
+          padding: "14px 20px",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
-            <AlertTriangle size={13} color={T.amber} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#92400E", textTransform: "uppercase", letterSpacing: ".08em" }}>
-              Atención
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <AlertTriangle size={13} color={T.red} />
+            <span style={{ fontSize: 10, fontWeight: 700, color: T.red, textTransform: "uppercase", letterSpacing: ".09em" }}>
+              Acciones requeridas
             </span>
           </div>
-          <div style={{ width: 1, height: 16, background: "#FDE68A", flexShrink: 0 }} />
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", flex: 1 }}>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
             {alerts.map((a, i) => (
-              <button key={i} onClick={() => onNavigate?.(a.nav)} style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "5px 12px", borderRadius: 20, border: `1px solid ${a.color}30`,
-                background: a.bg, cursor: "pointer", fontFamily: "inherit",
-              }}>
-                <a.icon size={11} color={a.color} />
-                <span style={{ fontSize: 12, fontWeight: 600, color: a.color }}>{a.label}</span>
-                {a.value && <span style={{ fontSize: 11, color: a.color, opacity: .7, fontFamily: "'DM Mono',monospace" }}>{a.value}</span>}
-              </button>
+              <AlertChip
+                key={i}
+                icon={a.icon}
+                color={a.color}
+                bg={a.bg}
+                label={a.label}
+                value={a.value}
+                onClick={() => onNavigate?.(a.nav)}
+              />
             ))}
           </div>
         </div>
       )}
 
-      {/* ── 2. KPI Cards ──────────────────────────────────────────────── */}
-      <div className="kpi-hero-grid">
+      {/* ── 2. KPI hero + grid ────────────────────────────────────────── */}
+      {/* Hero: ingresos full-width mobile, 1.4fr desktop */}
+      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 16 }} className="kpi-grid">
+        <style>{`
+          @media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr!important}}
+          @media(max-width:768px){.kpi-grid{grid-template-columns:1fr!important}}
+          @media(max-width:768px){.kpi-grid>*:first-child{grid-column:1/-1}}
+        `}</style>
         <KPI
           hero
           title="Ingresos del mes"
           value={fmtS(fin.tI)}
-          sub={`${MONTHS[month]} ${year}`}
+          sub={incTrend ? incTrend.label : "Sin dato anterior"}
           icon={TrendingUp}
+          color={T.green}
           spark={incSpark}
         />
         <KPI
@@ -525,28 +522,29 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        ...card, padding: 0, overflow: "hidden",
-        display: "flex", flexDirection: "row",
+        background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14,
+        padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
       }}>
         <div style={{
           background: T.text, color: "#fff",
           display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "16px 22px", gap: 2, flexShrink: 0, minWidth: 160,
+          padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 150,
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
         }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.45)", textTransform: "uppercase", letterSpacing: ".08em" }}>
-            Acumulado {year}
+          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,.4)", textTransform: "uppercase", letterSpacing: ".09em" }}>
+            Acumulado
           </div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginTop: 4 }}>
-            Resumen anual
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginTop: 4, letterSpacing: "-.2px" }}>
+            {year}
           </div>
         </div>
-        <Divider />
         <div style={{ display: "flex", flex: 1, overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
           {[
             { label: "Ingresos totales", value: fmtS(annualFin.tI), note: `Cobrados: ${fmtS(annualFin.cobr)}`, color: T.green },
             { label: "Egresos totales", value: fmtS(annualFin.tE), color: T.red },
             { label: "Utilidad acumulada", value: fmtS(annualFin.util), color: annualFin.util >= 0 ? T.violet : T.red },
-            { label: "IVA neto a declarar", value: fmtS(Math.abs(annualFin.ivaN)), note: annualFin.ivaN >= 0 ? "A pagar a DIAN" : "Saldo a favor", color: annualFin.ivaN >= 0 ? T.red : T.green },
+            { label: "IVA neto DIAN", value: fmtS(Math.abs(annualFin.ivaN)), note: annualFin.ivaN >= 0 ? "A pagar" : "A favor", color: annualFin.ivaN >= 0 ? T.red : T.green },
           ].map(({ label, value, note, color }, i, arr) => (
             <div key={label} style={{
               display: "flex", flexShrink: 0, minWidth: 140,
@@ -559,7 +557,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ ...card, padding: "22px 28px" }}>
+      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "24px 28px" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,
@@ -625,10 +623,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 5. Pending invoices + Pie + IVA ───────────────────────────── */}
-      <div className="g3" style={{ gap: 14 }}>
+      <div className="g3" style={{ gap: 16 }}>
 
         {/* Pending invoices */}
-        <div style={{ ...card, padding: "20px 22px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader
             title="Facturas pendientes"
             subtitle={`${allPendingInc.length} en curso · ${fmtS(totalPendingAll)}`}
@@ -648,7 +646,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Expense pie */}
-        <div style={{ ...card, padding: "20px 22px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader
             title="Distribución de egresos"
             subtitle="Por categoría este mes"
@@ -700,7 +698,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* IVA fiscal */}
-        <div style={{ ...card, padding: "20px 22px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader title="Resumen fiscal" subtitle="IVA del período" />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -753,10 +751,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 6. Quick access + Recent movements ───────────────────────── */}
-      <div className="g2" style={{ gap: 14 }}>
+      <div className="g2" style={{ gap: 16 }}>
 
         {/* Quick access */}
-        <div style={{ ...card, padding: "20px 16px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 18px" }}>
           <div style={{ paddingLeft: 4, paddingRight: 4 }}>
             <SectionHeader title="Accesos rápidos" />
           </div>
@@ -782,7 +780,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Recent movements */}
-        <div style={{ ...card, padding: "20px 24px" }}>
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
           <SectionHeader
             title="Movimientos recientes"
             subtitle="Últimos 8 registros de ingresos y egresos"

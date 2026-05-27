@@ -7,18 +7,42 @@ const today = () => new Date().toISOString().split("T")[0]
 
 function ModalShell({ title, sub, onClose, children }) {
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: 20 }}>
-      <div style={{ background: T.surf, borderRadius: 16, border: `1px solid ${T.border}`, padding: 28, width: "100%", maxWidth: 540, maxHeight: "90vh", overflowY: "auto", boxShadow: "0 24px 64px rgba(0,0,0,.22), 0 8px 24px rgba(0,0,0,.12)" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+    <div style={{
+      position: "fixed", inset: 0,
+      background: "rgba(0,0,0,.45)", backdropFilter: "blur(8px)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      zIndex: 200, padding: 20,
+    }}>
+      <div style={{
+        background: T.surf, borderRadius: 16,
+        border: `1px solid ${T.border}`,
+        padding: 0, width: "100%", maxWidth: 540,
+        maxHeight: "90vh", overflowY: "auto",
+        /* subtle shadow — not exaggerated */
+        boxShadow: "0 8px 40px rgba(0,0,0,.18)",
+      }}>
+        {/* Modal header */}
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+          padding: "22px 28px 18px", borderBottom: `1px solid ${T.border}`,
+        }}>
           <div>
-            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.2px" }}>{title}</h2>
+            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>{title}</h2>
             {sub && <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>}
           </div>
-          <button onClick={onClose} style={{ background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginLeft: 12 }}>
+          <button onClick={onClose} style={{
+            background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8,
+            width: 32, height: 32, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0, marginLeft: 12,
+          }}>
             <X size={14} color={T.subtle} />
           </button>
         </div>
-        {children}
+        {/* Modal body */}
+        <div style={{ padding: "24px 28px" }}>
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -300,7 +324,7 @@ export function IncomeModal({ initial, onSave, onClose, clients = [], incomes = 
           </div>
 
           <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.green} />
-          <div style={{ display: "flex", gap: 10, marginTop: 18, justifyContent: "flex-end", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
             {!isEdit && <button onClick={() => setMode("start")} style={{ ...btnGhost, fontSize: 12, padding: "6px 12px", gap: 5, marginRight: "auto" }}><ArrowLeft size={13} />Volver</button>}
             <button onClick={onClose} style={btnGhost}>Cancelar</button>
             <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnGreen}>
@@ -386,7 +410,7 @@ export function ExpenseModal({ initial, onSave, onClose, expenses = [] }) {
             <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Observaciones</label><input style={inp} value={f.obs} onChange={e => set("obs", e.target.value)} placeholder="Notas adicionales..." /></div>
           </div>
           <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.red} />
-          <div style={{ display: "flex", gap: 10, marginTop: 18, justifyContent: "flex-end", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
             {!isEdit && <button onClick={() => setMode("start")} style={{ ...btnGhost, fontSize: 12, padding: "6px 12px", gap: 5, marginRight: "auto" }}><ArrowLeft size={13} />Volver</button>}
             <button onClick={onClose} style={btnGhost}>Cancelar</button>
             <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnRed}>
@@ -459,7 +483,7 @@ export function RecurringModal({ initial, onSave, onClose }) {
         <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notes} onChange={e => set("notes", e.target.value)} placeholder="Descripción o detalles..." /></div>
       </div>
       <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.red} />
-      <div style={{ display: "flex", gap: 10, marginTop: 18, justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end" }}>
         <button onClick={onClose} style={btnGhost}>Cancelar</button>
         <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnRed}>
           <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar recurrente"}
@@ -483,7 +507,7 @@ export function ClientModalWrapper({ initial, onSave, onClose }) {
         <div><label style={lbl}>Teléfono</label><input style={inp} value={f.phone} onChange={e=>set("phone",e.target.value)} placeholder="+57 300 123 4567" /></div>
         <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notas} onChange={e=>set("notas",e.target.value)} placeholder="Información adicional..." /></div>
       </div>
-      <div style={{ display:"flex", gap:10, marginTop:20, justifyContent:"flex-end" }}>
+      <div style={{ display:"flex", gap:10, marginTop:24, paddingTop:20, borderTop:`1px solid ${T.border}`, justifyContent:"flex-end" }}>
         <button onClick={onClose} style={btnGhost}>Cancelar</button>
         <button onClick={() => { if(f.name.trim()) onSave({...f, id:f.id||uid()}) }} style={btnGreen}>
           <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar cliente"}
