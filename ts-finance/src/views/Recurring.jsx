@@ -39,7 +39,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
         <button onClick={onAdd} style={{ ...btnRed, flexShrink: 0 }}><Plus size={14} />Agregar</button>
       </div>
 
-      {/* Summary cards — flat editorial */}
+      {/* Summary cards — flat hairline borders */}
       <div className="g4">
         {[
           { label: "Costo mensual equivalente", val: fmtS(monthlyTotal), color: T.red },
@@ -47,9 +47,9 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           { label: "IVA mensual estimado", val: fmtS(monthlyIVA), color: T.amber },
           { label: "Suscripciones activas", val: `${active.length}`, color: T.green },
         ].map(({ label, val, color }) => (
-          <div key={label} style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "18px 20px" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 12 }}>{label}</div>
-            <div style={{ fontSize: 24, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.2px" }}>{val}</div>
+          <div key={label} style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "18px 20px", boxShadow: "none" }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#9B9992", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 12 }}>{label}</div>
+            <div style={{ fontSize: 26, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.2px" }}>{val}</div>
           </div>
         ))}
       </div>
@@ -62,11 +62,12 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
               <button key={val} onClick={() => setFilter(val)} style={{
                 padding: "6px 13px", borderRadius: 8,
-                border: filter === val ? `1px solid ${T.text}` : `1px solid ${T.border}`,
+                border: filter === val ? `1px solid ${T.text}` : `0.5px solid ${T.border}`,
                 fontSize: 11, fontWeight: filter === val ? 700 : 500, cursor: "pointer",
-                background: filter === val ? T.text : T.surf,
-                color: filter === val ? "#fff" : T.subtle,
+                background: "transparent",
+                color: filter === val ? T.text : T.subtle,
                 fontFamily: "inherit", transition: "all .15s",
+                boxShadow: "none",
               }}>
                 {label} {val === "all" ? `(${recurring.length})` : val === "active" ? `(${active.length})` : `(${paused.length})`}
               </button>
@@ -80,7 +81,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
               const base = getBase(r)
               const monthlyEq = Number(r.amount) * freqMult(r.freq)
               return (
-                <div key={r.id} style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "16px 20px", opacity: r.active ? 1 : 0.5, transition: "opacity .2s" }}>
+                <div key={r.id} style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "16px 20px", opacity: r.active ? 1 : 0.5, transition: "opacity .2s", boxShadow: "none" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <SoftIcon icon={r.icon} />
                     <div style={{ flex: 1 }}>
@@ -126,7 +127,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
               )
             })}
             {filtered.length === 0 && (
-              <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, textAlign: "center", padding: "56px 48px", color: T.muted, fontSize: 13 }}>
+              <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, textAlign: "center", padding: "56px 48px", color: T.muted, fontSize: 13 }}>
                 No hay gastos recurrentes. Agrega el primero.
               </div>
             )}
@@ -135,15 +136,15 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
 
         {/* Sidebar: upcoming */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px" }}>
+          <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "20px 22px", boxShadow: "none" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
               <Zap size={13} color={T.amber} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".07em" }}>Próximos cobros</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".1em" }}>Próximos cobros</span>
             </div>
             {upcoming.length === 0 ? (
               <div style={{ color: T.muted, fontSize: 12, textAlign: "center", padding: "16px 0" }}>Sin cobros pendientes</div>
             ) : upcoming.map((r, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < upcoming.length - 1 ? `1px solid ${T.border}` : "none" }}>
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < upcoming.length - 1 ? `0.5px solid #F0EEE9` : "none" }}>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: T.surf2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${T.border}` }}>
                   <span style={{ fontSize: 11, fontWeight: 800, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{r.day}</span>
                 </div>
@@ -155,8 +156,8 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
             ))}
           </div>
 
-          <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14 }}>Resumen activos</div>
+          <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "20px 22px", boxShadow: "none" }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 14 }}>Resumen activos</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {Object.entries(active.reduce((acc, r) => {
                 acc[r.cat] = (acc[r.cat] || 0) + Number(r.amount) * freqMult(r.freq)

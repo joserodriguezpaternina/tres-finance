@@ -9,29 +9,28 @@ function ModalShell({ title, sub, onClose, children }) {
   return (
     <div style={{
       position: "fixed", inset: 0,
-      background: "rgba(0,0,0,.45)", backdropFilter: "blur(8px)",
+      background: "rgba(0,0,0,.4)", backdropFilter: "blur(6px)",
       display: "flex", alignItems: "center", justifyContent: "center",
       zIndex: 200, padding: 20,
     }}>
       <div style={{
         background: T.surf, borderRadius: 16,
-        border: `1px solid ${T.border}`,
-        padding: 0, width: "100%", maxWidth: 540,
+        border: `0.5px solid ${T.border}`,
+        padding: 0, width: "100%", maxWidth: 520,
         maxHeight: "90vh", overflowY: "auto",
-        /* subtle shadow — not exaggerated */
-        boxShadow: "0 8px 40px rgba(0,0,0,.18)",
+        boxShadow: "none",
       }}>
         {/* Modal header */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-          padding: "22px 28px 18px", borderBottom: `1px solid ${T.border}`,
+          padding: "22px 28px 18px", borderBottom: `0.5px solid ${T.border}`,
         }}>
           <div>
             <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>{title}</h2>
             {sub && <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>}
           </div>
           <button onClick={onClose} style={{
-            background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8,
+            background: T.surf2, border: `0.5px solid ${T.border}`, borderRadius: 8,
             width: 32, height: 32, cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
             flexShrink: 0, marginLeft: 12,
@@ -53,7 +52,7 @@ function CalcBar({ amount, hasIVA, ivaP, colorTotal }) {
   const ivaAmt = hasIVA ? (amount * ivaP) / (100 + ivaP) : 0
   const base = amount - ivaAmt
   return (
-    <div style={{ background: T.surf2, borderRadius: 10, padding: "12px 16px", marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, border: `1px solid ${T.border}` }}>
+    <div style={{ background: T.surf2, borderRadius: 10, padding: "12px 16px", marginTop: 14, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, border: `0.5px solid ${T.border}` }}>
       {[["Base", fmtS(base), T.text], ["IVA", fmtS(ivaAmt), T.amber], ["Total", fmtS(amount), colorTotal]].map(([k, v, c]) => (
         <div key={k} style={{ textAlign: "center" }}>
           <div style={{ fontSize: 10, color: T.subtle, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".6px" }}>{k}</div>
@@ -68,9 +67,9 @@ function CalcBar({ amount, hasIVA, ivaP, colorTotal }) {
 function StartScreen({ onNew, onFromHistory, onClose, historyCount }) {
   const btnStyle = {
     display: "flex", alignItems: "center", gap: 14,
-    padding: "16px 18px", borderRadius: 12, border: `1.5px solid ${T.border}`,
+    padding: "16px 18px", borderRadius: 12, border: `0.5px solid ${T.border}`,
     background: T.surf, cursor: "pointer", textAlign: "left", width: "100%",
-    transition: "border-color .12s",
+    transition: "border-color .12s", boxShadow: "none",
   }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -143,7 +142,7 @@ function HistoryPicker({ items, labelFn, subFn, onSelect, onBack }) {
             onClick={() => onSelect(item)}
             style={{
               display: "flex", alignItems: "center", justifyContent: "space-between",
-              padding: "11px 14px", borderRadius: 10, border: `1px solid ${T.border}`,
+              padding: "11px 14px", borderRadius: 10, border: `0.5px solid ${T.border}`,
               background: T.surf2, cursor: "pointer", textAlign: "left", width: "100%",
               transition: "background .1s",
             }}
@@ -191,12 +190,12 @@ function ClientAutocomplete({ value, onChange, clients }) {
         autoComplete="off"
       />
       {open && suggestions.length > 0 && (
-        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: T.surf, border: `1px solid ${T.border}`, borderRadius: 10, zIndex: 50, maxHeight: 220, overflowY: "auto", boxShadow: "0 12px 32px rgba(0,0,0,.15)" }}>
+        <div style={{ position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 10, zIndex: 50, maxHeight: 220, overflowY: "auto", boxShadow: "0 8px 24px rgba(0,0,0,.10)" }}>
           {suggestions.map(c => (
             <div
               key={c.id}
               onMouseDown={() => { onChange(c.name); setOpen(false) }}
-              style={{ padding: "10px 14px", cursor: "pointer", display: "flex", alignItems: "center", gap: 10, borderBottom: `1px solid ${T.border}` }}
+              style={{ padding: "10px 14px", cursor: "pointer", display: "flex", alignItems: "center", gap: 10, borderBottom: `0.5px solid ${T.border}` }}
               onMouseEnter={e => e.currentTarget.style.background = T.surf2}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
@@ -281,7 +280,7 @@ export function IncomeModal({ initial, onSave, onClose, clients = [], incomes = 
           </div>
 
           {/* ── Documento soporte DIAN ── */}
-          <div style={{ marginTop: 16, borderRadius: 10, border: `1px solid ${T.border}`, overflow: "hidden" }}>
+          <div style={{ marginTop: 16, borderRadius: 10, border: `0.5px solid ${T.border}`, overflow: "hidden" }}>
             <button
               onClick={() => setShowDoc(v => !v)}
               style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "11px 14px", background: T.surf2, border: "none", cursor: "pointer", textAlign: "left" }}
@@ -324,7 +323,7 @@ export function IncomeModal({ initial, onSave, onClose, clients = [], incomes = 
           </div>
 
           <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.green} />
-          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `0.5px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
             {!isEdit && <button onClick={() => setMode("start")} style={{ ...btnGhost, fontSize: 12, padding: "6px 12px", gap: 5, marginRight: "auto" }}><ArrowLeft size={13} />Volver</button>}
             <button onClick={onClose} style={btnGhost}>Cancelar</button>
             <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnGreen}>
@@ -410,7 +409,7 @@ export function ExpenseModal({ initial, onSave, onClose, expenses = [] }) {
             <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Observaciones</label><input style={inp} value={f.obs} onChange={e => set("obs", e.target.value)} placeholder="Notas adicionales..." /></div>
           </div>
           <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.red} />
-          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `0.5px solid ${T.border}`, justifyContent: "flex-end", alignItems: "center" }}>
             {!isEdit && <button onClick={() => setMode("start")} style={{ ...btnGhost, fontSize: 12, padding: "6px 12px", gap: 5, marginRight: "auto" }}><ArrowLeft size={13} />Volver</button>}
             <button onClick={onClose} style={btnGhost}>Cancelar</button>
             <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnRed}>
@@ -483,7 +482,7 @@ export function RecurringModal({ initial, onSave, onClose }) {
         <div style={{ gridColumn: "1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notes} onChange={e => set("notes", e.target.value)} placeholder="Descripción o detalles..." /></div>
       </div>
       <CalcBar amount={amt} hasIVA={f.hasIVA} ivaP={f.ivaP} colorTotal={T.red} />
-      <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `1px solid ${T.border}`, justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", gap: 10, marginTop: 24, paddingTop: 20, borderTop: `0.5px solid ${T.border}`, justifyContent: "flex-end" }}>
         <button onClick={onClose} style={btnGhost}>Cancelar</button>
         <button onClick={() => onSave({ ...f, id: f.id || uid(), amount: parseFloat(f.amount) || 0 })} style={btnRed}>
           <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar recurrente"}
@@ -507,7 +506,7 @@ export function ClientModalWrapper({ initial, onSave, onClose }) {
         <div><label style={lbl}>Teléfono</label><input style={inp} value={f.phone} onChange={e=>set("phone",e.target.value)} placeholder="+57 300 123 4567" /></div>
         <div style={{ gridColumn:"1/-1" }}><label style={lbl}>Notas</label><input style={inp} value={f.notas} onChange={e=>set("notas",e.target.value)} placeholder="Información adicional..." /></div>
       </div>
-      <div style={{ display:"flex", gap:10, marginTop:24, paddingTop:20, borderTop:`1px solid ${T.border}`, justifyContent:"flex-end" }}>
+      <div style={{ display:"flex", gap:10, marginTop:24, paddingTop:20, borderTop:`0.5px solid ${T.border}`, justifyContent:"flex-end" }}>
         <button onClick={onClose} style={btnGhost}>Cancelar</button>
         <button onClick={() => { if(f.name.trim()) onSave({...f, id:f.id||uid()}) }} style={btnGreen}>
           <CheckCircle size={14} />{initial ? "Actualizar" : "Guardar cliente"}

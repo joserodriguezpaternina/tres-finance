@@ -53,8 +53,8 @@ function fmtDate(dateStr) {
 function Label({ children }) {
   return (
     <div style={{
-      fontSize: 11, fontWeight: 700, color: T.muted,
-      textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 10,
+      fontSize: 10, fontWeight: 700, color: T.muted,
+      textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 10,
     }}>
       {children}
     </div>
@@ -65,7 +65,7 @@ function SectionHeader({ title, subtitle, action, onAction }) {
   return (
     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
       <div>
-        <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>{title}</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: T.text, letterSpacing: "-.2px" }}>{title}</div>
         {subtitle && <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>{subtitle}</div>}
       </div>
       {action && (
@@ -97,7 +97,7 @@ function AlertChip({ icon: Icon, color, bg, label, value, onClick }) {
         display: "flex", alignItems: "center", gap: 10,
         padding: "12px 16px", borderRadius: 12,
         background: bg,
-        border: `1px solid ${color}30`,
+        border: `0.5px solid ${color}30`,
         cursor: "pointer", transition: "box-shadow .15s",
         flex: "1 1 200px", minWidth: 0,
       }}
@@ -135,14 +135,16 @@ function StatusDot({ status }) {
   )
 }
 
-function PendingInvoiceRow({ item, last }) {
+function PendingInvoiceRow({ item, last, idx }) {
   const days = daysAgo(item.date)
   const overdue = days > 30 && item.status !== "Pagado"
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
-      padding: "12px 0",
-      borderBottom: last ? "none" : `1px solid ${T.border}`,
+      padding: "11px 0",
+      borderBottom: last ? "none" : `0.5px solid #F0EEE9`,
+      background: !last && idx % 2 === 1 ? "#FAFAF9" : "transparent",
+      minHeight: 46,
     }}>
       <div style={{
         width: 38, height: 38, borderRadius: 11, flexShrink: 0,
@@ -176,13 +178,15 @@ function PendingInvoiceRow({ item, last }) {
   )
 }
 
-function MovementRow({ item, last }) {
+function MovementRow({ item, last, idx }) {
   const isInc = item._tipo === "I"
   return (
     <div style={{
       display: "flex", alignItems: "center", gap: 12,
       padding: "11px 0",
-      borderBottom: last ? "none" : `1px solid ${T.border}`,
+      borderBottom: last ? "none" : `0.5px solid #F0EEE9`,
+      background: !last && idx % 2 === 1 ? "#FAFAF9" : "transparent",
+      minHeight: 46,
     }}>
       <div style={{
         width: 36, height: 36, borderRadius: 10, flexShrink: 0,
@@ -254,8 +258,8 @@ function MetricStrip({ label, value, note, color }) {
       display: "flex", flexDirection: "column", gap: 4,
       padding: "16px 20px",
     }}>
-      <div style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".07em" }}>{label}</div>
-      <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: color || T.text, letterSpacing: "-.3px" }}>{value}</div>
+      <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".1em" }}>{label}</div>
+      <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "'DM Mono',monospace", color: color || T.text, letterSpacing: "-.5px" }}>{value}</div>
       {note && <div style={{ fontSize: 11, color: T.muted }}>{note}</div>}
     </div>
   )
@@ -438,10 +442,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
       <div style={{ paddingBottom: 4 }}>
-        <div style={{ fontSize: 26, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
           {greeting}, tres Studio
         </div>
-        <div style={{ fontSize: 14, color: T.muted, marginTop: 5 }}>
+        <div style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>
           Aquí está el resumen financiero de tu estudio.
         </div>
       </div>
@@ -450,7 +454,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       {alerts.length > 0 && (
         <div style={{
           background: T.surf, borderRadius: 12,
-          border: `1px solid ${T.border}`,
+          border: `0.5px solid ${T.border}`,
           borderLeft: `3px solid ${T.red}`,
           padding: "14px 20px",
         }}>
@@ -522,15 +526,13 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14,
+        background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12,
         padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
       }}>
         <div style={{
           background: T.text, color: "#fff",
           display: "flex", flexDirection: "column", justifyContent: "center",
           padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 150,
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,.4)", textTransform: "uppercase", letterSpacing: ".09em" }}>
             Acumulado
@@ -548,7 +550,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           ].map(({ label, value, note, color }, i, arr) => (
             <div key={label} style={{
               display: "flex", flexShrink: 0, minWidth: 140,
-              borderRight: i < arr.length - 1 ? `1px solid ${T.border}` : "none",
+              borderRight: i < arr.length - 1 ? `0.5px solid ${T.border}` : "none",
             }}>
               <MetricStrip label={label} value={value} note={note} color={color} />
             </div>
@@ -557,7 +559,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "24px 28px" }}>
+      <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "24px 28px" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,
@@ -626,7 +628,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       <div className="g3" style={{ gap: 16 }}>
 
         {/* Pending invoices */}
-        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
+        <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "22px 24px" }}>
           <SectionHeader
             title="Facturas pendientes"
             subtitle={`${allPendingInc.length} en curso · ${fmtS(totalPendingAll)}`}
@@ -635,7 +637,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           />
           {recentPending.length > 0 ? (
             recentPending.map((item, i) => (
-              <PendingInvoiceRow key={item.id || i} item={item} last={i === recentPending.length - 1} />
+              <PendingInvoiceRow key={item.id || i} item={item} last={i === recentPending.length - 1} idx={i} />
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "40px 0", color: T.muted, fontSize: 13 }}>
@@ -646,7 +648,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Expense pie */}
-        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
+        <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "22px 24px" }}>
           <SectionHeader
             title="Distribución de egresos"
             subtitle="Por categoría este mes"
@@ -698,7 +700,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* IVA fiscal */}
-        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
+        <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "22px 24px" }}>
           <SectionHeader title="Resumen fiscal" subtitle="IVA del período" />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -712,7 +714,8 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
                 style={{
                   display: "flex", justifyContent: "space-between", alignItems: "center",
                   padding: "12px 0",
-                  borderBottom: idx < arr.length - 1 ? `1px solid ${T.border}` : "none",
+                  borderBottom: idx < arr.length - 1 ? `0.5px solid #F0EEE9` : "none",
+                  minHeight: 46,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -733,9 +736,9 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           </div>
 
           <div style={{
-            marginTop: 18, padding: "16px 16px", borderRadius: 12,
+            marginTop: 18, padding: "16px 16px", borderRadius: 10,
             background: fin.ivaN >= 0 ? "rgba(215,43,32,.06)" : "rgba(68,178,107,.06)",
-            border: `1px solid ${fin.ivaN >= 0 ? "rgba(215,43,32,.18)" : "rgba(68,178,107,.18)"}`,
+            border: `0.5px solid ${fin.ivaN >= 0 ? "rgba(215,43,32,.25)" : "rgba(68,178,107,.25)"}`,
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
               <Building2 size={12} color={fin.ivaN >= 0 ? T.red : T.green} />
@@ -754,7 +757,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       <div className="g2" style={{ gap: 16 }}>
 
         {/* Quick access */}
-        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 18px" }}>
+        <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "22px 18px" }}>
           <div style={{ paddingLeft: 4, paddingRight: 4 }}>
             <SectionHeader title="Accesos rápidos" />
           </div>
@@ -780,7 +783,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
         </div>
 
         {/* Recent movements */}
-        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "22px 24px" }}>
+        <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: "22px 24px" }}>
           <SectionHeader
             title="Movimientos recientes"
             subtitle="Últimos 8 registros de ingresos y egresos"
@@ -789,7 +792,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           />
           {recentMoves.length > 0 ? (
             recentMoves.map((item, i) => (
-              <MovementRow key={item.id || i} item={item} last={i === recentMoves.length - 1} />
+              <MovementRow key={item.id || i} item={item} last={i === recentMoves.length - 1} idx={i} />
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "48px 0", color: T.muted, fontSize: 13 }}>

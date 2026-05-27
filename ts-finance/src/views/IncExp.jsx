@@ -56,14 +56,14 @@ const CAT_COLORS = {
 
 /* ── shared primitives ───────────────────────────────────── */
 const thCell = {
-  textAlign: 'left', fontSize: 10, fontWeight: 700, color: T.subtle,
-  padding: '12px 14px', textTransform: 'uppercase', letterSpacing: '.06em',
-  borderBottom: `1px solid ${T.border}`, whiteSpace: 'nowrap',
-  background: T.surf2, position: 'sticky', top: 0, zIndex: 1,
+  textAlign: 'left', fontSize: 10, fontWeight: 700, color: '#9B9992',
+  padding: '12px 14px', textTransform: 'uppercase', letterSpacing: '.1em',
+  borderBottom: `0.5px solid #F0EEE9`, whiteSpace: 'nowrap',
+  background: T.surf, position: 'sticky', top: 0, zIndex: 1,
 }
 const thRight = { ...thCell, textAlign: 'right' }
-/* rows ~44px height via padding */
-const tdBase = { padding: '13px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap' }
+/* rows 46px height */
+const tdBase = { padding: '11px 14px', fontSize: 13, color: T.text, whiteSpace: 'nowrap', height: 46 }
 const tdMono = { ...tdBase, fontFamily: "'DM Mono',monospace", textAlign: 'right' }
 
 function Th({ children, sortable, active, dir, onClick }) {
@@ -106,29 +106,30 @@ function ChipBtn({ active, onClick, children }) {
   return (
     <button onClick={onClick} style={{
       padding: '6px 13px', borderRadius: 8,
-      border: active ? `1px solid ${T.text}` : `1px solid ${T.border}`,
+      border: active ? `1px solid ${T.text}` : `0.5px solid ${T.border}`,
       fontSize: 11, fontWeight: active ? 700 : 500, cursor: 'pointer', whiteSpace: 'nowrap',
-      background: active ? T.text : T.surf,
-      color: active ? '#fff' : T.subtle,
+      background: active ? 'transparent' : T.surf,
+      color: active ? T.text : T.subtle,
       fontFamily: "inherit", transition: 'all .15s',
+      boxShadow: 'none',
     }}>{children}</button>
   )
 }
 
-/* KPI strip — compact horizontal cards — flat, no shadow */
+/* KPI strip — compact horizontal cards — flat, hairline borders */
 function KpiStrip({ items }) {
   return (
     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
       {items.map((k, i) => (
         <div key={i} style={{
-          flex: '1 1 160px', background: T.surf, border: `1px solid ${T.border}`,
+          flex: '1 1 160px', background: T.surf, border: `0.5px solid ${T.border}`,
           borderRadius: 12, padding: '16px 20px',
-          /* NO box-shadow */
+          boxShadow: 'none',
         }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 10 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#9B9992', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 10 }}>
             {k.label}
           </div>
-          <div style={{ fontSize: 22, fontWeight: 700, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-1px', lineHeight: 1 }}>
+          <div style={{ fontSize: 28, fontWeight: 700, color: k.accent, fontFamily: "'DM Mono',monospace", letterSpacing: '-1.2px', lineHeight: 1 }}>
             {fmt(k.value)}
           </div>
           {k.sub && <div style={{ fontSize: 11, color: T.muted, marginTop: 6 }}>{k.sub}</div>}
@@ -236,9 +237,9 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       </div>
 
       {/* ── Filter bar */}
-      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {/* Row 1: search */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', border: `1px solid ${T.border}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', border: `0.5px solid ${T.border}` }}>
           <Search size={13} color={T.muted} />
           <input
             placeholder="Buscar cliente, proyecto…"
@@ -270,7 +271,7 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
       ]} />
 
       {/* ── Table */}
-      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
+      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 12, border: `0.5px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
@@ -294,7 +295,7 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
                   ctaLabel="Registrar ingreso"
                   onCta={onAdd}
                 />
-              : filtered.map(i => {
+              : filtered.map((i, rowIdx) => {
                   const overdue = isOverdue(i)
                   const canPay  = i.status === 'Pendiente' || i.status === 'Parcial'
                   const isHovered = hoveredRow === i.id
@@ -303,10 +304,11 @@ export function IncomesView({ incomes, allIncomes, onAdd, onEdit, onDelete, onMa
                       onMouseEnter={() => setHoveredRow(i.id)}
                       onMouseLeave={() => setHoveredRow(null)}
                       style={{
-                        borderBottom: `1px solid ${T.border}`,
+                        borderBottom: `0.5px solid #F0EEE9`,
                         borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
-                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : 'transparent',
+                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : rowIdx % 2 === 1 ? '#FAFAF9' : '#FFFFFF',
                         transition: 'background .1s',
+                        height: 46,
                       }}>
                       {/* Cliente */}
                       <td style={{ ...tdBase, paddingLeft: overdue ? 11 : 14 }}>
@@ -463,9 +465,9 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       </div>
 
       {/* ── Filter bar */}
-      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ background: T.surf, border: `0.5px solid ${T.border}`, borderRadius: 12, padding: '10px 14px', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Search */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', minWidth: 200, border: `1px solid ${T.border}` }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: T.surf2, borderRadius: 8, padding: '8px 12px', minWidth: 200, border: `0.5px solid ${T.border}` }}>
           <Search size={13} color={T.muted} />
           <input
             placeholder="Buscar descripción, proveedor…"
@@ -497,7 +499,7 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       ]} />
 
       {/* ── Table */}
-      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 14, border: `1px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
+      <div className="tbl-wrap" style={{ background: T.surf, borderRadius: 12, border: `0.5px solid ${T.border}`, maxHeight: 560, overflow: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 640 }}>
           <thead>
             <tr>
@@ -521,7 +523,7 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
                   ctaLabel="Registrar egreso"
                   onCta={onAdd}
                 />
-              : filtered.map(e => {
+              : filtered.map((e, rowIdx) => {
                   const catTheme = CAT_COLORS[e.cat] || { bg: T.surf2, c: T.text2 }
                   const overdue  = e.status && e.status !== 'Pagado' && isOverdue(e)
                   const isHovered = hoveredRow === e.id
@@ -530,11 +532,12 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
                       onMouseEnter={() => setHoveredRow(e.id)}
                       onMouseLeave={() => setHoveredRow(null)}
                       style={{
-                        borderBottom: `1px solid ${T.border}`,
+                        borderBottom: `0.5px solid #F0EEE9`,
                         borderLeft: overdue ? `3px solid ${T.red}` : '3px solid transparent',
-                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : 'transparent',
+                        background: overdue ? 'rgba(215,43,32,.025)' : isHovered ? T.surf2 : rowIdx % 2 === 1 ? '#FAFAF9' : '#FFFFFF',
                         opacity: e.autoGenerated ? 0.93 : 1,
                         transition: 'background .1s',
+                        height: 46,
                       }}>
                       {/* Fecha */}
                       <td style={{ ...tdBase, paddingLeft: overdue ? 11 : 14, fontSize: 12, color: T.muted, minWidth: 60 }}>

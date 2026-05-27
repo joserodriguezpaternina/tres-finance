@@ -165,9 +165,9 @@ export default function App() {
         html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text};-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:${T.border};border-radius:10px}
-        input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:1px solid ${T.border};border-radius:10px}
-        input:focus,select:focus{border-color:${T.accent}!important;outline:none;box-shadow:0 0 0 3px ${T.accentBg}!important}
+        ::-webkit-scrollbar-thumb{background:rgba(15,14,12,.12);border-radius:10px}
+        input,select{background:${T.surf};color:${T.text};font-family:'AcidGrotesk',sans-serif;border:0.5px solid rgba(15,14,12,.12);border-radius:10px}
+        input:focus,select:focus{border-color:${T.text}!important;border-width:1px!important;outline:none;}
         button{transition:opacity .15s;font-family:'AcidGrotesk',sans-serif}
         button:hover{opacity:.8}
         ::placeholder{color:${T.muted}}
@@ -176,17 +176,32 @@ export default function App() {
         @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         /* ─── Layout ─── */
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:210px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:99;backdrop-filter:blur(4px)}
+        /* ─── Sidebar Icon Rail — desktop ─── */
+        .sidebar{width:64px;background:${T.surf};border-right:0.5px solid rgba(15,14,12,.10);display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:width 280ms cubic-bezier(.4,0,.2,1);overflow:hidden}
+        .sidebar:hover{width:210px}
+        .sidebar .nav-label{opacity:0;transition:opacity 150ms;white-space:nowrap;overflow:hidden}
+        .sidebar:hover .nav-label{opacity:1}
+        .sidebar .brand-name{display:none;white-space:nowrap;overflow:hidden}
+        .sidebar:hover .brand-name{display:block}
+        .sidebar .nav-group-label{display:none;white-space:nowrap}
+        .sidebar:hover .nav-group-label{display:block}
+        /* ─── Nav items ─── */
+        .nav-item{border-left:2.5px solid transparent;transition:background .12s,border-left-color .12s}
+        .nav-item:hover{background:rgba(15,14,12,.04)!important;border-left-color:rgba(15,14,12,.15)!important}
+        .nav-active{background:rgba(15,14,12,.06)!important;border-left:2.5px solid #0F0E0C!important}
+        /* ─── Main area ─── */
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 32px;height:58px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:99;backdrop-filter:blur(4px)}
+        /* ─── Topbar ─── */
+        .topbar{background:${T.surf};border-bottom:0.5px solid rgba(15,14,12,.10);padding:0 28px;height:56px;display:flex;align-items:center;gap:10px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* ─── Nav active: borde izquierdo, NO fondo negro ─── */
-        .nav-item:hover{background:${T.sideHov}!important}
-        .nav-item-active{background:${T.sideAct};border-left:2.5px solid ${T.text}!important}
+        /* ─── Page header ─── */
+        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:12px}
+        .page-title{font-size:24px;font-weight:700;color:${T.text};letter-spacing:-.5px;line-height:1.2}
+        .page-sub{font-size:13px;color:${T.muted};margin-top:4px}
         /* ─── Grid utilities ─── */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -202,10 +217,6 @@ export default function App() {
         /* ─── Table scroll ─── */
         .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         main.content{overflow-x:clip}
-        /* ─── Page header ─── */
-        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
-        .page-title{font-size:22px;font-weight:700;color:${T.text};letter-spacing:-.4px;line-height:1.2}
-        .page-sub{font-size:13px;color:${T.muted};margin-top:3px}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
@@ -215,14 +226,18 @@ export default function App() {
           .gc{grid-template-columns:1fr}
           .rg{grid-template-columns:1fr}
         }
-        /* ─── Responsive 768px (mobile) ─── */
+        /* ─── Responsive 768px (mobile) — sidebar becomes full overlay panel ─── */
         @media(max-width:768px){
-          .sidebar{position:fixed;top:0;left:0;height:100vh;transform:translateX(-100%);box-shadow:none}
+          .sidebar{position:fixed;top:0;left:0;height:100vh;width:220px!important;transform:translateX(-100%);box-shadow:none;overflow:hidden}
+          .sidebar:hover{width:220px!important}
           .sidebar.open{transform:translateX(0);animation:slideIn .28s cubic-bezier(.4,0,.2,1);box-shadow:24px 0 60px rgba(0,0,0,.1)}
+          .sidebar .nav-label{opacity:1!important}
+          .sidebar .brand-name{display:block!important}
+          .sidebar .nav-group-label{display:block!important}
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
           .topbar{padding:0;flex-direction:column;align-items:stretch;height:auto;gap:0}
-          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid ${T.border}}
+          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:0.5px solid rgba(15,14,12,.10)}
           .topbar-row2{display:flex!important;align-items:center;justify-content:space-between;padding:8px 16px;gap:8px;background:${T.bg}}
           .hactions{display:none!important}
           .g4{grid-template-columns:1fr 1fr;gap:10px}
@@ -233,7 +248,7 @@ export default function App() {
           .bottom-nav{display:flex!important}
           .col-hide-mobile{display:none!important}
           .page-hdr{margin-bottom:18px}
-          .page-title{font-size:18px}
+          .page-title{font-size:20px}
         }
         @media(max-width:480px){
           .g4{grid-template-columns:1fr;gap:10px}
@@ -244,7 +259,7 @@ export default function App() {
           .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
         /* ─── Bottom nav ─── */
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:1px solid ${T.border};height:62px;align-items:stretch}
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:${T.surf};border-top:0.5px solid rgba(15,14,12,.10);height:62px;align-items:stretch}
         .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 2px;font-family:inherit;transition:background .15s;min-width:0;position:relative}
         .bnav-item:hover{background:${T.surf2}}
         .bnav-item.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:${T.text};border-radius:0 0 3px 3px}
@@ -256,28 +271,31 @@ export default function App() {
       <div className="app-layout">
         <div className={`overlay${sidebarOpen ? " open" : ""}`} onClick={() => setSidebarOpen(false)} />
 
-        {/* ── SIDEBAR ── */}
+        {/* ── SIDEBAR — Icon Rail ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           {/* Brand */}
-          <div style={{ padding: "20px 16px 16px", borderBottom: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 9, background: T.text, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg viewBox="0 0 1675 1675" style={{ width: 17, height: 17 }} fill="none">
+          <div style={{ padding: "16px 0 14px", borderBottom: "0.5px solid rgba(15,14,12,.10)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 60, flexShrink: 0, overflow: "hidden" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, paddingLeft: 20, paddingRight: 14, width: "100%" }}>
+              {/* Logo icon — always visible, centered when collapsed */}
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: T.text, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg viewBox="0 0 1675 1675" style={{ width: 16, height: 16 }} fill="none">
                   <path fillRule="evenodd" clipRule="evenodd" d="M837.607 363.741C1048.32 363.741 1240.76 414.671 1381.48 498.375C1521.56 581.706 1615 700.811 1615 837.721C1615 974.626 1521.57 1093.73 1381.49 1177.06C1241.25 1260.49 1049.62 1311.36 839.728 1311.7C839.013 1311.75 838.293 1311.78 837.566 1311.78C626.861 1311.77 434.429 1260.82 293.723 1177.1C153.644 1093.75 60.2149 974.624 60.2148 837.721C60.2148 700.811 153.652 581.706 293.739 498.375C434.454 414.671 626.895 363.741 837.607 363.741ZM601.944 696.784H772.853V587.68H852.841V696.784H1023.75V587.68H1103.74V696.784H1212.08V766.598H1103.74V984.806C1103.74 1011.76 1120.41 1027.02 1144.43 1027.02H1212.08V1096.83H1137.18C1063.04 1096.83 1023.75 1064.79 1023.75 989.894V766.598H852.841V984.806C852.841 1011.76 869.509 1027.02 893.538 1027.02H961.188V1096.83H886.286C812.143 1096.83 772.853 1064.79 772.853 989.894V766.598H601.944V984.806C601.944 1011.76 618.614 1027.02 642.643 1027.02H710.291V1096.83H635.391C561.247 1096.83 521.956 1064.79 521.956 989.894V766.598H456.473V696.784H521.956V587.68H601.944V696.784Z" fill="white" />
                 </svg>
               </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
-                <div style={{ fontSize: 11, color: T.muted }}>Finanzas · {year}</div>
+              {/* Brand text — only visible when expanded */}
+              <div className="brand-name">
+                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px", lineHeight: 1.2 }}>tres Studio</div>
+                <div style={{ fontSize: 10, color: T.muted }}>Finanzas · {year}</div>
               </div>
             </div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "10px 8px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 1 }}>
+          <nav style={{ flex: 1, padding: "10px 0", display: "flex", flexDirection: "column", overflowY: "auto", overflowX: "hidden", gap: 0 }}>
             {NAV_GROUPS.map((group, gi) => (
-              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 16 : 0 }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 10px 5px" }}>{group.label}</div>
+              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 12 : 0 }}>
+                {/* Group label — only shown when expanded */}
+                <div className="nav-group-label" style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".09em", padding: "0 20px 4px", whiteSpace: "nowrap" }}>{group.label}</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                   {group.items.map(v => {
                     const active = view === v.id
@@ -285,26 +303,27 @@ export default function App() {
                       <button
                         key={v.id}
                         onClick={() => navTo(v.id)}
-                        className={active ? "nav-item-active" : "nav-item"}
+                        className={active ? "nav-active" : "nav-item"}
                         style={{
-                          display: "flex", alignItems: "center", gap: 9,
-                          padding: "8px 12px 8px 10px",
-                          borderRadius: 8, border: "none",
-                          borderLeft: active ? `2.5px solid ${T.text}` : "2.5px solid transparent",
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "10px 20px 10px 18px",
+                          border: "none",
                           cursor: "pointer", width: "100%", textAlign: "left",
-                          background: active ? T.sideAct : "transparent",
+                          background: "transparent",
                           color: active ? T.text : T.subtle,
                           fontSize: 13, fontWeight: active ? 600 : 400,
-                          transition: "background .12s",
+                          borderRadius: 0,
+                          minHeight: 44,
+                          whiteSpace: "nowrap",
                         }}
                       >
-                        <v.icon size={14} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
-                        <span style={{ flex: 1 }}>{v.label}</span>
+                        <v.icon size={15} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} style={{ flexShrink: 0 }} />
+                        <span className="nav-label" style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: T.amberBg, color: T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
+                          <span className="nav-label" style={{ fontSize: 10, fontWeight: 700, background: T.amberBg, color: T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center", flexShrink: 0 }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 6px", borderRadius: 8 }}>{recurring.filter(r => r.active).length}</span>
+                          <span className="nav-label" style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 6px", borderRadius: 8, flexShrink: 0 }}>{recurring.filter(r => r.active).length}</span>
                         )}
                       </button>
                     )
@@ -315,11 +334,9 @@ export default function App() {
           </nav>
 
           {/* Footer status */}
-          <div style={{ padding: "14px 18px", borderTop: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.green : T.amber, flexShrink: 0 }} />
-              <span style={{ fontSize: 11, color: T.muted }}>{hasSupabase ? "Sincronizado · Supabase" : "Guardado localmente"}</span>
-            </div>
+          <div style={{ padding: "12px 18px", borderTop: "0.5px solid rgba(15,14,12,.10)", display: "flex", alignItems: "center", gap: 8, overflow: "hidden" }}>
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.green : T.amber, flexShrink: 0 }} />
+            <span className="nav-label" style={{ fontSize: 11, color: T.muted, whiteSpace: "nowrap" }}>{hasSupabase ? "Supabase" : "Local"}</span>
           </div>
         </aside>
 
@@ -334,7 +351,7 @@ export default function App() {
               {/* Breadcrumb */}
               <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
                 <span style={{ fontSize: 12, color: T.muted }}>tres Studio</span>
-                <span style={{ fontSize: 14, color: T.border2, fontWeight: 300, lineHeight: 1 }}>/</span>
+                <span style={{ fontSize: 14, color: T.muted, fontWeight: 300, lineHeight: 1 }}>/</span>
                 <span style={{ fontSize: 14, fontWeight: 600, color: T.text, letterSpacing: "-.2px" }}>
                   {NAV.find(v => v.id === view)?.label}
                 </span>
@@ -342,11 +359,11 @@ export default function App() {
 
               <div className="hactions">
                 {/* Month selector */}
-                <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "5px 10px", border: `1px solid ${T.border}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "5px 10px", border: "0.5px solid rgba(15,14,12,.12)" }}>
                   <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
                     <ChevronLeft size={12} />
                   </button>
-                  <span className="monthLabel" style={{ fontSize: 12, fontWeight: 600, color: T.text, minWidth: 92, textAlign: "center" }}>
+                  <span className="monthLabel" style={{ fontSize: 12, fontWeight: 600, color: T.text, minWidth: 92, textAlign: "center", fontFamily: "'DM Mono',monospace" }}>
                     {MONTHS[month]} {year}
                   </span>
                   <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
@@ -375,7 +392,7 @@ export default function App() {
                 </button>
 
                 {/* Bell */}
-                <div style={{ position: "relative", width: 34, height: 34, borderRadius: 8, background: T.bg, border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                <div style={{ position: "relative", width: 34, height: 34, borderRadius: 8, background: T.bg, border: "0.5px solid rgba(15,14,12,.12)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
                   <Bell size={14} color={T.muted} />
                   {allPending > 0 && (
                     <span style={{ position: "absolute", top: 6, right: 6, width: 7, height: 7, borderRadius: "50%", background: T.amber, border: `2px solid ${T.surf}` }} />
@@ -386,7 +403,7 @@ export default function App() {
 
             {/* Mobile row 2 */}
             <div className="topbar-row2">
-              <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "7px 10px", border: `1px solid ${T.border}`, flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "7px 10px", border: "0.5px solid rgba(15,14,12,.12)", flex: 1 }}>
                 <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}><ChevronLeft size={14} /></button>
                 <span style={{ fontSize: 12, fontWeight: 600, color: T.text, flex: 1, textAlign: "center" }}>{MONTHS[month]} {year}</span>
                 <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}><ChevronRight size={14} /></button>
