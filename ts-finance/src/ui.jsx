@@ -2,15 +2,18 @@ import { T } from './constants.js'
 import { fmtS } from './constants.js'
 import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
+/* ── Card styles ── */
 export const card = {
   background: T.surf, borderRadius: 14,
   border: `1px solid ${T.border}`, padding: "24px",
-  boxShadow: "0 1px 3px rgba(0,0,0,.04), 0 1px 2px rgba(0,0,0,.03)",
+  /* NO box-shadow — flat editorial */
 }
 export const cardFlat = {
   background: T.surf2, borderRadius: 10,
   border: `1px solid ${T.border}`, padding: "14px 16px",
 }
+
+/* ── Form primitives ── */
 export const inp = {
   width:"100%", padding:"10px 14px", borderRadius:10,
   border:`1px solid ${T.border}`, fontSize:13, color:T.text,
@@ -18,52 +21,66 @@ export const inp = {
   fontFamily:"inherit", transition:"border-color .15s, box-shadow .15s",
 }
 export const lbl = {
-  display:"block", fontSize:11, fontWeight:600, color:T.subtle,
-  marginBottom:5, textTransform:"uppercase", letterSpacing:".06em",
+  display:"block", fontSize:10, fontWeight:700, color:T.subtle,
+  marginBottom:5, textTransform:"uppercase", letterSpacing:".07em",
 }
+
+/* ── Buttons ── */
 export const btnPrimary = {
-  background:T.text, color:"#fff", border:"none", borderRadius:10,
-  padding:"9px 18px", fontSize:13, fontWeight:600, cursor:"pointer",
+  background: T.text, color:"#fff", border:"none", borderRadius:8,
+  padding:"9px 16px", fontSize:13, fontWeight:600, cursor:"pointer",
   display:"flex", alignItems:"center", gap:7,
   fontFamily:"inherit", transition:"opacity .15s", letterSpacing:"-.1px",
 }
 export const btnGreen  = btnPrimary
-export const btnRed    = { ...btnPrimary, background:"#fff", color:T.red,   border:`1px solid ${T.border}` }
+export const btnRed    = { ...btnPrimary, background:"#fff", color:T.red, border:`1px solid ${T.border}` }
 export const btnGhost  = { ...btnPrimary, background:"#fff", color:T.text2, border:`1px solid ${T.border}` }
-export const btnSmall  = { ...btnPrimary, padding:"5px 12px", fontSize:12, borderRadius:8 }
+export const btnSmall  = { ...btnPrimary, padding:"5px 12px", fontSize:12, borderRadius:7 }
 
+/* ── Semantic color themes ── */
 const THEME = {
-  green:   { bg:T.greenBg,   accent:T.green,   light:"#DCFCE7" },
-  red:     { bg:T.redBg,     accent:T.red,     light:"#FEE2E2" },
-  amber:   { bg:T.amberBg,   accent:T.amber,   light:"#FEF3C7" },
-  blue:    { bg:T.blueBg,    accent:T.blue,    light:"#DBEAFE" },
-  violet:  { bg:T.violetBg,  accent:T.violet,  light:"#EDE9FE" },
+  green:   { bg:T.greenBg,   accent:T.green,   light:"rgba(22,120,74,.12)"  },
+  red:     { bg:T.redBg,     accent:T.red,     light:"rgba(196,30,30,.12)"  },
+  amber:   { bg:T.amberBg,   accent:T.amber,   light:"rgba(184,115,8,.12)"  },
+  blue:    { bg:T.blueBg,    accent:T.blue,    light:"rgba(26,79,191,.12)"  },
+  violet:  { bg:T.violetBg,  accent:T.violet,  light:"rgba(104,48,204,.12)" },
   default: { bg:T.surf2, accent:T.muted, light:T.surf3 },
 }
 function getTheme(color) {
   if (!color) return THEME.default
   const c = color.toString()
-  if (c.includes("16A34A")||c.includes("44B26B")||c.includes("059669")) return THEME.green
-  if (c.includes("DC2626")||c.includes("D72B20")||c.includes("B91C1C")) return THEME.red
-  if (c.includes("D97706")) return THEME.amber
-  if (c.includes("2563EB")||c.includes("3B82F6")) return THEME.blue
-  if (c.includes("7C3AED")||c.includes("8B5CF6")||c.includes("5A3EE7")) return THEME.violet
+  if (c.includes("16784A")||c.includes("16A34A")||c.includes("44B26B")||c.includes("059669")) return THEME.green
+  if (c.includes("C41E1E")||c.includes("DC2626")||c.includes("D72B20")||c.includes("B91C1C")) return THEME.red
+  if (c.includes("B87308")||c.includes("D97706")) return THEME.amber
+  if (c.includes("1A4FBF")||c.includes("2563EB")||c.includes("3B82F6")) return THEME.blue
+  if (c.includes("6830CC")||c.includes("7C3AED")||c.includes("8B5CF6")||c.includes("5A3EE7")) return THEME.violet
   return THEME.default
 }
 
+/* ── KPI component ── */
 export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, hero }) {
   const th = getTheme(color)
   if (hero) {
     return (
-      <div style={{ background:T.text, borderRadius:14, padding:"22px 24px", display:"flex", flexDirection:"column", boxShadow:"0 4px 16px rgba(0,0,0,.15)" }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16, gap:8 }}>
-          <span style={{ fontSize:11, fontWeight:600, color:"rgba(255,255,255,.5)", textTransform:"uppercase", letterSpacing:".07em", lineHeight:1.4, minWidth:0 }}>{title}</span>
-          {Icon && <div style={{ width:28, height:28, borderRadius:8, background:"rgba(255,255,255,.1)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}><Icon size={13} color="rgba(255,255,255,.7)" /></div>}
+      <div style={{
+        background: T.text, borderRadius: 14, padding: "26px 28px",
+        display:"flex", flexDirection:"column",
+        /* dot texture subtle */
+        backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
+        backgroundSize: "20px 20px",
+      }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:18, gap:8 }}>
+          <span style={{ fontSize:10, fontWeight:700, color:"rgba(255,255,255,.45)", textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
+          {Icon && (
+            <div style={{ width:28, height:28, borderRadius:8, background:"rgba(255,255,255,.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <Icon size={13} color="rgba(255,255,255,.65)" />
+            </div>
+          )}
         </div>
-        <div style={{ fontSize:28, fontWeight:700, color:"#FFFFFF", letterSpacing:"-1.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:14 }}>
+        <div style={{ fontSize:48, fontWeight:700, color:"#FFFFFF", letterSpacing:"-2px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:16 }}>
           <div>
-            {sub && <div style={{ fontSize:12, color:"rgba(255,255,255,.45)" }}>{sub}</div>}
+            {sub && <div style={{ fontSize:12, color:"rgba(255,255,255,.38)" }}>{sub}</div>}
             {trend !== undefined && trend !== null && (
               <div style={{ fontSize:11, fontWeight:600, color:trend>=0?"#4ADE80":"#F87171", marginTop:sub?3:0 }}>
                 {trend>=0?"↑":"↓"} {Math.abs(trend)}% vs mes ant.
@@ -71,10 +88,10 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
             )}
           </div>
           {spark && (
-            <div style={{ width:60, height:26, flexShrink:0 }}>
+            <div style={{ width:64, height:28, flexShrink:0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={spark}>
-                  <Line type="monotone" dataKey="v" stroke="rgba(255,255,255,.5)" strokeWidth={1.5} dot={false} />
+                  <Line type="monotone" dataKey="v" stroke="rgba(255,255,255,.45)" strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -86,7 +103,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
   return (
     <div style={{ ...card, padding:"20px 22px", display:"flex", flexDirection:"column" }}>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, gap:8 }}>
-        <span style={{ fontSize:11, fontWeight:600, color:T.subtle, textTransform:"uppercase", letterSpacing:".07em", lineHeight:1.4, minWidth:0 }}>{title}</span>
+        <span style={{ fontSize:10, fontWeight:700, color:T.subtle, textTransform:"uppercase", letterSpacing:".07em", lineHeight:1.4, minWidth:0 }}>{title}</span>
         {badge ? (
           <span style={{ fontSize:10, fontWeight:600, padding:"2px 8px", borderRadius:20, background:badge.bg||th.light, color:badge.color||th.accent, whiteSpace:"nowrap", flexShrink:0 }}>{badge.label}</span>
         ) : Icon ? (
@@ -95,7 +112,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize:26, fontWeight:700, color:T.text, letterSpacing:"-1px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+      <div style={{ fontSize:34, fontWeight:700, color:T.text, letterSpacing:"-1.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:12 }}>
         <div>
           {sub && <div style={{ fontSize:12, color:T.muted }}>{sub}</div>}
@@ -119,12 +136,13 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
   )
 }
 
+/* ── Pill status component ── */
 export function Pill({ s }) {
   const m = {
-    Pagado:    { bg:"#F0FDF4", c:"#15803D", dot:"#16A34A" },
-    Pendiente: { bg:"#FFFBEB", c:"#92400E", dot:"#D97706" },
-    Parcial:   { bg:"#EFF6FF", c:"#1D4ED8", dot:"#3B82F6" },
-    Vencida:   { bg:"#FEF2F2", c:"#B91C1C", dot:"#DC2626" },
+    Pagado:    { bg:"rgba(22,120,74,.08)",   c:"#16784A", dot:"#16784A" },
+    Pendiente: { bg:"rgba(184,115,8,.08)",   c:"#B87308", dot:"#B87308" },
+    Parcial:   { bg:"rgba(26,79,191,.08)",   c:"#1A4FBF", dot:"#1A4FBF" },
+    Vencida:   { bg:"rgba(196,30,30,.08)",   c:"#C41E1E", dot:"#C41E1E" },
   }
   const st = m[s]||m.Pendiente
   return (
@@ -135,6 +153,7 @@ export function Pill({ s }) {
   )
 }
 
+/* ── Status bar ── */
 export function StatusBar({ items }) {
   return (
     <div style={{ display:"flex", background:T.surf, border:`1px solid ${T.border}`, borderRadius:14, overflow:"hidden" }}>
@@ -148,9 +167,10 @@ export function StatusBar({ items }) {
   )
 }
 
+/* ── Alert banner ── */
 export function AlertBanner({ icon, title, sub, color, bg, border, action, onAction }) {
   return (
-    <div style={{ background:bg||"#FFFBEB", border:`1px solid ${border||"#FDE68A"}`, borderRadius:10, padding:"12px 16px", display:"flex", alignItems:"center", gap:10 }}>
+    <div style={{ background:bg||"rgba(184,115,8,.06)", border:`1px solid ${border||"rgba(184,115,8,.25)"}`, borderRadius:10, padding:"12px 16px", display:"flex", alignItems:"center", gap:10 }}>
       {icon && <div style={{ flexShrink:0 }}>{icon}</div>}
       <div style={{ flex:1, minWidth:0 }}>
         <span style={{ fontSize:13, fontWeight:600, color:color||T.amber }}>{title}</span>
@@ -163,6 +183,7 @@ export function AlertBanner({ icon, title, sub, color, bg, border, action, onAct
   )
 }
 
+/* ── Empty state ── */
 export function EmptyState({ icon:Icon, title, sub, action, onAction }) {
   return (
     <div style={{ textAlign:"center", padding:"64px 24px", display:"flex", flexDirection:"column", alignItems:"center", gap:12 }}>
@@ -178,15 +199,16 @@ export function EmptyState({ icon:Icon, title, sub, action, onAction }) {
   )
 }
 
+/* ── Chart tooltip ── */
 export function Tip({ active, payload, label }) {
   if (!active||!payload?.length) return null
   return (
-    <div style={{ background:T.text, borderRadius:10, padding:"10px 14px", boxShadow:"0 8px 32px rgba(0,0,0,.22)" }}>
-      <div style={{ color:"rgba(255,255,255,.4)", fontSize:10, marginBottom:8, fontWeight:600, textTransform:"uppercase", letterSpacing:".07em" }}>{label}</div>
+    <div style={{ background:T.text, borderRadius:10, padding:"10px 14px", border:`1px solid rgba(255,255,255,.06)` }}>
+      <div style={{ color:"rgba(255,255,255,.38)", fontSize:10, marginBottom:8, fontWeight:700, textTransform:"uppercase", letterSpacing:".07em" }}>{label}</div>
       {payload.map((p,i)=>(
         <div key={i} style={{ color:"#fff", fontSize:12, fontWeight:600, display:"flex", alignItems:"center", gap:8, marginBottom:i<payload.length-1?5:0, fontFamily:"'DM Mono',monospace" }}>
           <span style={{ width:7, height:7, borderRadius:2, background:p.color, display:"inline-block", flexShrink:0 }}/>
-          <span style={{ color:"rgba(255,255,255,.4)", minWidth:60 }}>{p.name}</span>
+          <span style={{ color:"rgba(255,255,255,.38)", minWidth:60 }}>{p.name}</span>
           {fmtS(p.value)}
         </div>
       ))}
@@ -194,22 +216,25 @@ export function Tip({ active, payload, label }) {
   )
 }
 
+/* ── Divider ── */
 export const Div = () => <div style={{ height:"1px", background:T.border, margin:"2px 0" }}/>
 
+/* ── Icon map for recurring ── */
 export const ICON_MAP = {
-  adobe:   { label:"Ae", color:"#EF4444", bg:"#FEE2E2" },
-  figma:   { label:"Fi", color:"#A855F7", bg:"#F3E8FF" },
-  slack:   { label:"Sl", color:"#EC4899", bg:"#FCE7F3" },
-  google:  { label:"G",  color:"#3B82F6", bg:"#DBEAFE" },
-  notion:  { label:"No", color:T.text,    bg:T.surf2   },
-  loom:    { label:"Lo", color:"#6366F1", bg:"#E0E7FF" },
-  office:  { label:"Of", color:"#D97706", bg:"#FEF3C7" },
-  wifi:    { label:"Wi", color:"#2563EB", bg:"#DBEAFE" },
-  globe:   { label:"Gl", color:T.green,   bg:"#DCFCE7" },
-  spotify: { label:"Sp", color:T.green,   bg:"#DCFCE7" },
-  default: { label:"·",  color:T.muted,   bg:T.surf2   },
+  adobe:   { label:"Ae", color:"#EF4444", bg:"rgba(239,68,68,.08)"  },
+  figma:   { label:"Fi", color:"#A855F7", bg:"rgba(168,85,247,.08)" },
+  slack:   { label:"Sl", color:"#EC4899", bg:"rgba(236,72,153,.08)" },
+  google:  { label:"G",  color:"#1A4FBF", bg:"rgba(26,79,191,.08)"  },
+  notion:  { label:"No", color:T.text,    bg:T.surf2                },
+  loom:    { label:"Lo", color:"#6366F1", bg:"rgba(99,102,241,.08)" },
+  office:  { label:"Of", color:"#B87308", bg:"rgba(184,115,8,.08)"  },
+  wifi:    { label:"Wi", color:"#1A4FBF", bg:"rgba(26,79,191,.08)"  },
+  globe:   { label:"Gl", color:T.green,   bg:T.greenBg              },
+  spotify: { label:"Sp", color:T.green,   bg:T.greenBg              },
+  default: { label:"·",  color:T.muted,   bg:T.surf2                },
 }
 
+/* ── Section title ── */
 export function SectionTitle({ title, sub, action, onAction }) {
   return (
     <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", marginBottom:16 }}>
@@ -224,6 +249,7 @@ export function SectionTitle({ title, sub, action, onAction }) {
   )
 }
 
+/* ── Tab bar ── */
 export function TabBar({ tabs, active, onChange }) {
   return (
     <div style={{ display:"flex", gap:0, borderBottom:`1px solid ${T.border}`, marginBottom:20 }}>

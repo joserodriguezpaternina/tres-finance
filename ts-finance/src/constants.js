@@ -1,52 +1,52 @@
 /* ── DESIGN TOKENS — tres Studio ────────────────────── */
 export const T = {
   /* Fondos */
-  bg:       "#F7F7F7",   /* Casi blanco — área de contenido */
-  surf:     "#FFFFFF",   /* Blanco puro — cards y paneles   */
-  surf2:    "#F5F5F5",   /* Gris muy suave — secundario     */
-  surf3:    "#EBEBEB",   /* Terciario                       */
+  bg:       "#F9F9F8",   /* Casi blanco cálido — área de contenido */
+  surf:     "#FFFFFF",   /* Blanco puro — cards y paneles          */
+  surf2:    "#F5F4F0",   /* Gris cálido suave — secundario         */
+  surf3:    "#EDECEA",   /* Terciario                              */
 
   /* Bordes */
-  border:   "#E8E8E8",
-  border2:  "#D4D4D4",
+  border:   "#E6E4DF",
+  border2:  "#D0CEC8",
 
   /* Texto */
-  muted:    "#A3A3A3",   /* Gris medio — labels             */
-  subtle:   "#737373",   /* Gris oscuro — texto secundario  */
-  text2:    "#404040",   /* Casi negro — texto de apoyo     */
-  text:     "#0A0A0A",   /* Negro marca                     */
-  white:    "#0A0A0A",   /* backward-compat                 */
+  muted:    "#9B9992",   /* Gris medio cálido — labels             */
+  subtle:   "#6B6962",   /* Gris oscuro cálido — texto secundario  */
+  text2:    "#3A3830",   /* Casi negro cálido — texto de apoyo     */
+  text:     "#0F0E0C",   /* Negro marca tres Studio                */
+  white:    "#0F0E0C",   /* backward-compat                        */
 
   /* Acento = Negro (color de marca tres Studio) */
-  accent:    "#0A0A0A",
+  accent:    "#0F0E0C",
   accentD:   "#000000",
-  accentBg:  "rgba(10,10,10,.05)",
-  accentBg2: "rgba(10,10,10,.10)",
-  accentText:"#0A0A0A",
+  accentBg:  "rgba(15,14,12,.05)",
+  accentBg2: "rgba(15,14,12,.10)",
+  accentText:"#0F0E0C",
 
   /* Sidebar */
   side:    "#FFFFFF",
-  sideB:   "#E8E8E8",
-  sideT:   "#0A0A0A",
-  sideM:   "#A3A3A3",
-  sideHov: "#F5F5F5",
-  sideAct: "#0A0A0A",   /* fondo activo = negro */
+  sideB:   "#E6E4DF",
+  sideT:   "#0F0E0C",
+  sideM:   "#9B9992",
+  sideHov: "rgba(15,14,12,.04)",
+  sideAct: "rgba(15,14,12,.05)", /* fondo activo = sutil, no negro */
 
-  /* Semánticos (mantienen color para datos financieros) */
-  green:    "#16A34A",
-  greenD:   "#15803D",
-  greenBg:  "rgba(22,163,74,.07)",
-  greenBg2: "rgba(22,163,74,.13)",
-  red:      "#DC2626",
-  redD:     "#B91C1C",
-  redBg:    "rgba(220,38,38,.07)",
-  redBg2:   "rgba(220,38,38,.13)",
-  amber:    "#D97706",
-  amberBg:  "rgba(217,119,6,.07)",
-  blue:     "#2563EB",
-  blueBg:   "rgba(37,99,235,.07)",
-  violet:   "#7C3AED",
-  violetBg: "rgba(124,58,237,.07)",
+  /* Semánticos (señales de datos financieros) */
+  green:    "#16784A",
+  greenD:   "#125F3C",
+  greenBg:  "rgba(22,120,74,.07)",
+  greenBg2: "rgba(22,120,74,.13)",
+  red:      "#C41E1E",
+  redD:     "#A31919",
+  redBg:    "rgba(196,30,30,.07)",
+  redBg2:   "rgba(196,30,30,.13)",
+  amber:    "#B87308",
+  amberBg:  "rgba(184,115,8,.07)",
+  blue:     "#1A4FBF",
+  blueBg:   "rgba(26,79,191,.07)",
+  violet:   "#6830CC",
+  violetBg: "rgba(104,48,204,.07)",
 }
 
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
@@ -57,20 +57,20 @@ export const EXP_CATS     = ["Nómina","Honorarios","Proveedores","Arriendo","Se
 export const RECUR_FREQ   = ["Mensual","Bimestral","Trimestral","Semestral","Anual"]
 
 export const DIAN_DEDUCIBLES = {
-  "Nómina":                   { si: true,  label: "Deducible",   color: "#16A34A", nota: "Salarios, prestaciones y aportes parafiscales" },
-  "Honorarios":               { si: true,  label: "Deducible",   color: "#16A34A", nota: "Requiere documento soporte DIAN o factura electrónica" },
-  "Proveedores":              { si: true,  label: "Deducible",   color: "#16A34A", nota: "Con factura electrónica de venta del proveedor" },
-  "Arriendo":                 { si: true,  label: "Deducible",   color: "#16A34A", nota: "Arrendamiento de inmuebles para actividad productora de renta" },
-  "Servicios":                { si: true,  label: "Deducible",   color: "#16A34A", nota: "Requiere factura o documento soporte de adquisición" },
-  "Internet":                 { si: true,  label: "Deducible",   color: "#16A34A", nota: "Servicios de telecomunicaciones ligados a la actividad" },
-  "Software y suscripciones": { si: true,  label: "Deducible",   color: "#16A34A", nota: "Herramientas y plataformas necesarias para la actividad" },
-  "Publicidad":               { si: true,  label: "Deducible",   color: "#16A34A", nota: "Gastos de marketing y publicidad con soporte" },
-  "Producción":               { si: true,  label: "Deducible",   color: "#16A34A", nota: "Costos directos de producción y materiales" },
-  "Transporte":               { si: true,  label: "Deducible",   color: "#16A34A", nota: "Con factura o documento equivalente. Aplica si es del negocio" },
-  "Impuestos":                { si: "p",   label: "Parcial",     color: "#D97706", nota: "Solo ICA e impuesto predial del negocio. No el impuesto de renta" },
-  "Imprevistos":              { si: "c",   label: "Condicional", color: "#D97706", nota: "Solo con soporte documental válido y causalidad demostrable" },
-  "Casino":                   { si: false, label: "No deducible",color: "#DC2626", nota: "No reconocido como deducible por la DIAN" },
-  "Otros":                    { si: "c",   label: "Condicional", color: "#D97706", nota: "Depende del soporte y la relación de causalidad. Consultar contador" },
+  "Nómina":                   { si: true,  label: "Deducible",   color: "#16784A", nota: "Salarios, prestaciones y aportes parafiscales" },
+  "Honorarios":               { si: true,  label: "Deducible",   color: "#16784A", nota: "Requiere documento soporte DIAN o factura electrónica" },
+  "Proveedores":              { si: true,  label: "Deducible",   color: "#16784A", nota: "Con factura electrónica de venta del proveedor" },
+  "Arriendo":                 { si: true,  label: "Deducible",   color: "#16784A", nota: "Arrendamiento de inmuebles para actividad productora de renta" },
+  "Servicios":                { si: true,  label: "Deducible",   color: "#16784A", nota: "Requiere factura o documento soporte de adquisición" },
+  "Internet":                 { si: true,  label: "Deducible",   color: "#16784A", nota: "Servicios de telecomunicaciones ligados a la actividad" },
+  "Software y suscripciones": { si: true,  label: "Deducible",   color: "#16784A", nota: "Herramientas y plataformas necesarias para la actividad" },
+  "Publicidad":               { si: true,  label: "Deducible",   color: "#16784A", nota: "Gastos de marketing y publicidad con soporte" },
+  "Producción":               { si: true,  label: "Deducible",   color: "#16784A", nota: "Costos directos de producción y materiales" },
+  "Transporte":               { si: true,  label: "Deducible",   color: "#16784A", nota: "Con factura o documento equivalente. Aplica si es del negocio" },
+  "Impuestos":                { si: "p",   label: "Parcial",     color: "#B87308", nota: "Solo ICA e impuesto predial del negocio. No el impuesto de renta" },
+  "Imprevistos":              { si: "c",   label: "Condicional", color: "#B87308", nota: "Solo con soporte documental válido y causalidad demostrable" },
+  "Casino":                   { si: false, label: "No deducible",color: "#C41E1E", nota: "No reconocido como deducible por la DIAN" },
+  "Otros":                    { si: "c",   label: "Condicional", color: "#B87308", nota: "Depende del soporte y la relación de causalidad. Consultar contador" },
 }
 
 export const DOC_TIPOS_SOPORTE = [
