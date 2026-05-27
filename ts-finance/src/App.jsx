@@ -205,10 +205,15 @@ export default function App() {
         .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:12px}
         .page-title{font-size:20px;font-weight:700;color:${T.text};letter-spacing:-.4px;line-height:1.2}
         .page-sub{font-size:13px;color:${T.muted};margin-top:3px}
+        /* ─── Dashboard KPI hero grid ─── */
+        .kpi-hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+        .kpi-hero-grid>*:first-child{grid-column:1/2}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
           .g3{grid-template-columns:repeat(2,1fr)}
+          .kpi-hero-grid{grid-template-columns:1fr 1fr}
+          .kpi-hero-grid>*:first-child{grid-column:1/-1}
           .g3-2{grid-template-columns:1fr}
           .g2-1{grid-template-columns:1fr}
           .gc{grid-template-columns:1fr}
@@ -227,6 +232,8 @@ export default function App() {
           .g4{grid-template-columns:1fr 1fr;gap:10px}
           .g3{grid-template-columns:1fr 1fr;gap:10px}
           .g2{grid-template-columns:1fr}
+          .kpi-hero-grid{grid-template-columns:1fr 1fr;gap:10px}
+          .kpi-hero-grid>*:first-child{grid-column:1/-1}
           main.content{padding:16px!important;padding-bottom:76px!important}
           .btnText{display:none}
           .bottom-nav{display:flex!important}

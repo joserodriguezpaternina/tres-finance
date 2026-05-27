@@ -10,7 +10,7 @@ import {
   PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { T, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
+import { T, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
 import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 /* ── Constants ─────────────────────────────────────────────────────────── */
@@ -429,47 +429,71 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
     [allInc, allExp, year]
   )
 
+  const greetHour = new Date().getHours()
+  const greet = greetHour < 12 ? "Buenos días" : greetHour < 19 ? "Buenas tardes" : "Buenas noches"
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+
+      {/* ── 0. Greeting header ────────────────────────────────────────── */}
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", paddingBottom: 4 }}>
+        <div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
+            {greet}, tres Studio
+          </div>
+          <div style={{ fontSize: 13, color: T.muted, marginTop: 4 }}>
+            {MONTHS[month]} {year} · Aquí está tu resumen financiero
+          </div>
+        </div>
+        {allPendingInc.length > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 7, padding: "6px 12px", borderRadius: 20, background: "#FFFBEB", border: "1px solid #FDE68A", cursor: "pointer" }}
+            onClick={() => onNavigate?.("ingresos")}>
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: T.amber }} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: "#92400E" }}>
+              {allPendingInc.length} cobro{allPendingInc.length !== 1 ? "s" : ""} pendiente{allPendingInc.length !== 1 ? "s" : ""}
+            </span>
+          </div>
+        )}
+      </div>
 
       {/* ── 1. Acciones pendientes ─────────────────────────────────────── */}
       {alerts.length > 0 && (
         <div style={{
-          ...card, padding: "16px 20px",
-          borderLeft: `4px solid ${T.red}`,
-          borderRadius: "0 14px 14px 0",
+          background: "#FFFBEB", border: "1px solid #FDE68A",
+          borderRadius: 12, padding: "14px 18px",
+          display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap",
         }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-            <AlertTriangle size={14} color={T.red} />
-            <span style={{ fontSize: 11, fontWeight: 700, color: T.red, textTransform: "uppercase", letterSpacing: ".08em" }}>
-              Acciones requeridas
+          <div style={{ display: "flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
+            <AlertTriangle size={13} color={T.amber} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#92400E", textTransform: "uppercase", letterSpacing: ".08em" }}>
+              Atención
             </span>
           </div>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <div style={{ width: 1, height: 16, background: "#FDE68A", flexShrink: 0 }} />
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", flex: 1 }}>
             {alerts.map((a, i) => (
-              <AlertChip
-                key={i}
-                icon={a.icon}
-                color={a.color}
-                bg={a.bg}
-                label={a.label}
-                value={a.value}
-                onClick={() => onNavigate?.(a.nav)}
-              />
+              <button key={i} onClick={() => onNavigate?.(a.nav)} style={{
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "5px 12px", borderRadius: 20, border: `1px solid ${a.color}30`,
+                background: a.bg, cursor: "pointer", fontFamily: "inherit",
+              }}>
+                <a.icon size={11} color={a.color} />
+                <span style={{ fontSize: 12, fontWeight: 600, color: a.color }}>{a.label}</span>
+                {a.value && <span style={{ fontSize: 11, color: a.color, opacity: .7, fontFamily: "'DM Mono',monospace" }}>{a.value}</span>}
+              </button>
             ))}
           </div>
         </div>
       )}
 
       {/* ── 2. KPI Cards ──────────────────────────────────────────────── */}
-      <div className="g4" style={{ gap: 12 }}>
+      <div className="kpi-hero-grid">
         <KPI
+          hero
           title="Ingresos del mes"
           value={fmtS(fin.tI)}
-          sub={incTrend ? incTrend.label : "Sin dato anterior"}
+          sub={`${MONTHS[month]} ${year}`}
           icon={TrendingUp}
-          color={T.green}
-          badge={incTrend}
           spark={incSpark}
         />
         <KPI
