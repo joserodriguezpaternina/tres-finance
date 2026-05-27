@@ -179,21 +179,23 @@ export default function App() {
         .sidebar{width:220px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99;backdrop-filter:blur(3px)}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 28px;height:56px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 32px;height:58px;display:flex;align-items:center;gap:10px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
         /* ─── Nav item hover ─── */
-        .nav-item:hover{background:${T.sideHov}!important}
+        .nav-item:hover{background:${T.sideHov}!important;color:${T.text}!important}
+        /* ─── Nav active: left border indicator, no fill ─── */
+        .nav-active{background:${T.accentBg}!important;color:${T.text}!important;border-left:2px solid ${T.text};padding-left:8px!important}
         /* ─── Grid utilities ─── */
-        .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-        .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-        .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-        .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:14px}
-        .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-        .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
+        .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+        .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+        .gc{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+        .rg{display:grid;grid-template-columns:1fr 280px;gap:16px}
         .g4>*,.g3>*,.g2>*,.g2-1>*,.g3-2>*,.gc>*,.rg>*{min-width:0}
         /* ─── Scrollable chips ─── */
         .chip-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;padding-bottom:2px}
@@ -202,11 +204,11 @@ export default function App() {
         .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         main.content{overflow-x:clip}
         /* ─── Page header ─── */
-        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:12px}
-        .page-title{font-size:20px;font-weight:700;color:${T.text};letter-spacing:-.4px;line-height:1.2}
-        .page-sub{font-size:13px;color:${T.muted};margin-top:3px}
+        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
+        .page-title{font-size:22px;font-weight:700;color:${T.text};letter-spacing:-.5px;line-height:1.2}
+        .page-sub{font-size:13px;color:${T.muted};margin-top:4px;letter-spacing:-.1px}
         /* ─── Dashboard KPI hero grid ─── */
-        .kpi-hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+        .kpi-hero-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:16px}
         .kpi-hero-grid>*:first-child{grid-column:1/2}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
@@ -291,17 +293,18 @@ export default function App() {
                       <button
                         key={v.id}
                         onClick={() => navTo(v.id)}
-                        className={active ? undefined : "nav-item"}
+                        className={active ? "nav-active" : "nav-item"}
                         style={{
                           display: "flex", alignItems: "center", gap: 9, padding: "8px 10px",
-                          borderRadius: 9, border: "none", cursor: "pointer", width: "100%", textAlign: "left",
-                          background: active ? T.text : "transparent",
-                          color: active ? "#FFFFFF" : T.subtle,
+                          borderRadius: 9, border: "none", borderLeft: active ? undefined : "2px solid transparent",
+                          cursor: "pointer", width: "100%", textAlign: "left",
+                          background: "transparent",
+                          color: active ? T.text : T.subtle,
                           fontSize: 13, fontWeight: active ? 600 : 400,
-                          transition: "background .15s",
+                          transition: "background .15s, color .15s",
                         }}
                       >
-                        <v.icon size={14} color={active ? "#FFFFFF" : T.muted} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={14} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
                           <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.18)" : "#FEF3C7", color: active ? "#FFFFFF" : "#92400E", padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
