@@ -4,11 +4,11 @@ export const T = {
   bg:       "#F9F9F8",   /* Casi blanco cálido — área de contenido */
   surf:     "#FFFFFF",   /* Blanco puro — cards y paneles          */
   surf2:    "#F5F4F0",   /* Gris cálido suave — secundario         */
-  surf3:    "#EDECEA",   /* Terciario                              */
+  surf3:    "#ECEAE6",   /* Terciario                              */
 
   /* Bordes */
-  border:   "#E6E4DF",
-  border2:  "#D0CEC8",
+  border:   "rgba(15,14,12,.10)",
+  border2:  "rgba(15,14,12,.18)",
 
   /* Texto */
   muted:    "#9B9992",   /* Gris medio cálido — labels             */
@@ -48,6 +48,7 @@ export const T = {
   violet:   "#6830CC",
   violetBg: "rgba(104,48,204,.07)",
 }
+
 
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
 export const MONTHS_SHORT = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
