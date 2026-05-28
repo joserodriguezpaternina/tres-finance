@@ -69,21 +69,36 @@ export default function App() {
   ]
 
   useEffect(() => {
-    Promise.all([
-      incomeService.getAll(),
-      expenseService.getAll(),
-      recurringService.getAll(),
-      clientService.getAll(),
-    ]).then(async ([inc, exp, rec, cli]) => {
-      setIncomes(inc); setRecurr(rec)
-      const syncedExp = await syncRecurring(rec, exp)
-      setExpenses(syncedExp)
-      const merged = syncClientsFromIncomes(inc, cli)
-      if (merged.length > cli.length) {
-        merged.filter(m => !cli.find(x => x.id === m.id)).forEach(nc => clientService.upsert(nc))
+    const load = async () => {
+      try {
+        const [inc, exp, rec, cli] = await Promise.all([
+          incomeService.getAll().catch(() => []),
+          expenseService.getAll().catch(() => []),
+          recurringService.getAll().catch(() => []),
+          clientService.getAll().catch(() => []),
+        ])
+        setIncomes(inc)
+        setRecurr(rec)
+        try {
+          const syncedExp = await syncRecurring(rec, exp)
+          setExpenses(syncedExp)
+        } catch {
+          setExpenses(exp)
+        }
+        try {
+          const merged = syncClientsFromIncomes(inc, cli)
+          if (merged.length > cli.length) {
+            merged.filter(m => !cli.find(x => x.id === m.id)).forEach(nc => clientService.upsert(nc))
+          }
+          setClients(merged)
+        } catch {
+          setClients(cli)
+        }
+      } finally {
+        setLoading(false)
       }
-      setClients(merged)
-    }).finally(() => setLoading(false))
+    }
+    load()
   }, [])
 
   const monthInc = useMemo(() => filterM(incomes, month, year),  [incomes,  month, year])
