@@ -176,17 +176,18 @@ export default function App() {
         @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         /* ─── Layout ─── */
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:210px;background:${T.surf};border-right:1px solid ${T.border};display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+        .sidebar{width:240px;background:#FFFFFF;border-right:1px solid #EEECE8;display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:99;backdrop-filter:blur(4px)}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;max-width:100%}
-        .topbar{background:${T.surf};border-bottom:1px solid ${T.border};padding:0 32px;height:58px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .topbar{background:#FFFFFF;border-bottom:1px solid #EEECE8;padding:0 32px;height:60px;display:flex;align-items:center;gap:10px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* ─── Nav active: borde izquierdo, NO fondo negro ─── */
-        .nav-item:hover{background:${T.sideHov}!important}
-        .nav-item-active{background:${T.sideAct};border-left:2.5px solid ${T.text}!important}
+        /* ─── Nav: pill redondeado con bg gris suave — NO negro sólido ─── */
+        .nav-item{border-radius:10px;color:#6B6962;transition:background .12s,color .12s}
+        .nav-item:hover{background:#F5F4F1!important;color:#0F0E0C!important}
+        .nav-item-active{background:rgba(15,14,12,.07)!important;color:#0F0E0C!important;font-weight:600!important;border-radius:10px!important;border:none!important}
         /* ─── Grid utilities ─── */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -194,7 +195,7 @@ export default function App() {
         .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
         .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
         .gc{display:grid;grid-template-columns:2fr 1fr;gap:16px}
-        .rg{display:grid;grid-template-columns:1fr 280px;gap:16px}
+        .rg{display:grid;grid-template-columns:1fr 300px;gap:16px}
         .g4>*,.g3>*,.g2>*,.g2-1>*,.g3-2>*,.gc>*,.rg>*{min-width:0}
         /* ─── Scrollable chips ─── */
         .chip-scroll{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0;padding-bottom:2px}
@@ -267,18 +268,18 @@ export default function App() {
                 </svg>
               </div>
               <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
-                <div style={{ fontSize: 11, color: T.muted }}>Finanzas · {year}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>tres Studio</div>
+                <div style={{ fontSize: 11, color: T.muted }}>Finanzas {year}</div>
               </div>
             </div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "10px 8px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 1 }}>
+          <nav style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 0 }}>
             {NAV_GROUPS.map((group, gi) => (
-              <div key={group.label} style={{ marginBottom: gi < NAV_GROUPS.length - 1 ? 16 : 0 }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 10px 5px" }}>{group.label}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              <div key={group.label} style={{ marginTop: gi === 0 ? 0 : 20, marginBottom: 4 }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 12px 6px" }}>{group.label}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {group.items.map(v => {
                     const active = view === v.id
                     return (
@@ -287,18 +288,16 @@ export default function App() {
                         onClick={() => navTo(v.id)}
                         className={active ? "nav-item-active" : "nav-item"}
                         style={{
-                          display: "flex", alignItems: "center", gap: 9,
-                          padding: "8px 12px 8px 10px",
-                          borderRadius: 8, border: "none",
-                          borderLeft: active ? `2.5px solid ${T.text}` : "2.5px solid transparent",
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "9px 12px",
+                          border: "none",
                           cursor: "pointer", width: "100%", textAlign: "left",
-                          background: active ? T.sideAct : "transparent",
-                          color: active ? T.text : T.subtle,
-                          fontSize: 13, fontWeight: active ? 600 : 400,
-                          transition: "background .12s",
+                          fontSize: 13,
+                          fontFamily: "inherit",
+                          height: 38,
                         }}
                       >
-                        <v.icon size={14} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={15} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
                           <span style={{ fontSize: 10, fontWeight: 700, background: T.amberBg, color: T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
@@ -342,7 +341,7 @@ export default function App() {
 
               <div className="hactions">
                 {/* Month selector */}
-                <div style={{ display: "flex", alignItems: "center", gap: 4, background: T.bg, borderRadius: 8, padding: "5px 10px", border: `1px solid ${T.border}` }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#F5F4F1", borderRadius: 20, padding: "5px 12px", border: `1px solid ${T.border}` }}>
                   <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
                     <ChevronLeft size={12} />
                   </button>

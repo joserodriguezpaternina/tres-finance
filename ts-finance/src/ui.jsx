@@ -4,13 +4,13 @@ import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
 /* ── Card styles ── */
 export const card = {
-  background: T.surf, borderRadius: 14,
-  border: `1px solid ${T.border}`, padding: "24px",
-  /* NO box-shadow — flat editorial */
+  background: "#FFFFFF", borderRadius: 14,
+  border: "1px solid #EEECE8", padding: "22px 24px",
+  boxShadow: "0 1px 3px rgba(0,0,0,.06)",
 }
 export const cardFlat = {
-  background: T.surf2, borderRadius: 10,
-  border: `1px solid ${T.border}`, padding: "14px 16px",
+  background: "#F5F4F1", borderRadius: 10,
+  border: "1px solid #EEECE8", padding: "14px 16px",
 }
 
 /* ── Form primitives ── */
@@ -27,14 +27,15 @@ export const lbl = {
 
 /* ── Buttons ── */
 export const btnPrimary = {
-  background: T.text, color:"#fff", border:"none", borderRadius:8,
-  padding:"9px 16px", fontSize:13, fontWeight:600, cursor:"pointer",
-  display:"flex", alignItems:"center", gap:7,
-  fontFamily:"inherit", transition:"opacity .15s", letterSpacing:"-.1px",
+  background: "#0F0E0C", color:"#FFFFFF", border:"none",
+  borderRadius:10, padding:"9px 18px", fontSize:13,
+  fontWeight:600, cursor:"pointer", display:"flex",
+  alignItems:"center", gap:7, fontFamily:"inherit",
+  transition:"opacity .15s", letterSpacing:"-.1px",
 }
 export const btnGreen  = btnPrimary
-export const btnRed    = { ...btnPrimary, background:"#fff", color:T.red, border:`1px solid ${T.border}` }
-export const btnGhost  = { ...btnPrimary, background:"#fff", color:T.text2, border:`1px solid ${T.border}` }
+export const btnRed    = { ...btnPrimary, background:"#FFFFFF", color:"#C41E1E", border:"1px solid #EEECE8" }
+export const btnGhost  = { ...btnPrimary, background:"#FFFFFF", color:"#3A3830", border:"1px solid #EEECE8" }
 export const btnSmall  = { ...btnPrimary, padding:"5px 12px", fontSize:12, borderRadius:7 }
 
 /* ── Semantic color themes ── */
@@ -61,28 +62,28 @@ function getTheme(color) {
 export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, hero }) {
   const th = getTheme(color)
   if (hero) {
+    const th = getTheme(color || T.green)
     return (
       <div style={{
-        background: T.text, borderRadius: 14, padding: "26px 28px",
+        background: "#FFFFFF", borderRadius: 14, padding: "22px 24px",
+        border: "1px solid #EEECE8",
+        boxShadow: "0 1px 3px rgba(0,0,0,.06)",
         display:"flex", flexDirection:"column",
-        /* dot texture subtle */
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
-        backgroundSize: "20px 20px",
       }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:18, gap:8 }}>
-          <span style={{ fontSize:10, fontWeight:700, color:"rgba(255,255,255,.45)", textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, gap:8 }}>
+          <span style={{ fontSize:10, fontWeight:700, color:T.subtle, textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
           {Icon && (
-            <div style={{ width:28, height:28, borderRadius:8, background:"rgba(255,255,255,.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-              <Icon size={13} color="rgba(255,255,255,.65)" />
+            <div style={{ width:28, height:28, borderRadius:8, background:th.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <Icon size={13} color={th.accent} />
             </div>
           )}
         </div>
-        <div style={{ fontSize:48, fontWeight:700, color:"#FFFFFF", letterSpacing:"-2px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+        <div style={{ fontSize:48, fontWeight:700, color:T.text, letterSpacing:"-2px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:16 }}>
           <div>
-            {sub && <div style={{ fontSize:12, color:"rgba(255,255,255,.38)" }}>{sub}</div>}
+            {sub && <div style={{ fontSize:12, color:T.muted }}>{sub}</div>}
             {trend !== undefined && trend !== null && (
-              <div style={{ fontSize:11, fontWeight:600, color:trend>=0?"#4ADE80":"#F87171", marginTop:sub?3:0 }}>
+              <div style={{ fontSize:11, fontWeight:600, color:trend>=0?T.green:T.red, marginTop:sub?3:0 }}>
                 {trend>=0?"↑":"↓"} {Math.abs(trend)}% vs mes ant.
               </div>
             )}
@@ -91,7 +92,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
             <div style={{ width:64, height:28, flexShrink:0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={spark}>
-                  <Line type="monotone" dataKey="v" stroke="rgba(255,255,255,.45)" strokeWidth={1.5} dot={false} />
+                  <Line type="monotone" dataKey="v" stroke={th.accent} strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -112,7 +113,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize:34, fontWeight:700, color:T.text, letterSpacing:"-1.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+      <div style={{ fontSize:32, fontWeight:700, color:T.text, letterSpacing:"-1.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:12 }}>
         <div>
           {sub && <div style={{ fontSize:12, color:T.muted }}>{sub}</div>}

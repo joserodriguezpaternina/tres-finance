@@ -47,9 +47,9 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           { label: "IVA mensual estimado", val: fmtS(monthlyIVA), color: T.amber },
           { label: "Suscripciones activas", val: `${active.length}`, color: T.green },
         ].map(({ label, val, color }) => (
-          <div key={label} style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "18px 20px" }}>
+          <div key={label} style={{ background: "#FFFFFF", border: "1px solid #EEECE8", borderRadius: 14, padding: "22px 24px", boxShadow: "0 1px 3px rgba(0,0,0,.06)" }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 12 }}>{label}</div>
-            <div style={{ fontSize: 24, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.2px" }}>{val}</div>
+            <div style={{ fontSize: 32, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1 }}>{val}</div>
           </div>
         ))}
       </div>
@@ -61,10 +61,10 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           <div style={{ display: "flex", gap: 6 }}>
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
               <button key={val} onClick={() => setFilter(val)} style={{
-                padding: "6px 13px", borderRadius: 8,
+                padding: "6px 14px", borderRadius: 20,
                 border: filter === val ? `1px solid ${T.text}` : `1px solid ${T.border}`,
                 fontSize: 11, fontWeight: filter === val ? 700 : 500, cursor: "pointer",
-                background: filter === val ? T.text : T.surf,
+                background: filter === val ? T.text : "#FFFFFF",
                 color: filter === val ? "#fff" : T.subtle,
                 fontFamily: "inherit", transition: "all .15s",
               }}>

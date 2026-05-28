@@ -9,29 +9,28 @@ function ModalShell({ title, sub, onClose, children }) {
   return (
     <div style={{
       position: "fixed", inset: 0,
-      background: "rgba(0,0,0,.45)", backdropFilter: "blur(8px)",
+      background: "rgba(0,0,0,.4)", backdropFilter: "blur(8px)",
       display: "flex", alignItems: "center", justifyContent: "center",
       zIndex: 200, padding: 20,
     }}>
       <div style={{
-        background: T.surf, borderRadius: 16,
-        border: `1px solid ${T.border}`,
-        padding: 0, width: "100%", maxWidth: 540,
+        background: "#FFFFFF", borderRadius: 16,
+        border: "1px solid #EEECE8",
+        padding: 0, width: "100%", maxWidth: 520,
         maxHeight: "90vh", overflowY: "auto",
-        /* subtle shadow — not exaggerated */
-        boxShadow: "0 8px 40px rgba(0,0,0,.18)",
+        boxShadow: "0 20px 60px rgba(0,0,0,.15)",
       }}>
         {/* Modal header */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-          padding: "22px 28px 18px", borderBottom: `1px solid ${T.border}`,
+          padding: "24px", borderBottom: "1px solid #EEECE8",
         }}>
           <div>
             <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>{title}</h2>
             {sub && <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>}
           </div>
           <button onClick={onClose} style={{
-            background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 8,
+            background: "#F5F4F1", border: "1px solid #EEECE8", borderRadius: 8,
             width: 32, height: 32, cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
             flexShrink: 0, marginLeft: 12,
@@ -40,7 +39,7 @@ function ModalShell({ title, sub, onClose, children }) {
           </button>
         </div>
         {/* Modal body */}
-        <div style={{ padding: "24px 28px" }}>
+        <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: 0 }}>
           {children}
         </div>
       </div>

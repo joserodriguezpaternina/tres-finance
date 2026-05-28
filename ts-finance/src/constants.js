@@ -1,17 +1,17 @@
 /* ── DESIGN TOKENS — tres Studio ────────────────────── */
 export const T = {
   /* Fondos */
-  bg:       "#F9F9F8",   /* Casi blanco cálido — área de contenido */
-  surf:     "#FFFFFF",   /* Blanco puro — cards y paneles          */
-  surf2:    "#F5F4F0",   /* Gris cálido suave — secundario         */
-  surf3:    "#EDECEA",   /* Terciario                              */
+  bg:       "#F5F4F1",   /* Gris cálido muy suave — área de contenido */
+  surf:     "#FFFFFF",   /* Blanco puro — cards y paneles              */
+  surf2:    "#F0EEE9",   /* Gris cálido suave — secundario             */
+  surf3:    "#E8E6E1",   /* Terciario                                  */
 
   /* Bordes */
-  border:   "#E6E4DF",
-  border2:  "#D0CEC8",
+  border:   "#EEECE8",
+  border2:  "#D8D5CF",
 
   /* Texto */
-  muted:    "#9B9992",   /* Gris medio cálido — labels             */
+  muted:    "#9B9890",   /* Gris medio cálido — labels             */
   subtle:   "#6B6962",   /* Gris oscuro cálido — texto secundario  */
   text2:    "#3A3830",   /* Casi negro cálido — texto de apoyo     */
   text:     "#0F0E0C",   /* Negro marca tres Studio                */
@@ -20,33 +20,33 @@ export const T = {
   /* Acento = Negro (color de marca tres Studio) */
   accent:    "#0F0E0C",
   accentD:   "#000000",
-  accentBg:  "rgba(15,14,12,.05)",
-  accentBg2: "rgba(15,14,12,.10)",
+  accentBg:  "rgba(15,14,12,.07)",
+  accentBg2: "rgba(15,14,12,.12)",
   accentText:"#0F0E0C",
 
   /* Sidebar */
   side:    "#FFFFFF",
-  sideB:   "#E6E4DF",
+  sideB:   "#EEECE8",
   sideT:   "#0F0E0C",
-  sideM:   "#9B9992",
-  sideHov: "rgba(15,14,12,.04)",
-  sideAct: "rgba(15,14,12,.05)", /* fondo activo = sutil, no negro */
+  sideM:   "#9B9890",
+  sideHov: "#F5F4F1",
+  sideAct: "rgba(15,14,12,.07)", /* fondo activo = pill gris suave, NO negro */
 
   /* Semánticos (señales de datos financieros) */
   green:    "#16784A",
   greenD:   "#125F3C",
-  greenBg:  "rgba(22,120,74,.07)",
+  greenBg:  "rgba(22,120,74,.08)",
   greenBg2: "rgba(22,120,74,.13)",
   red:      "#C41E1E",
   redD:     "#A31919",
-  redBg:    "rgba(196,30,30,.07)",
+  redBg:    "rgba(196,30,30,.08)",
   redBg2:   "rgba(196,30,30,.13)",
   amber:    "#B87308",
-  amberBg:  "rgba(184,115,8,.07)",
+  amberBg:  "rgba(184,115,8,.08)",
   blue:     "#1A4FBF",
-  blueBg:   "rgba(26,79,191,.07)",
+  blueBg:   "rgba(26,79,191,.08)",
   violet:   "#6830CC",
-  violetBg: "rgba(104,48,204,.07)",
+  violetBg: "rgba(104,48,204,.08)",
 }
 
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
