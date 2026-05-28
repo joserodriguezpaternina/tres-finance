@@ -47,7 +47,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           { label: "IVA mensual estimado", val: fmtS(monthlyIVA), color: T.amber },
           { label: "Suscripciones activas", val: `${active.length}`, color: T.green },
         ].map(({ label, val, color }) => (
-          <div key={label} style={{ background: "#FFFFFF", border: "1px solid #EEECE8", borderRadius: 14, padding: "22px 24px", boxShadow: "0 1px 3px rgba(0,0,0,.06)" }}>
+          <div key={label} style={{ background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12, padding: "20px 22px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 12 }}>{label}</div>
             <div style={{ fontSize: 32, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1 }}>{val}</div>
           </div>
@@ -62,10 +62,10 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
               <button key={val} onClick={() => setFilter(val)} style={{
                 padding: "6px 14px", borderRadius: 20,
-                border: filter === val ? `1px solid ${T.text}` : `1px solid ${T.border}`,
+                border: filter === val ? `1px solid #1C1C1A` : `1px solid ${T.border}`,
                 fontSize: 11, fontWeight: filter === val ? 700 : 500, cursor: "pointer",
-                background: filter === val ? T.text : "#FFFFFF",
-                color: filter === val ? "#fff" : T.subtle,
+                background: filter === val ? "#1C1C1A" : "#FFFFFF",
+                color: filter === val ? "#FFFFFF" : T.subtle,
                 fontFamily: "inherit", transition: "all .15s",
               }}>
                 {label} {val === "all" ? `(${recurring.length})` : val === "active" ? `(${active.length})` : `(${paused.length})`}

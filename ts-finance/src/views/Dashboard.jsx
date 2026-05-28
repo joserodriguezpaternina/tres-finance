@@ -438,10 +438,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
       <div style={{ paddingBottom: 4 }}>
-        <div style={{ fontSize: 24, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
+        <div style={{ fontSize: 22, fontWeight: 700, color: "#1C1C1A", letterSpacing: "-.3px", lineHeight: 1.2 }}>
           {greeting}, tres Studio
         </div>
-        <div style={{ fontSize: 13, color: T.muted, marginTop: 5 }}>
+        <div style={{ fontSize: 13, color: "#6B6966", marginTop: 5 }}>
           Mayo 2026 · Resumen financiero
         </div>
       </div>
@@ -522,15 +522,15 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        background: "#FFFFFF", border: "1px solid #EEECE8", borderRadius: 14,
+        background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12,
         padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
-        boxShadow: "0 1px 3px rgba(0,0,0,.06)",
+        boxShadow: "0 1px 2px rgba(0,0,0,.05)",
       }}>
         <div style={{
-          background: "#F5F4F1",
+          background: "#EFEFED",
           display: "flex", flexDirection: "column", justifyContent: "center",
           padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 130,
-          borderRight: "1px solid #EEECE8",
+          borderRight: "1px solid #E8E6E2",
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".09em" }}>
             Acumulado
@@ -557,7 +557,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #EEECE8", borderRadius: 14, padding: "24px 28px", boxShadow: "0 1px 3px rgba(0,0,0,.06)" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,
