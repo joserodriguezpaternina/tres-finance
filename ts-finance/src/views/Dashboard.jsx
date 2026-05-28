@@ -436,28 +436,13 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      {/* ── DEBUG BANNER — remove after fix ── */}
-      {allInc.length === 0 && allExp.length === 0 && (
-        <div style={{ background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 10, padding: "12px 16px", fontSize: 13 }}>
-          <strong>🔍 Diagnóstico:</strong>{" "}
-          {typeof import.meta.env.VITE_SUPABASE_URL === "string" && import.meta.env.VITE_SUPABASE_URL
-            ? `✅ VITE_SUPABASE_URL presente (${import.meta.env.VITE_SUPABASE_URL.slice(0,30)}...)`
-            : "❌ VITE_SUPABASE_URL NO encontrada en build"
-          }{" · "}
-          {typeof import.meta.env.VITE_SUPABASE_ANON_KEY === "string" && import.meta.env.VITE_SUPABASE_ANON_KEY
-            ? "✅ VITE_SUPABASE_ANON_KEY presente"
-            : "❌ VITE_SUPABASE_ANON_KEY NO encontrada"
-          }
-        </div>
-      )}
-
       {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
       <div style={{ paddingBottom: 4 }}>
-        <div style={{ fontSize: 26, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
+        <div style={{ fontSize: 22, fontWeight: 700, color: "#1C1C1A", letterSpacing: "-.3px", lineHeight: 1.2 }}>
           {greeting}, tres Studio
         </div>
-        <div style={{ fontSize: 14, color: T.muted, marginTop: 5 }}>
-          Aquí está el resumen financiero de tu estudio.
+        <div style={{ fontSize: 13, color: "#6B6966", marginTop: 5 }}>
+          Mayo 2026 · Resumen financiero
         </div>
       </div>
 
@@ -537,20 +522,20 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14,
+        background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12,
         padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
+        boxShadow: "0 1px 2px rgba(0,0,0,.05)",
       }}>
         <div style={{
-          background: T.text, color: "#fff",
+          background: "#EFEFED",
           display: "flex", flexDirection: "column", justifyContent: "center",
-          padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 150,
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
+          padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 130,
+          borderRight: "1px solid #E8E6E2",
         }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,.4)", textTransform: "uppercase", letterSpacing: ".09em" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".09em" }}>
             Acumulado
           </div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginTop: 4, letterSpacing: "-.2px" }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: T.text, marginTop: 4, letterSpacing: "-.2px" }}>
             {year}
           </div>
         </div>
@@ -572,7 +557,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "24px 28px" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,

@@ -4,13 +4,17 @@ import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
 /* ── Card styles ── */
 export const card = {
-  background: T.surf, borderRadius: 14,
-  border: `1px solid ${T.border}`, padding: "24px",
-  /* NO box-shadow — flat editorial */
+  background: "#FFFFFF",
+  borderRadius: 12,
+  border: "1px solid #E8E6E2",
+  padding: "20px 22px",
+  boxShadow: "0 1px 2px rgba(0,0,0,.05)",
 }
 export const cardFlat = {
-  background: T.surf2, borderRadius: 10,
-  border: `1px solid ${T.border}`, padding: "14px 16px",
+  background: "#EFEFED",
+  borderRadius: 8,
+  border: "1px solid #E8E6E2",
+  padding: "12px 14px",
 }
 
 /* ── Form primitives ── */
@@ -27,33 +31,39 @@ export const lbl = {
 
 /* ── Buttons ── */
 export const btnPrimary = {
-  background: T.text, color:"#fff", border:"none", borderRadius:8,
-  padding:"9px 16px", fontSize:13, fontWeight:600, cursor:"pointer",
-  display:"flex", alignItems:"center", gap:7,
-  fontFamily:"inherit", transition:"opacity .15s", letterSpacing:"-.1px",
+  background: "#1C1C1A", color: "#FFFFFF", border: "none",
+  borderRadius: 8, padding: "8px 16px", fontSize: 13,
+  fontWeight: 600, cursor: "pointer", display: "flex",
+  alignItems: "center", gap: 6, fontFamily: "inherit",
 }
-export const btnGreen  = btnPrimary
-export const btnRed    = { ...btnPrimary, background:"#fff", color:T.red, border:`1px solid ${T.border}` }
-export const btnGhost  = { ...btnPrimary, background:"#fff", color:T.text2, border:`1px solid ${T.border}` }
-export const btnSmall  = { ...btnPrimary, padding:"5px 12px", fontSize:12, borderRadius:7 }
+export const btnGreen = { ...btnPrimary, background: "#16A34A" }
+export const btnRed = {
+  ...btnPrimary, background: "#FFFFFF", color: "#EA580C",
+  border: "1px solid #E8E6E2",
+}
+export const btnGhost = {
+  ...btnPrimary, background: "#FFFFFF", color: "#3D3B37",
+  border: "1px solid #E8E6E2",
+}
+export const btnSmall = { ...btnPrimary, padding: "5px 12px", fontSize: 12, borderRadius: 7 }
 
 /* ── Semantic color themes ── */
 const THEME = {
-  green:   { bg:T.greenBg,   accent:T.green,   light:"rgba(22,120,74,.12)"  },
-  red:     { bg:T.redBg,     accent:T.red,     light:"rgba(196,30,30,.12)"  },
-  amber:   { bg:T.amberBg,   accent:T.amber,   light:"rgba(184,115,8,.12)"  },
-  blue:    { bg:T.blueBg,    accent:T.blue,    light:"rgba(26,79,191,.12)"  },
-  violet:  { bg:T.violetBg,  accent:T.violet,  light:"rgba(104,48,204,.12)" },
+  green:   { bg:T.greenBg,   accent:T.green,   light:"rgba(34,197,94,.18)"   },
+  red:     { bg:T.redBg,     accent:T.red,     light:"rgba(249,115,22,.18)"  },
+  amber:   { bg:T.amberBg,   accent:T.amber,   light:"rgba(217,119,6,.18)"   },
+  blue:    { bg:T.blueBg,    accent:T.blue,    light:"rgba(37,99,235,.18)"   },
+  violet:  { bg:T.violetBg,  accent:T.violet,  light:"rgba(124,58,237,.18)"  },
   default: { bg:T.surf2, accent:T.muted, light:T.surf3 },
 }
 function getTheme(color) {
   if (!color) return THEME.default
   const c = color.toString()
-  if (c.includes("16784A")||c.includes("16A34A")||c.includes("44B26B")||c.includes("059669")) return THEME.green
-  if (c.includes("C41E1E")||c.includes("DC2626")||c.includes("D72B20")||c.includes("B91C1C")) return THEME.red
-  if (c.includes("B87308")||c.includes("D97706")) return THEME.amber
-  if (c.includes("1A4FBF")||c.includes("2563EB")||c.includes("3B82F6")) return THEME.blue
-  if (c.includes("6830CC")||c.includes("7C3AED")||c.includes("8B5CF6")||c.includes("5A3EE7")) return THEME.violet
+  if (c.includes("16A34A")||c.includes("15803D")||c.includes("16784A")||c.includes("44B26B")||c.includes("059669")) return THEME.green
+  if (c.includes("EA580C")||c.includes("C2410C")||c.includes("F97316")||c.includes("C41E1E")||c.includes("DC2626")||c.includes("D72B20")) return THEME.red
+  if (c.includes("D97706")||c.includes("B87308")) return THEME.amber
+  if (c.includes("2563EB")||c.includes("1A4FBF")||c.includes("3B82F6")) return THEME.blue
+  if (c.includes("7C3AED")||c.includes("6830CC")||c.includes("8B5CF6")||c.includes("5A3EE7")) return THEME.violet
   return THEME.default
 }
 
@@ -61,28 +71,28 @@ function getTheme(color) {
 export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, hero }) {
   const th = getTheme(color)
   if (hero) {
+    const th = getTheme(color || T.green)
     return (
       <div style={{
-        background: T.text, borderRadius: 14, padding: "26px 28px",
+        background: "#FFFFFF", borderRadius: 12, padding: "20px 22px",
+        border: "1px solid #E8E6E2",
+        boxShadow: "0 1px 2px rgba(0,0,0,.05)",
         display:"flex", flexDirection:"column",
-        /* dot texture subtle */
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)",
-        backgroundSize: "20px 20px",
       }}>
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:18, gap:8 }}>
-          <span style={{ fontSize:10, fontWeight:700, color:"rgba(255,255,255,.45)", textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, gap:8 }}>
+          <span style={{ fontSize:11, fontWeight:500, color:T.muted, textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
           {Icon && (
-            <div style={{ width:28, height:28, borderRadius:8, background:"rgba(255,255,255,.08)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-              <Icon size={13} color="rgba(255,255,255,.65)" />
+            <div style={{ width:28, height:28, borderRadius:8, background:th.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+              <Icon size={13} color={th.accent} />
             </div>
           )}
         </div>
-        <div style={{ fontSize:48, fontWeight:700, color:"#FFFFFF", letterSpacing:"-2px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+        <div style={{ fontSize:38, fontWeight:700, color:T.text, letterSpacing:"-.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:16 }}>
           <div>
-            {sub && <div style={{ fontSize:12, color:"rgba(255,255,255,.38)" }}>{sub}</div>}
+            {sub && <div style={{ fontSize:12, color:T.muted }}>{sub}</div>}
             {trend !== undefined && trend !== null && (
-              <div style={{ fontSize:11, fontWeight:600, color:trend>=0?"#4ADE80":"#F87171", marginTop:sub?3:0 }}>
+              <div style={{ fontSize:11, fontWeight:600, color:trend>=0?T.green:T.red, marginTop:sub?3:0 }}>
                 {trend>=0?"↑":"↓"} {Math.abs(trend)}% vs mes ant.
               </div>
             )}
@@ -91,7 +101,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
             <div style={{ width:64, height:28, flexShrink:0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={spark}>
-                  <Line type="monotone" dataKey="v" stroke="rgba(255,255,255,.45)" strokeWidth={1.5} dot={false} />
+                  <Line type="monotone" dataKey="v" stroke={th.accent} strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -112,7 +122,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize:34, fontWeight:700, color:T.text, letterSpacing:"-1.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
+      <div style={{ fontSize:28, fontWeight:700, color:T.text, letterSpacing:"-.5px", fontFamily:"'DM Mono',monospace", lineHeight:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{value}</div>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginTop:12 }}>
         <div>
           {sub && <div style={{ fontSize:12, color:T.muted }}>{sub}</div>}
@@ -139,10 +149,10 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
 /* ── Pill status component ── */
 export function Pill({ s }) {
   const m = {
-    Pagado:    { bg:"rgba(22,120,74,.08)",   c:"#16784A", dot:"#16784A" },
-    Pendiente: { bg:"rgba(184,115,8,.08)",   c:"#B87308", dot:"#B87308" },
-    Parcial:   { bg:"rgba(26,79,191,.08)",   c:"#1A4FBF", dot:"#1A4FBF" },
-    Vencida:   { bg:"rgba(196,30,30,.08)",   c:"#C41E1E", dot:"#C41E1E" },
+    Pagado:    { bg:"rgba(34,197,94,.1)",   c:"#16A34A", dot:"#16A34A" },
+    Pendiente: { bg:"rgba(217,119,6,.1)",   c:"#D97706", dot:"#D97706" },
+    Parcial:   { bg:"rgba(37,99,235,.1)",   c:"#2563EB", dot:"#2563EB" },
+    Vencida:   { bg:"rgba(249,115,22,.1)",  c:"#EA580C", dot:"#EA580C" },
   }
   const st = m[s]||m.Pendiente
   return (
