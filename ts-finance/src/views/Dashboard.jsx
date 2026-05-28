@@ -436,6 +436,21 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
+      {/* ── DEBUG BANNER — remove after fix ── */}
+      {allInc.length === 0 && allExp.length === 0 && (
+        <div style={{ background: "#FEF3C7", border: "1px solid #F59E0B", borderRadius: 10, padding: "12px 16px", fontSize: 13 }}>
+          <strong>🔍 Diagnóstico:</strong>{" "}
+          {typeof import.meta.env.VITE_SUPABASE_URL === "string" && import.meta.env.VITE_SUPABASE_URL
+            ? `✅ VITE_SUPABASE_URL presente (${import.meta.env.VITE_SUPABASE_URL.slice(0,30)}...)`
+            : "❌ VITE_SUPABASE_URL NO encontrada en build"
+          }{" · "}
+          {typeof import.meta.env.VITE_SUPABASE_ANON_KEY === "string" && import.meta.env.VITE_SUPABASE_ANON_KEY
+            ? "✅ VITE_SUPABASE_ANON_KEY presente"
+            : "❌ VITE_SUPABASE_ANON_KEY NO encontrada"
+          }
+        </div>
+      )}
+
       {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
       <div style={{ paddingBottom: 4 }}>
         <div style={{ fontSize: 26, fontWeight: 700, color: T.text, letterSpacing: "-.5px", lineHeight: 1.2 }}>
