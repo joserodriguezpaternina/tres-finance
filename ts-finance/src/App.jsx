@@ -157,45 +157,46 @@ export default function App() {
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Light.otf') format('opentype');font-weight:300;font-display:swap}
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Regular.otf') format('opentype');font-weight:400;font-display:swap}
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Medium.otf') format('opentype');font-weight:500;font-display:swap}
         @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body,#root{height:100%;font-family:'AcidGrotesk','Inter',sans-serif;background:${T.bg};color:${T.text};-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+        html,body,#root{height:100%;font-family:'Manrope','AcidGrotesk','Inter',sans-serif;background:#F9F9F9;color:#1B1B1B;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
         ::-webkit-scrollbar{width:4px;height:4px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:#D4D1CC;border-radius:10px}
-        input,select{background:#FFFFFF;color:#1C1C1A;font-family:'AcidGrotesk',sans-serif;border:1px solid #E8E6E2;border-radius:10px}
-        input:focus,select:focus{border-color:#1C1C1A!important;outline:none;box-shadow:0 0 0 3px rgba(28,28,26,.06)!important}
-        button{transition:opacity .15s;font-family:'AcidGrotesk',sans-serif}
+        ::-webkit-scrollbar-thumb{background:#CFC4C5;border-radius:10px}
+        input,select{background:#FFFFFF;color:#1B1B1B;font-family:'Manrope','AcidGrotesk',sans-serif;border:1px solid #E5E2E1;border-radius:12px}
+        input:focus,select:focus{border-color:#000000!important;outline:none;box-shadow:0 0 0 3px rgba(0,0,0,.06)!important}
+        button{transition:opacity .15s;font-family:'Manrope','AcidGrotesk',sans-serif}
         button:hover{opacity:.8}
-        ::placeholder{color:#9B9893}
+        ::placeholder{color:#7E7576}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         /* ─── Layout ─── */
         .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:220px;background:#FFFFFF;border-right:1px solid #E8E6E2;display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+        .sidebar{width:240px;background:#F9F9F9;border-right:1px solid #E5E2E1;display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-        .topbar{background:#FFFFFF;border-bottom:1px solid #E8E6E2;padding:0 28px;height:60px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .topbar{background:rgba(249,249,249,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #E5E2E1;padding:0 32px;height:64px;display:flex;align-items:center;gap:10px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* ─── Nav: Kurio pill style ─── */
-        .nav-item{border-radius:8px;color:#6B6966;transition:background .12s,color .12s}
-        .nav-item:hover{background:#F4F4F2!important;color:#1C1C1A!important}
-        .nav-item-active{background:#EFEFED!important;color:#1C1C1A!important;font-weight:600!important;border-radius:8px!important;border:none!important}
+        /* ─── Nav: Stitch black pill ─── */
+        .nav-item{border-radius:999px;color:#5C5F60;transition:background .15s,color .15s}
+        .nav-item:hover{background:#EEEEEE!important;color:#1B1B1B!important}
+        .nav-item-active{background:#1B1B1B!important;color:#FFFFFF!important;font-weight:600!important;border-radius:999px!important;border:none!important}
         /* ─── Grid utilities ─── */
-        .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-        .g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-        .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-        .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:14px}
-        .gc{display:grid;grid-template-columns:2fr 1fr;gap:14px}
-        .rg{display:grid;grid-template-columns:1fr 280px;gap:14px}
+        .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+        .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .g2-1{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+        .g3-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+        .gc{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+        .rg{display:grid;grid-template-columns:1fr 280px;gap:16px}
         .g4>*,.g3>*,.g2>*,.g2-1>*,.g3-2>*,.gc>*,.rg>*{min-width:0}
         /* ─── Scrollable chips ─── */
         .chip-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
@@ -204,9 +205,9 @@ export default function App() {
         .tbl-wrap{overflow-x:auto}
         main.content{overflow-x:clip}
         /* ─── Page header ─── */
-        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;gap:12px}
-        .page-title{font-size:20px;font-weight:700;color:#1C1C1A;letter-spacing:-.3px}
-        .page-sub{font-size:13px;color:#6B6966;margin-top:3px}
+        .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
+        .page-title{font-size:24px;font-weight:700;color:#1B1B1B;letter-spacing:-.4px;line-height:1.2}
+        .page-sub{font-size:14px;color:#5C5F60;margin-top:4px}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
@@ -223,8 +224,8 @@ export default function App() {
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
           .topbar{padding:0;flex-direction:column;height:auto}
-          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #E8E6E2}
-          .topbar-row2{display:flex!important;padding:8px 16px;gap:8px;background:#F4F4F2}
+          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #E5E2E1}
+          .topbar-row2{display:flex!important;padding:8px 16px;gap:8px;background:#F3F3F3}
           .hactions{display:none!important}
           .g4{grid-template-columns:1fr 1fr;gap:10px}
           .g3{grid-template-columns:1fr 1fr;gap:10px}
@@ -234,7 +235,7 @@ export default function App() {
           .bottom-nav{display:flex!important}
           .col-hide-mobile{display:none!important}
           .page-hdr{margin-bottom:18px}
-          .page-title{font-size:18px}
+          .page-title{font-size:20px}
           .quick-fab{display:block}
         }
         @media(max-width:480px){
@@ -246,12 +247,12 @@ export default function App() {
           .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
         /* ─── Bottom nav ─── */
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#FFFFFF;border-top:1px solid #E8E6E2;height:62px;align-items:stretch}
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#F9F9F9;border-top:1px solid #E5E2E1;height:64px;align-items:stretch}
         .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 2px;font-family:inherit;min-width:0;position:relative}
-        .bnav-item:hover{background:#EFEFED}
-        .bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;background:#1C1C1A;border-radius:0 0 3px 3px}
+        .bnav-item:hover{background:#F3F3F3}
+        .bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;background:#000000;border-radius:0 0 3px 3px}
         /* ─── FAB ─── */
-        .quick-fab{display:none;position:fixed;bottom:70px;right:16px;z-index:201}
+        .quick-fab{display:none;position:fixed;bottom:72px;right:16px;z-index:201}
       `}</style>
 
       <div className="app-layout">
@@ -260,25 +261,16 @@ export default function App() {
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           {/* Brand */}
-          <div style={{ padding: "20px 16px 16px", borderBottom: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, background: "#1C1C1A", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <svg viewBox="0 0 1675 1675" style={{ width: 17, height: 17 }} fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M837.607 363.741C1048.32 363.741 1240.76 414.671 1381.48 498.375C1521.56 581.706 1615 700.811 1615 837.721C1615 974.626 1521.57 1093.73 1381.49 1177.06C1241.25 1260.49 1049.62 1311.36 839.728 1311.7C839.013 1311.75 838.293 1311.78 837.566 1311.78C626.861 1311.77 434.429 1260.82 293.723 1177.1C153.644 1093.75 60.2149 974.624 60.2148 837.721C60.2148 700.811 153.652 581.706 293.739 498.375C434.454 414.671 626.895 363.741 837.607 363.741ZM601.944 696.784H772.853V587.68H852.841V696.784H1023.75V587.68H1103.74V696.784H1212.08V766.598H1103.74V984.806C1103.74 1011.76 1120.41 1027.02 1144.43 1027.02H1212.08V1096.83H1137.18C1063.04 1096.83 1023.75 1064.79 1023.75 989.894V766.598H852.841V984.806C852.841 1011.76 869.509 1027.02 893.538 1027.02H961.188V1096.83H886.286C812.143 1096.83 772.853 1064.79 772.853 989.894V766.598H601.944V984.806C601.944 1011.76 618.614 1027.02 642.643 1027.02H710.291V1096.83H635.391C561.247 1096.83 521.956 1064.79 521.956 989.894V766.598H456.473V696.784H521.956V587.68H601.944V696.784Z" fill="white" />
-                </svg>
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "#1C1C1A", letterSpacing: "-.3px" }}>tres Studio</div>
-                <div style={{ fontSize: 11, color: "#6B6966" }}>Finanzas · {year}</div>
-              </div>
-            </div>
+          <div style={{ padding: "24px 20px 20px" }}>
+            <div style={{ fontSize: 20, fontWeight: 700, color: "#1B1B1B", letterSpacing: "-.5px", lineHeight: 1.2 }}>tres Studio®</div>
+            <div style={{ fontSize: 12, color: "#5C5F60", marginTop: 2 }}>Creative Finance</div>
           </div>
 
           {/* Nav */}
-          <nav style={{ flex: 1, padding: "12px 8px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 0 }}>
+          <nav style={{ flex: 1, padding: "8px 12px", display: "flex", flexDirection: "column", overflowY: "auto", gap: 0 }}>
             {NAV_GROUPS.map((group, gi) => (
               <div key={group.label} style={{ marginTop: gi === 0 ? 0 : 20, marginBottom: 4 }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 12px 6px" }}>{group.label}</div>
+                <div style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".08em", padding: "0 12px 8px" }}>{group.label}</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   {group.items.map(v => {
                     const active = view === v.id
@@ -289,19 +281,20 @@ export default function App() {
                         className={active ? "nav-item-active" : "nav-item"}
                         style={{
                           display: "flex", alignItems: "center", gap: 10,
-                          padding: "8px 12px", borderRadius: 8,
+                          padding: "9px 14px",
                           border: "none",
                           cursor: "pointer", width: "100%", textAlign: "left",
-                          fontSize: 13, fontFamily: "inherit",
+                          fontSize: 14, fontFamily: "inherit",
                           background: "transparent",
-                          color: active ? "#1C1C1A" : "#6B6966",
+                          color: active ? "#FFFFFF" : "#5C5F60",
                           fontWeight: active ? 600 : 400,
+                          transition: "background .15s, color .15s",
                         }}
                       >
-                        <v.icon size={15} color={active ? T.text : T.muted} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={16} color={active ? "#FFFFFF" : "#7E7576"} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: T.amberBg, color: T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.2)" : T.amberBg, color: active ? "#FFFFFF" : T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
                           <span style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 6px", borderRadius: 8 }}>{recurring.filter(r => r.active).length}</span>
@@ -331,22 +324,26 @@ export default function App() {
                 <Menu size={16} color={T.subtle} />
               </button>
 
-              {/* Breadcrumb */}
+              {/* Search / breadcrumb */}
               <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontSize: 12, color: T.muted }}>tres Studio</span>
-                <span style={{ fontSize: 14, color: T.border2, fontWeight: 300, lineHeight: 1 }}>/</span>
-                <span style={{ fontSize: 14, fontWeight: 600, color: T.text, letterSpacing: "-.2px" }}>
-                  {NAV.find(v => v.id === view)?.label}
-                </span>
+                <div style={{ position: "relative" }}>
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    style={{ paddingLeft: 36, paddingRight: 16, paddingTop: 8, paddingBottom: 8, background: "#F3F3F3", border: "1px solid #E5E2E1", borderRadius: 999, fontSize: 13, color: "#1B1B1B", outline: "none", width: 220, fontFamily: "inherit" }}
+                    readOnly
+                  />
+                  <svg style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", opacity: .45 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B1B1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </div>
               </div>
 
               <div className="hactions">
                 {/* Month selector */}
-                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#EFEFED", borderRadius: 20, padding: "6px 14px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#EEEEEE", borderRadius: 999, padding: "7px 16px" }}>
                   <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
                     <ChevronLeft size={12} />
                   </button>
-                  <span className="monthLabel" style={{ fontSize: 12, fontWeight: 600, color: T.text, minWidth: 92, textAlign: "center" }}>
+                  <span className="monthLabel" style={{ fontSize: 13, fontWeight: 600, color: T.text, minWidth: 100, textAlign: "center" }}>
                     {MONTHS[month]} {year}
                   </span>
                   <button onClick={() => setMonth(m => (m + 1) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
@@ -355,31 +352,34 @@ export default function App() {
                 </div>
 
                 {/* Export */}
-                <button onClick={() => exportExcel({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "5px 10px", fontSize: 12, gap: 4 }}>
-                  <FileSpreadsheet size={13} color={T.muted} />
+                <button onClick={() => exportExcel({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "6px 12px", fontSize: 13, gap: 4 }}>
+                  <FileSpreadsheet size={14} color={T.muted} />
                   <span className="btnText">Excel</span>
                 </button>
-                <button onClick={() => exportPDF({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "5px 10px", fontSize: 12, gap: 4 }}>
-                  <FileText size={13} color={T.muted} />
+                <button onClick={() => exportPDF({ incomes: monthInc, expenses: monthExp, month, year })} style={{ ...btnGhost, padding: "6px 12px", fontSize: 13, gap: 4 }}>
+                  <FileText size={14} color={T.muted} />
                   <span className="btnText">PDF</span>
                 </button>
 
                 {/* Quick create */}
-                <button onClick={() => setModal({ type: "income" })} style={{ ...btnGreen, padding: "6px 14px", fontSize: 12, gap: 5 }}>
-                  <Plus size={13} />
+                <button onClick={() => setModal({ type: "income" })} style={{ ...btnGreen, padding: "7px 16px", fontSize: 13, gap: 5 }}>
+                  <Plus size={14} />
                   <span className="btnText">Ingreso</span>
                 </button>
-                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnRed, padding: "6px 14px", fontSize: 12, gap: 5 }}>
-                  <Plus size={13} />
+                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnGhost, padding: "7px 16px", fontSize: 13, gap: 5, color: "#BA1A1A" }}>
+                  <Plus size={14} />
                   <span className="btnText">Egreso</span>
                 </button>
 
-                {/* Bell */}
-                <div style={{ position: "relative", width: 34, height: 34, borderRadius: 8, background: T.bg, border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                  <Bell size={14} color={T.muted} />
+                {/* Bell + Avatar */}
+                <button style={{ position: "relative", width: 36, height: 36, borderRadius: 999, background: "transparent", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                  <Bell size={16} color={T.muted} />
                   {allPending > 0 && (
-                    <span style={{ position: "absolute", top: 6, right: 6, width: 7, height: 7, borderRadius: "50%", background: T.amber, border: `2px solid ${T.surf}` }} />
+                    <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: T.amber, border: `2px solid #F9F9F9` }} />
                   )}
+                </button>
+                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#EEEEEE", border: "1px solid #E5E2E1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#1B1B1B", flexShrink: 0 }}>
+                  T
                 </div>
               </div>
             </div>
@@ -398,7 +398,7 @@ export default function App() {
             </div>
           </header>
 
-          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "28px 32px", background: "#F4F4F2", scrollbarWidth: "thin", scrollbarColor: "#D4D1CC transparent" }}>
+          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "32px", background: "#F9F9F9", scrollbarWidth: "thin", scrollbarColor: "#CFC4C5 transparent" }}>
             {loading ? (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", flexDirection: "column", gap: 12 }}>
                 <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: T.text, borderRadius: "50%", animation: "spin 1s linear infinite" }} />

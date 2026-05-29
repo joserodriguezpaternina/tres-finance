@@ -1,176 +1,280 @@
 import { useState } from 'react'
-import { Plus, Edit2, Trash2, RefreshCw, PauseCircle, PlayCircle, Zap } from 'lucide-react'
-import { T, fmtS, fmt, getIVA, getBase, freqMult } from '../constants.js'
-import { card, btnRed, ICON_MAP } from '../ui.jsx'
+import { Plus, Edit2, Trash2, RefreshCw, PauseCircle, PlayCircle, Zap, MoreVertical } from 'lucide-react'
+import { T, fmtS, getIVA, getBase, freqMult } from '../constants.js'
+import { card, btnPrimary, ICON_MAP } from '../ui.jsx'
 
-function SoftIcon({ icon }) {
+function ServiceIcon({ icon, name }) {
   const cfg = ICON_MAP[icon] || ICON_MAP.default
   return (
-    <div style={{ width: 36, height: 36, borderRadius: 10, background: cfg.bg, border: `1px solid ${cfg.color}20`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-      <span style={{ fontSize: 12, fontWeight: 800, color: cfg.color, fontFamily: "'Inter',sans-serif" }}>{cfg.label}</span>
+    <div style={{ width: 48, height: 48, borderRadius: 12, background: cfg.bg, border: `1px solid ${cfg.color}22`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+      <span style={{ fontSize: 14, fontWeight: 800, color: cfg.color, fontFamily: "inherit" }}>{cfg.label}</span>
     </div>
   )
 }
 
+function StatusBadge({ active }) {
+  if (active) return (
+    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(16,185,129,.1)", color: "#10B981", fontSize: 12, fontWeight: 600 }}>
+      Activo
+    </span>
+  )
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(245,158,11,.1)", color: "#F59E0B", fontSize: 12, fontWeight: 600 }}>
+      Pausado
+    </span>
+  )
+}
+
 export default function RecurringView({ recurring, expenses = [], onAdd, onEdit, onDelete, onToggle }) {
-  const [filter, setFilter] = useState("all") // all | active | paused
+  const [filter, setFilter] = useState("all")
+  const [openMenu, setOpenMenu] = useState(null)
 
   const active = recurring.filter(r => r.active)
   const paused = recurring.filter(r => !r.active)
   const filtered = filter === "active" ? active : filter === "paused" ? paused : recurring
 
-  // Monthly equivalent cost
   const monthlyTotal = active.reduce((s, r) => s + Number(r.amount) * freqMult(r.freq), 0)
   const monthlyIVA   = active.reduce((s, r) => s + getIVA(r) * freqMult(r.freq), 0)
   const monthlyBase  = monthlyTotal - monthlyIVA
 
-  // Next payments this month (day of month)
   const today = new Date().getDate()
   const upcoming = active.filter(r => r.freq === "Mensual" && r.day >= today).sort((a, b) => a.day - b.day).slice(0, 5)
 
+  const catBreakdown = Object.entries(
+    active.reduce((acc, r) => { acc[r.cat] = (acc[r.cat] || 0) + Number(r.amount) * freqMult(r.freq); return acc }, {})
+  ).sort((a, b) => b[1] - a[1])
+
+  const mainCat = catBreakdown[0]
+  const mainCatPct = mainCat ? Math.round((mainCat[1] / monthlyTotal) * 100) : 0
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Header */}
       <div className="page-hdr">
         <div>
-          <div className="page-title">Gastos recurrentes</div>
-          <div className="page-sub">Suscripciones, software y pagos fijos</div>
+          <div className="page-title">Suscripciones y Pagos Recurrentes</div>
+          <div className="page-sub">Gestiona tus herramientas y servicios automatizados.</div>
         </div>
-        <button onClick={onAdd} style={{ ...btnRed, flexShrink: 0 }}><Plus size={14} />Agregar</button>
+        <button onClick={onAdd} style={{ ...btnPrimary, padding: "10px 20px", fontSize: 14 }}>
+          <Plus size={15} />
+          Nueva Suscripción
+        </button>
       </div>
 
-      {/* Summary cards — flat editorial */}
-      <div className="g4">
+      {/* Summary cards — Stitch bento style */}
+      <div className="g3">
         {[
-          { label: "Costo mensual equivalente", val: fmtS(monthlyTotal), color: T.red },
-          { label: "Base sin IVA", val: fmtS(monthlyBase), color: T.text },
-          { label: "IVA mensual estimado", val: fmtS(monthlyIVA), color: T.amber },
-          { label: "Suscripciones activas", val: `${active.length}`, color: T.green },
-        ].map(({ label, val, color }) => (
-          <div key={label} style={{ background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12, padding: "20px 22px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: T.subtle, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 12 }}>{label}</div>
-            <div style={{ fontSize: 32, fontWeight: 700, color, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1 }}>{val}</div>
+          {
+            icon: "💳",
+            label: "Total Mensual",
+            value: fmtS(monthlyTotal),
+            sub: monthlyIVA > 0 ? `Base ${fmtS(monthlyBase)} · IVA ${fmtS(monthlyIVA)}` : "Sin IVA",
+            trend: null,
+          },
+          {
+            icon: "🔄",
+            label: "Suscripciones Activas",
+            value: `${active.length}`,
+            sub: upcoming.length > 0 ? `${upcoming.length} pago${upcoming.length > 1 ? "s" : ""} próximo${upcoming.length > 1 ? "s" : ""} en 7 días` : "Sin cobros próximos",
+            trend: null,
+          },
+          {
+            icon: "📊",
+            label: "Categoría Principal",
+            value: mainCat ? mainCat[0] : "—",
+            sub: mainCat ? `Representa el ${mainCatPct}% del gasto` : "Sin datos",
+            trend: null,
+          },
+        ].map(({ icon, label, value, sub }) => (
+          <div key={label} style={{ ...card, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: "default", transition: "background .2s" }}
+            onMouseEnter={e => e.currentTarget.style.background = "#F3F3F3"}
+            onMouseLeave={e => e.currentTarget.style.background = "#FFFFFF"}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+              <span style={{ fontSize: 20 }}>{icon}</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: T.muted, textTransform: "uppercase", letterSpacing: ".07em" }}>{label}</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 24, fontWeight: 700, color: T.text, letterSpacing: "-.5px", fontFamily: "'DM Mono',monospace" }}>{value}</div>
+              <div style={{ fontSize: 12, color: T.muted, marginTop: 4 }}>{sub}</div>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="rg">
-        {/* Main list */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {/* Subscriptions list */}
+      <div style={{ background: "#FFFFFF", border: "1px solid #E5E2E1", borderRadius: 16, overflow: "hidden" }}>
+        {/* Table header */}
+        <div style={{ padding: "16px 24px", borderBottom: "1px solid #E5E2E1", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(249,249,249,.5)" }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: T.text, textTransform: "uppercase", letterSpacing: ".05em" }}>Detalle de Suscripciones</span>
           {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ display: "flex", gap: 4 }}>
             {[["all", "Todos"], ["active", "Activos"], ["paused", "Pausados"]].map(([val, label]) => (
               <button key={val} onClick={() => setFilter(val)} style={{
-                padding: "6px 14px", borderRadius: 20,
-                border: filter === val ? `1px solid #1C1C1A` : `1px solid ${T.border}`,
-                fontSize: 11, fontWeight: filter === val ? 700 : 500, cursor: "pointer",
-                background: filter === val ? "#1C1C1A" : "#FFFFFF",
-                color: filter === val ? "#FFFFFF" : T.subtle,
+                padding: "5px 12px", borderRadius: 999,
+                border: "1px solid",
+                borderColor: filter === val ? "#000000" : "#E5E2E1",
+                fontSize: 12, fontWeight: filter === val ? 700 : 400, cursor: "pointer",
+                background: filter === val ? "#000000" : "transparent",
+                color: filter === val ? "#FFFFFF" : T.muted,
                 fontFamily: "inherit", transition: "all .15s",
               }}>
-                {label} {val === "all" ? `(${recurring.length})` : val === "active" ? `(${active.length})` : `(${paused.length})`}
+                {label}
               </button>
             ))}
           </div>
+        </div>
 
-          {/* Cards */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {filtered.map(r => {
-              const ivaAmt = getIVA(r)
-              const base = getBase(r)
-              const monthlyEq = Number(r.amount) * freqMult(r.freq)
-              return (
-                <div key={r.id} style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "16px 20px", opacity: r.active ? 1 : 0.5, transition: "opacity .2s" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <SoftIcon icon={r.icon} />
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 14, fontWeight: 700, color: T.white }}>{r.name}</span>
-                        <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.surf2, color: T.muted, border: `1px solid ${T.border}` }}>{r.freq}</span>
-                        {!r.active && <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: T.amberBg, color: T.amber }}>Pausado</span>}
-                        {(() => { const n = expenses.filter(e => e.recurringId === r.id || (e.obs && e.obs.includes(r.id))).length; return n > 0 ? (
-                          <span title={`${n} egreso${n>1?'s':''} generado${n>1?'s':''} automáticamente`} style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20, background: "rgba(139,92,246,.15)", color: "#8B5CF6", border: "1px solid rgba(139,92,246,.25)", display:"flex", alignItems:"center", gap:3 }}>
-                            <RefreshCw size={8} />{n} egreso{n>1?'s':''}
-                          </span>
-                        ) : null })()}
-                      </div>
-                      <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>
-                        {r.cat} · Día {r.day} · {r.method}
-                        {r.notes && <span> · {r.notes}</span>}
-                      </div>
-                    </div>
+        {/* List */}
+        <div>
+          {filtered.length === 0 && (
+            <div style={{ textAlign: "center", padding: "48px 24px", color: T.muted, fontSize: 14 }}>
+              No hay suscripciones. Agrega la primera.
+            </div>
+          )}
+          {filtered.map((r, idx) => {
+            const ivaAmt = getIVA(r)
+            const base   = getBase(r)
+            const monthlyEq = Number(r.amount) * freqMult(r.freq)
+            const expCount = expenses.filter(e => e.recurringId === r.id || (e.obs && e.obs.includes(r.id))).length
+            const isLast = idx === filtered.length - 1
 
-                    {/* Amounts */}
-                    <div style={{ textAlign: "right", marginRight: 14 }}>
-                      <div style={{ fontSize: 16, fontWeight: 800, color: r.active ? T.red : T.muted, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</div>
-                      <div style={{ fontSize: 11, color: T.muted }}>
-                        Base {fmtS(base)} {r.hasIVA && `· IVA ${fmtS(ivaAmt)}`}
-                      </div>
-                      {r.freq !== "Mensual" && (
-                        <div style={{ fontSize: 10, color: T.subtle, marginTop: 2 }}>
-                          ≈ {fmtS(monthlyEq)}/mes
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Actions */}
-                    <div style={{ display: "flex", gap: 6 }}>
-                      <button onClick={() => onToggle(r.id)} title={r.active ? "Pausar" : "Activar"} style={{ background: r.active ? T.amberBg : T.greenBg, border: "none", borderRadius: 8, padding: "6px 8px", cursor: "pointer" }}>
-                        {r.active ? <PauseCircle size={13} color={T.amber} /> : <PlayCircle size={13} color={T.green} />}
-                      </button>
-                      <button onClick={() => onEdit(r)} style={{ background: T.blueBg, border: "none", borderRadius: 8, padding: "6px 8px", cursor: "pointer" }}><Edit2 size={13} color={T.blue} /></button>
-                      <button onClick={() => onDelete(r.id)} style={{ background: T.redBg, border: "none", borderRadius: 8, padding: "6px 8px", cursor: "pointer" }}><Trash2 size={13} color={T.red} /></button>
+            return (
+              <div
+                key={r.id}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "16px 24px",
+                  borderBottom: isLast ? "none" : "1px solid #E5E2E1",
+                  opacity: r.active ? 1 : 0.6,
+                  transition: "background .2s",
+                  background: "transparent",
+                  position: "relative",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "#F9F9F9"}
+                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setOpenMenu(null) }}
+              >
+                {/* Left: icon + name */}
+                <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1, minWidth: 0 }}>
+                  <ServiceIcon icon={r.icon} name={r.name} />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: T.text }}>{r.name}</div>
+                    <div style={{ fontSize: 12, color: T.muted, marginTop: 2 }}>
+                      {r.cat}
+                      {expCount > 0 && <span style={{ marginLeft: 8, color: "#7C3AED", fontWeight: 600 }}>· {expCount} egreso{expCount > 1 ? "s" : ""}</span>}
                     </div>
                   </div>
                 </div>
-              )
-            })}
-            {filtered.length === 0 && (
-              <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, textAlign: "center", padding: "56px 48px", color: T.muted, fontSize: 13 }}>
-                No hay gastos recurrentes. Agrega el primero.
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Sidebar: upcoming */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-              <Zap size={13} color={T.amber} />
-              <span style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".07em" }}>Próximos cobros</span>
+                {/* Right: amount + freq + next day + status + actions */}
+                <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+                  {/* Amount */}
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: T.text, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</div>
+                    <div style={{ fontSize: 11, color: T.muted }}>
+                      {r.freq}
+                      {r.freq !== "Mensual" && <span style={{ color: T.subtle }}> · ≈{fmtS(monthlyEq)}/mes</span>}
+                    </div>
+                  </div>
+
+                  {/* Next payment */}
+                  <div className="col-hide-mobile" style={{ textAlign: "right", width: 110 }}>
+                    <div style={{ fontSize: 14, color: T.text }}>Día {r.day}</div>
+                    <div style={{ fontSize: 11, color: T.muted }}>Próximo pago</div>
+                  </div>
+
+                  {/* Status */}
+                  <div style={{ width: 80, display: "flex", justifyContent: "flex-end" }}>
+                    <StatusBadge active={r.active} />
+                  </div>
+
+                  {/* Context menu */}
+                  <div style={{ position: "relative" }}>
+                    <button
+                      onClick={() => setOpenMenu(openMenu === r.id ? null : r.id)}
+                      style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 4, borderRadius: 8 }}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {openMenu === r.id && (
+                      <div style={{
+                        position: "absolute", right: 0, top: "calc(100% + 4px)", zIndex: 50,
+                        background: "#FFFFFF", border: "1px solid #E5E2E1", borderRadius: 12,
+                        padding: "6px", minWidth: 160,
+                        boxShadow: "0 8px 24px rgba(0,0,0,.1)",
+                      }}>
+                        <button onClick={() => { onToggle(r.id); setOpenMenu(null) }} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "8px 12px", border: "none", background: "none", cursor: "pointer", fontSize: 13, color: T.text, borderRadius: 8, fontFamily: "inherit", textAlign: "left" }}>
+                          {r.active ? <PauseCircle size={14} color={T.amber} /> : <PlayCircle size={14} color={T.green} />}
+                          {r.active ? "Pausar" : "Activar"}
+                        </button>
+                        <button onClick={() => { onEdit(r); setOpenMenu(null) }} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "8px 12px", border: "none", background: "none", cursor: "pointer", fontSize: 13, color: T.text, borderRadius: 8, fontFamily: "inherit", textAlign: "left" }}>
+                          <Edit2 size={14} color={T.blue} />
+                          Editar
+                        </button>
+                        <button onClick={() => { onDelete(r.id); setOpenMenu(null) }} style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", padding: "8px 12px", border: "none", background: "none", cursor: "pointer", fontSize: 13, color: T.red, borderRadius: 8, fontFamily: "inherit", textAlign: "left" }}>
+                          <Trash2 size={14} color={T.red} />
+                          Eliminar
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Bottom row: upcoming + breakdown */}
+      {(upcoming.length > 0 || catBreakdown.length > 0) && (
+        <div className="g2">
+          {/* Upcoming */}
+          <div style={{ ...card }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <Zap size={14} color={T.amber} />
+              <span style={{ fontSize: 12, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".06em" }}>Próximos cobros este mes</span>
             </div>
             {upcoming.length === 0 ? (
-              <div style={{ color: T.muted, fontSize: 12, textAlign: "center", padding: "16px 0" }}>Sin cobros pendientes</div>
+              <div style={{ color: T.muted, fontSize: 13, textAlign: "center", padding: "16px 0" }}>Sin cobros pendientes</div>
             ) : upcoming.map((r, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 0", borderBottom: i < upcoming.length - 1 ? `1px solid ${T.border}` : "none" }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: T.surf2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${T.border}` }}>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{r.day}</span>
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: i < upcoming.length - 1 ? `1px solid ${T.border}` : "none" }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: T.surf2, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${T.border}` }}>
+                  <span style={{ fontSize: 12, fontWeight: 800, color: T.amber, fontFamily: "'DM Mono',monospace" }}>{r.day}</span>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: T.white }}>{r.name}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{r.name}</div>
+                  <div style={{ fontSize: 11, color: T.muted }}>{r.freq}</div>
                 </div>
-                <span style={{ fontSize: 12, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(r.amount)}</span>
               </div>
             ))}
           </div>
 
-          <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 14, padding: "20px 22px" }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".07em", marginBottom: 14 }}>Resumen activos</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {Object.entries(active.reduce((acc, r) => {
-                acc[r.cat] = (acc[r.cat] || 0) + Number(r.amount) * freqMult(r.freq)
-                return acc
-              }, {})).sort((a, b) => b[1] - a[1]).map(([cat, val]) => (
-                <div key={cat} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontSize: 12, color: T.text2 }}>{cat}</span>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(val)}</span>
-                </div>
-              ))}
+          {/* Category breakdown */}
+          <div style={{ ...card }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: T.text, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 16 }}>Gasto por categoría</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {catBreakdown.map(([cat, val]) => {
+                const pct = monthlyTotal > 0 ? Math.round((val / monthlyTotal) * 100) : 0
+                return (
+                  <div key={cat}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+                      <span style={{ fontSize: 13, color: T.text2 }}>{cat}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 12, color: T.muted }}>{pct}%</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(val)}</span>
+                      </div>
+                    </div>
+                    <div style={{ height: 3, background: "#EEEEEE", borderRadius: 999, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct}%`, background: "#1B1B1B", borderRadius: 999, transition: "width .4s" }} />
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
