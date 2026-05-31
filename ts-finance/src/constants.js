@@ -1,60 +1,73 @@
-/* ── DESIGN TOKENS — tres Finance (Fynix design system) ─── */
+/* ─── DESIGN TOKENS — tres Finance® Redesign ──────────────────────────────
+   Visual DNA: dark forest sidebar (#062F28) + lime accent (#9FE870)
+   Faithful to the Fynix reference images shared in the design brief
+   ─────────────────────────────────────────────────────────────────────── */
 export const T = {
-  bg:       "#EEEFEA",   /* light canvas */
-  surf:     "#FFFFFF",   /* cards */
-  surf2:    "#F4F5F1",   /* subtle fills */
-  surf3:    "#EBECE6",
-  border:   "#E8E9E3",
-  border2:  "#D6D7D0",
-  muted:    "#8A8C82",
-  subtle:   "#56584E",
-  text2:    "#373930",
-  text:     "#161A12",   /* near-black green */
-  white:    "#FFFFFF",
-  /* primary = dark forest green */
-  accent:    "#1A2E1F",
-  accentD:   "#102015",
-  accentBg:  "rgba(26,46,31,.06)",
-  accentBg2: "rgba(26,46,31,.12)",
+  /* Canvas */
+  bg:        "#EEECEA",
+  surf:      "#FFFFFF",
+  surf2:     "#F5F5F3",
+  surf3:     "#EBEBEA",
+  border:    "#E6E6E3",
+  border2:   "#D0D0CC",
+
+  /* Text */
+  text:      "#1A1A18",
+  text2:     "#3A3A37",
+  muted:     "#8A8A86",
+  subtle:    "#5A5A56",
+  white:     "#FFFFFF",
+
+  /* Primary — dark forest green sidebar */
+  accent:    "#062F28",
+  accentD:   "#041F1A",
+  accentBg:  "rgba(6,47,40,.06)",
+  accentBg2: "rgba(6,47,40,.12)",
   accentText:"#FFFFFF",
-  /* lime — decorative brand accent */
-  lime:      "#A6E96A",
-  limeD:     "#8FD94A",
-  limeText:  "#2C4A14",
-  limeBg:    "rgba(166,233,106,.22)",
-  /* sidebar (white) */
-  side:    "#FBFBFA",
-  sideB:   "#E8E9E3",
-  sideT:   "#161A12",
-  sideM:   "#6B6D62",
-  sideHov: "#F1F2EC",
-  sideAct: "#E9F6D6",    /* light lime active */
-  green:    "#1E9E5A",
-  greenD:   "#157A45",
-  greenBg:  "rgba(30,158,90,.10)",
-  greenBg2: "rgba(30,158,90,.18)",
-  red:      "#E5484D",
-  redD:     "#C53438",
-  redBg:    "rgba(229,72,77,.10)",
-  redBg2:   "rgba(229,72,77,.18)",
-  amber:    "#E0A030",
-  amberBg:  "rgba(224,160,48,.12)",
-  blue:     "#3B82F6",
-  blueBg:   "rgba(59,130,246,.10)",
-  violet:   "#7C5CFC",
-  violetBg: "rgba(124,92,252,.10)",
+
+  /* Lime — brand highlight / active states */
+  lime:      "#9FE870",
+  limeD:     "#87D455",
+  limeText:  "#27500A",
+  limeBg:    "rgba(159,232,112,.18)",
+  limeBorder:"rgba(159,232,112,.35)",
+
+  /* Sidebar tokens */
+  side:      "#062F28",
+  sideSurf:  "#083D33",
+  sideBorder:"rgba(255,255,255,.08)",
+  sideText:  "rgba(255,255,255,.9)",
+  sideMuted: "rgba(255,255,255,.45)",
+  sideActive:"rgba(159,232,112,.14)",
+  sideHover: "rgba(255,255,255,.06)",
+
+  /* Semantic */
+  green:     "#1E9E5A",
+  greenD:    "#157A45",
+  greenBg:   "rgba(30,158,90,.10)",
+  greenBg2:  "rgba(30,158,90,.18)",
+  red:       "#E5484D",
+  redD:      "#C53438",
+  redBg:     "rgba(229,72,77,.10)",
+  redBg2:    "rgba(229,72,77,.18)",
+  amber:     "#D97706",
+  amberBg:   "rgba(217,119,6,.12)",
+  blue:      "#2563EB",
+  blueBg:    "rgba(37,99,235,.10)",
+  violet:    "#7C5CFC",
+  violetBg:  "rgba(124,92,252,.10)",
 }
 
-/* ── Chart palette — cohesive green family (Fynix) ─── */
+/* ─── Chart palette ────────────────────────────────────────────────────── */
 export const CHART = {
-  inc:    "#1A2E1F",   /* income — dark forest (bars/lines) */
-  exp:    "#A6E96A",   /* expense — lime (filled bars) */
-  expS:   "#5FB35B",   /* expense stroke on white (contrast) */
-  profit: "#1E9E5A",   /* utility / profit (lines) */
-  acc:    "#8FD94A",   /* lime accent */
-  neg:    "#E5484D",   /* negative / alert only */
-  grid:   "#E8E9E3",
-  scale:  ["#1A2E1F","#2C5638","#3F8A4E","#5FB35B","#8FD94A","#C2E89A"],
+  inc:    "#062F28",
+  exp:    "#9FE870",
+  expS:   "#5FB35B",
+  profit: "#1D9E75",
+  acc:    "#87D455",
+  neg:    "#E5484D",
+  grid:   "#E6E6E3",
+  scale:  ["#062F28","#1D6B52","#2C8A64","#5FB35B","#87D455","#C0E89A"],
 }
 
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
@@ -75,10 +88,10 @@ export const DIAN_DEDUCIBLES = {
   "Publicidad":               { si: true,  label: "Deducible",   color: "#1E9E5A", nota: "Gastos de marketing y publicidad con soporte" },
   "Producción":               { si: true,  label: "Deducible",   color: "#1E9E5A", nota: "Costos directos de producción y materiales" },
   "Transporte":               { si: true,  label: "Deducible",   color: "#1E9E5A", nota: "Con factura o documento equivalente. Aplica si es del negocio" },
-  "Impuestos":                { si: "p",   label: "Parcial",     color: "#E0A030", nota: "Solo ICA e impuesto predial del negocio. No el impuesto de renta" },
-  "Imprevistos":              { si: "c",   label: "Condicional", color: "#E0A030", nota: "Solo con soporte documental válido y causalidad demostrable" },
+  "Impuestos":                { si: "p",   label: "Parcial",     color: "#D97706", nota: "Solo ICA e impuesto predial del negocio. No el impuesto de renta" },
+  "Imprevistos":              { si: "c",   label: "Condicional", color: "#D97706", nota: "Solo con soporte documental válido y causalidad demostrable" },
   "Casino":                   { si: false, label: "No deducible",color: "#E5484D", nota: "No reconocido como deducible por la DIAN" },
-  "Otros":                    { si: "c",   label: "Condicional", color: "#E0A030", nota: "Depende del soporte y la relación de causalidad. Consultar contador" },
+  "Otros":                    { si: "c",   label: "Condicional", color: "#D97706", nota: "Depende del soporte y la relación de causalidad. Consultar contador" },
 }
 
 export const DOC_TIPOS_SOPORTE = [
@@ -86,7 +99,7 @@ export const DOC_TIPOS_SOPORTE = [
   "Contrato de servicios", "Recibo de pago", "Comprobante de egreso", "Otro",
 ]
 
-export const uid = () => Math.random().toString(36).slice(2,9)
+export const uid  = () => Math.random().toString(36).slice(2,9)
 export const fmt  = (n = 0) => new Intl.NumberFormat("es-CO", { style:"currency", currency:"COP", minimumFractionDigits:0, maximumFractionDigits:0 }).format(n)
 export const fmtS = (n = 0) => new Intl.NumberFormat("es-CO", { style:"currency", currency:"COP", minimumFractionDigits:0, maximumFractionDigits:0 }).format(n)
 export const getIVA  = i => (i.hasIVA||i.has_iva) ? (i.amount*(i.ivaP||i.iva_p))/((i.ivaP||i.iva_p)+100) : 0

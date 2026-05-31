@@ -440,50 +440,50 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       <div style={{
         position: "relative", overflow: "hidden",
         borderRadius: 24, padding: "26px 28px",
-        background: "linear-gradient(135deg, #B6EF7A 0%, #93E04E 55%, #7FD63C 100%)",
+        background: "linear-gradient(135deg, #062F28 0%, #0a3d32 60%, #062F28 100%)",
         border: "1px solid rgba(26,46,31,.08)",
       }}>
         {/* decorative swirls */}
-        <div style={{ position: "absolute", right: -40, top: -60, width: 220, height: 220, borderRadius: "50%", background: "rgba(255,255,255,.22)" }} />
-        <div style={{ position: "absolute", right: 60, bottom: -90, width: 200, height: 200, borderRadius: "50%", background: "rgba(26,46,31,.06)" }} />
+        <div style={{ position: "absolute", right: -40, top: -60, width: 220, height: 220, borderRadius: "50%", background: "rgba(159,232,112,.10)" }} />
+        <div style={{ position: "absolute", right: 60, bottom: -90, width: 200, height: 200, borderRadius: "50%", background: "rgba(159,232,112,.05)" }} />
 
         <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 20 }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: T.limeText, letterSpacing: "-.1px" }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "rgba(255,255,255,.7)", letterSpacing: "-.1px" }}>
               {greeting}, tres Studio
             </div>
-            <div style={{ fontSize: 12, color: "rgba(26,46,31,.6)", marginTop: 2, marginBottom: 18 }}>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,.5)", marginTop: 2, marginBottom: 18 }}>
               {MONTHS[month]} {year} · posición de caja del mes
             </div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,46,31,.7)", textTransform: "uppercase", letterSpacing: ".09em" }}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,.5)", textTransform: "uppercase", letterSpacing: ".09em" }}>
               Caja del mes
             </div>
-            <div style={{ fontSize: 40, fontWeight: 800, color: T.text, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1.05, marginTop: 4 }}>
+            <div style={{ fontSize: 40, fontWeight: 800, color: "#fff", fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1.05, marginTop: 4 }}>
               {fmtS(fin.caja)}
             </div>
             <div style={{ display: "flex", gap: 18, marginTop: 14 }}>
               <div>
-                <div style={{ fontSize: 11, color: "rgba(26,46,31,.6)", fontWeight: 600 }}>Cobrado</div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.cobr)}</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Cobrado</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.cobr)}</div>
               </div>
-              <div style={{ width: 1, background: "rgba(26,46,31,.14)" }} />
+              <div style={{ width: 1, background: "rgba(255,255,255,.15)" }} />
               <div>
-                <div style={{ fontSize: 11, color: "rgba(26,46,31,.6)", fontWeight: 600 }}>Egresos</div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.tE)}</div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,.5)", fontWeight: 600 }}>Egresos</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.tE)}</div>
               </div>
             </div>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "stretch", minWidth: 150 }}>
             <button onClick={() => onNavigate?.("ingresos")} style={{
-              background: "#FFFFFF", color: T.text, border: "none", borderRadius: 999,
+              background: "rgba(255,255,255,.12)", color: "#fff", border: "1px solid rgba(255,255,255,.2)", borderRadius: 999,
               padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7, fontFamily: "inherit",
             }}>
               <ArrowDownRight size={15} />Ver cobros
             </button>
             <button onClick={() => onNavigate?.("flujo")} style={{
-              background: T.accent, color: "#FFFFFF", border: "none", borderRadius: 999,
+              background: "#9FE870", color: "#062F28", border: "none", borderRadius: 999,
               padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer",
               display: "flex", alignItems: "center", justifyContent: "center", gap: 7, fontFamily: "inherit",
             }}>
@@ -524,7 +524,6 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       )}
 
       {/* ── 2. KPI hero + grid ────────────────────────────────────────── */}
-      {/* Hero: ingresos full-width mobile, 1.4fr desktop */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }} className="kpi-grid">
         <style>{`
           @media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr!important}}
