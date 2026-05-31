@@ -45,6 +45,18 @@ export const T = {
   violetBg: "rgba(124,92,252,.10)",
 }
 
+/* ── Chart palette — cohesive green family (Fynix) ─── */
+export const CHART = {
+  inc:    "#1A2E1F",   /* income — dark forest (bars/lines) */
+  exp:    "#A6E96A",   /* expense — lime (filled bars) */
+  expS:   "#5FB35B",   /* expense stroke on white (contrast) */
+  profit: "#1E9E5A",   /* utility / profit (lines) */
+  acc:    "#8FD94A",   /* lime accent */
+  neg:    "#E5484D",   /* negative / alert only */
+  grid:   "#E8E9E3",
+  scale:  ["#1A2E1F","#2C5638","#3F8A4E","#5FB35B","#8FD94A","#C2E89A"],
+}
+
 export const MONTHS       = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
 export const MONTHS_SHORT = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"]
 export const PAY_METHODS  = ["Transferencia","Efectivo","Tarjeta crédito","Tarjeta débito","Nequi","Daviplata"]

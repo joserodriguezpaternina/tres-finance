@@ -493,7 +493,7 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
       <KpiStrip items={[
         { label: 'Total egresos',      value: total,   accent: T.red,   sub: `${filtered.length} transacciones` },
         { label: 'Promedio por egreso', value: avgAmt, accent: T.amber, sub: 'Por transacción' },
-        { label: topCat ? topCat[0] : 'Sin categoría', value: topCat ? topCat[1] : 0, accent: T.violet, sub: 'Categoría mayor' },
+        { label: topCat ? topCat[0] : 'Sin categoría', value: topCat ? topCat[1] : 0, accent: T.green, sub: 'Categoría mayor' },
       ]} />
 
       {/* ── Table */}
@@ -557,8 +557,8 @@ export function ExpensesView({ expenses, allExpenses, onAdd, onEdit, onDelete })
                             <span title="Generado automáticamente desde Recurrentes" style={{
                               display: 'inline-flex', alignItems: 'center', gap: 3,
                               fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 5,
-                              background: T.violetBg, color: T.violet,
-                              border: `1px solid rgba(124,92,252,.2)`, flexShrink: 0,
+                              background: T.greenBg, color: T.green,
+                              border: `1px solid rgba(30,158,90,.2)`, flexShrink: 0,
                             }}>
                               <RefreshCw size={8} />AUTO
                             </span>

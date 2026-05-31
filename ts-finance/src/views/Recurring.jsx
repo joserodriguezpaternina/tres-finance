@@ -161,7 +161,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                     <div style={{ fontSize: 15, fontWeight: 600, color: T.text }}>{r.name}</div>
                     <div style={{ fontSize: 12, color: T.muted, marginTop: 2 }}>
                       {r.cat}
-                      {expCount > 0 && <span style={{ marginLeft: 8, color: "#7C5CFC", fontWeight: 600 }}>· {expCount} egreso{expCount > 1 ? "s" : ""}</span>}
+                      {expCount > 0 && <span style={{ marginLeft: 8, color: T.green, fontWeight: 600 }}>· {expCount} egreso{expCount > 1 ? "s" : ""}</span>}
                     </div>
                   </div>
                 </div>

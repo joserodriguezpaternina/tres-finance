@@ -10,12 +10,12 @@ import {
   PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { T, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
+import { T, CHART, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
 import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 /* ── Constants ─────────────────────────────────────────────────────────── */
 
-const PIE_COLORS = [T.red, "#F97316", T.amber, T.violet, T.blue, T.green]
+const PIE_COLORS = CHART.scale
 
 const NOW = new Date()
 
@@ -412,8 +412,8 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
   if (expNoCat.length > 3) {
     alerts.push({
       icon: Tag,
-      color: T.violet,
-      bg: T.violetBg,
+      color: T.green,
+      bg: T.greenBg,
       label: `${expNoCat.length} egreso${expNoCat.length > 1 ? "s" : ""} sin categorizar`,
       value: "Revisar egresos",
       nav: "egresos",
@@ -552,7 +552,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           value={fmtS(fin.util)}
           sub={utlTrend ? utlTrend.label : "Sin dato anterior"}
           icon={BarChart2}
-          color={fin.util >= 0 ? T.violet : T.red}
+          color={fin.util >= 0 ? T.green : T.red}
           badge={utlTrend}
           spark={utlSpark}
         />
@@ -588,7 +588,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           {[
             { label: "Ingresos totales", value: fmtS(annualFin.tI), note: `Cobrados: ${fmtS(annualFin.cobr)}`, color: T.green },
             { label: "Egresos totales", value: fmtS(annualFin.tE), color: T.red },
-            { label: "Utilidad acumulada", value: fmtS(annualFin.util), color: annualFin.util >= 0 ? T.violet : T.red },
+            { label: "Utilidad acumulada", value: fmtS(annualFin.util), color: annualFin.util >= 0 ? T.green : T.red },
             { label: "IVA neto DIAN", value: fmtS(Math.abs(annualFin.ivaN)), note: annualFin.ivaN >= 0 ? "A pagar" : "A favor", color: annualFin.ivaN >= 0 ? T.red : T.green },
           ].map(({ label, value, note, color }, i, arr) => (
             <div key={label} style={{
@@ -615,7 +615,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <div style={{ display: "flex", gap: 14 }}>
-              {[["Ingresos", T.green], ["Egresos", T.red], ["Utilidad", T.violet]].map(([l, c]) => (
+              {[["Ingresos", CHART.inc], ["Egresos", CHART.exp], ["Utilidad", CHART.profit]].map(([l, c]) => (
                 <div key={l} style={{ display: "flex", alignItems: "center", gap: 5 }}>
                   <span style={{ width: 8, height: 8, borderRadius: 2, background: c, display: "inline-block" }} />
                   <span style={{ fontSize: 11, color: T.muted, fontWeight: 500 }}>{l}</span>
@@ -657,11 +657,11 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
               tickFormatter={v => fmtS(v)} width={64}
             />
             <Tooltip content={<Tip />} />
-            <Bar dataKey="ingresos" name="Ingresos" fill={T.green} radius={[3, 3, 0, 0]} opacity={0.85} />
-            <Bar dataKey="egresos" name="Egresos" fill={T.red} radius={[3, 3, 0, 0]} opacity={0.85} />
+            <Bar dataKey="ingresos" name="Ingresos" fill={CHART.inc} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="egresos" name="Egresos" fill={CHART.exp} radius={[4, 4, 0, 0]} />
             <Area
               type="monotone" dataKey="utilidad" name="Utilidad"
-              fill="rgba(124,92,252,.08)" stroke={T.violet} strokeWidth={2} dot={false}
+              fill="rgba(30,158,90,.08)" stroke={CHART.profit} strokeWidth={2} dot={false}
             />
           </ComposedChart>
         </ResponsiveContainer>
@@ -750,7 +750,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             {[
               { label: "IVA cobrado", value: fin.tIVAc, color: T.green, icon: TrendingUp },
               { label: "IVA pagado", value: fin.tIVAp, color: T.red, icon: TrendingDown },
-              { label: "IVA neto", value: fin.ivaN, color: fin.ivaN >= 0 ? T.violet : T.green, bold: true, icon: BarChart2 },
+              { label: "IVA neto", value: fin.ivaN, color: fin.ivaN >= 0 ? T.green : T.green, bold: true, icon: BarChart2 },
             ].map(({ label, value, color, bold, icon: Icon }, idx, arr) => (
               <div
                 key={label}
@@ -807,7 +807,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             <Label>Contabilidad</Label>
             <QuickLink label="Ingresos del mes" view="ingresos" icon={TrendingUp} color={T.green} bg={T.greenBg} onNavigate={onNavigate} />
             <QuickLink label="Egresos del mes" view="egresos" icon={TrendingDown} color={T.red} bg={T.redBg} onNavigate={onNavigate} />
-            <QuickLink label="Reportes anuales" view="reportes" icon={BarChart2} color={T.violet} bg={T.violetBg} onNavigate={onNavigate} />
+            <QuickLink label="Reportes anuales" view="reportes" icon={BarChart2} color={T.green} bg={T.greenBg} onNavigate={onNavigate} />
 
             <div style={{ marginTop: 10 }}>
               <Label>Clientes y cobros</Label>

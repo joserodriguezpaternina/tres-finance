@@ -9,7 +9,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, ReferenceLine, Cell
 } from 'recharts'
-import { T, MONTHS, MONTHS_SHORT, fmt, fmtS, calcFin, filterM } from '../constants.js'
+import { T, CHART, MONTHS, MONTHS_SHORT, fmt, fmtS, calcFin, filterM } from '../constants.js'
 import { card, KPI, Tip } from '../ui.jsx'
 
 const TRIMESTRES = [
@@ -67,7 +67,7 @@ function ReportsTab({ allInc, allExp, year }) {
         <KPI title="Ingresos totales" value={fmtS(totals.i)} color={T.green}  icon={TrendingUp}   sub={`${allInc.length} facturas`} />
         <KPI title="Egresos totales"  value={fmtS(totals.e)} color={T.red}    icon={TrendingDown} sub={`${allExp.length} registros`} />
         <KPI title="Utilidad del año" value={fmtS(totals.u)} color={totals.u >= 0 ? T.green : T.red} icon={DollarSign} sub="Base gravable" />
-        <KPI title="Margen operativo" value={`${marginAnual.toFixed(1)}%`} color={T.violet} icon={BarChart2} sub="Rentabilidad anual" />
+        <KPI title="Margen operativo" value={`${marginAnual.toFixed(1)}%`} color={T.green} icon={BarChart2} sub="Rentabilidad anual" />
       </div>
 
       <div style={card}>
@@ -91,9 +91,9 @@ function ReportsTab({ allInc, allExp, year }) {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {[
-                    { label: "Ingresos", value: t.inc,  color: active ? "#4ade80" : T.green },
+                    { label: "Ingresos", value: t.inc,  color: active ? "#A6E96A" : T.green },
                     { label: "Egresos",  value: t.exp,  color: active ? "#f87171" : T.red },
-                    { label: "Utilidad", value: t.util, color: active ? (t.util >= 0 ? "#a78bfa" : "#f87171") : (t.util >= 0 ? T.violet : T.red) },
+                    { label: "Utilidad", value: t.util, color: active ? (t.util >= 0 ? "#8FD94A" : "#f87171") : (t.util >= 0 ? T.green : T.red) },
                   ].map(({ label, value, color }) => (
                     <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontSize: 11, color: active ? "rgba(255,255,255,.5)" : T.muted }}>{label}</span>
@@ -104,7 +104,7 @@ function ReportsTab({ allInc, allExp, year }) {
                 {t.inc > 0 && (
                   <div style={{ marginTop: 12 }}>
                     <div style={{ height: 3, borderRadius: 99, background: active ? "rgba(255,255,255,.15)" : T.border }}>
-                      <div style={{ height: "100%", borderRadius: 99, width: `${Math.min(100, Math.max(0, margin))}%`, background: active ? "#a78bfa" : T.violet, transition: "width .4s" }} />
+                      <div style={{ height: "100%", borderRadius: 99, width: `${Math.min(100, Math.max(0, margin))}%`, background: active ? "#8FD94A" : T.green, transition: "width .4s" }} />
                     </div>
                     <div style={{ fontSize: 10, color: active ? "rgba(255,255,255,.4)" : T.muted, marginTop: 4 }}>{margin.toFixed(1)}% margen</div>
                   </div>
@@ -125,7 +125,7 @@ function ReportsTab({ allInc, allExp, year }) {
           </div>
           <div style={{ display: "flex", gap: 24 }}>
             {[
-              { label: "IVA cobrado", value: totals.ivaC, color: "#4ade80" },
+              { label: "IVA cobrado", value: totals.ivaC, color: "#A6E96A" },
               { label: "IVA pagado",  value: totals.ivaP, color: "#f87171" },
             ].map(({ label, value, color }) => (
               <div key={label}>
@@ -143,7 +143,7 @@ function ReportsTab({ allInc, allExp, year }) {
                 {t.ivaN > 0 && <AlertCircle size={13} color="#f87171" />}
               </div>
               <div style={{ fontSize: 17, fontWeight: 700, fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px",
-                color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#4ade80" : "rgba(255,255,255,.3)"
+                color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#A6E96A" : "rgba(255,255,255,.3)"
               }}>
                 {t.ivaN !== 0 ? fmt(Math.abs(t.ivaN)) : "—"}
               </div>
@@ -166,10 +166,10 @@ function ReportsTab({ allInc, allExp, year }) {
             <BarChart data={data} barGap={4} barSize={14}>
               <defs>
                 <linearGradient id="rGreen" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.green} stopOpacity={1}/><stop offset="100%" stopColor={T.green} stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor={CHART.inc} stopOpacity={1}/><stop offset="100%" stopColor={CHART.inc} stopOpacity={0.55}/>
                 </linearGradient>
                 <linearGradient id="rRed" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.red} stopOpacity={1}/><stop offset="100%" stopColor={T.red} stopOpacity={0.3}/>
+                  <stop offset="0%" stopColor={CHART.exp} stopOpacity={1}/><stop offset="100%" stopColor={CHART.exp} stopOpacity={0.45}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -187,7 +187,7 @@ function ReportsTab({ allInc, allExp, year }) {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="rUtil" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="100%" stopColor={T.violet} stopOpacity={0}/>
+                  <stop offset="0%" stopColor={T.green} stopOpacity={0.2}/><stop offset="100%" stopColor={T.green} stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -195,7 +195,7 @@ function ReportsTab({ allInc, allExp, year }) {
               <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={62}/>
               <Tooltip content={<Tip />}/>
               <ReferenceLine y={0} stroke={T.border} strokeDasharray="3 3"/>
-              <Area type="monotone" dataKey="utilidad" name="Utilidad" stroke={T.violet} strokeWidth={2.5} fill="url(#rUtil)" dot={{ r: 3, fill: T.violet, strokeWidth: 0 }} activeDot={{ r: 5 }}/>
+              <Area type="monotone" dataKey="utilidad" name="Utilidad" stroke={T.green} strokeWidth={2.5} fill="url(#rUtil)" dot={{ r: 3, fill: T.green, strokeWidth: 0 }} activeDot={{ r: 5 }}/>
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -328,10 +328,10 @@ function CashFlowTab({ allInc, allExp, year }) {
           <BarChart data={data} barGap={4} barSize={14}>
             <defs>
               <linearGradient id="cfG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={T.green} stopOpacity={1}/><stop offset="100%" stopColor={T.green} stopOpacity={0.3}/>
+                <stop offset="0%" stopColor={CHART.inc} stopOpacity={1}/><stop offset="100%" stopColor={CHART.inc} stopOpacity={0.55}/>
               </linearGradient>
               <linearGradient id="cfR" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={T.red} stopOpacity={1}/><stop offset="100%" stopColor={T.red} stopOpacity={0.3}/>
+                <stop offset="0%" stopColor={CHART.exp} stopOpacity={1}/><stop offset="100%" stopColor={CHART.exp} stopOpacity={0.45}/>
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
@@ -438,9 +438,9 @@ function AccountingTab({ allInc, allExp, year, month }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div className="g3">
-        <SparkCard title="Total facturas de compra" sub="Egresos totales del año"  value={fmtS(totalExp)} trend="+7%" trendUp={true}          sparkData={expSpark} sparkColor={T.red}    />
-        <SparkCard title="Total pagos recibidos"    sub="Ingresos totales del año" value={fmtS(totalInc)} trend="+7%" trendUp={true}           sparkData={incSpark} sparkColor={T.green}  />
-        <SparkCard title="Utilidad total del año"   sub="Margen operativo neto"    value={fmtS(totalPro)} trend="+4%" trendUp={totalPro >= 0}   sparkData={utlSpark} sparkColor={T.violet} />
+        <SparkCard title="Total facturas de compra" sub="Egresos totales del año"  value={fmtS(totalExp)} trend="+7%" trendUp={true}          sparkData={expSpark} sparkColor={CHART.expS} />
+        <SparkCard title="Total pagos recibidos"    sub="Ingresos totales del año" value={fmtS(totalInc)} trend="+7%" trendUp={true}           sparkData={incSpark} sparkColor={CHART.inc}  />
+        <SparkCard title="Utilidad total del año"   sub="Margen operativo neto"    value={fmtS(totalPro)} trend="+4%" trendUp={totalPro >= 0}   sparkData={utlSpark} sparkColor={CHART.profit} />
       </div>
 
       <div style={card}>
@@ -449,9 +449,9 @@ function AccountingTab({ allInc, allExp, year, month }) {
             <div style={{ fontSize: 14, fontWeight: 700, color: T.text }}>Analítica total</div>
             <div style={{ display: "flex", gap: 20, marginTop: 8 }}>
               {[
-                { label: fmtS(totalInc), color: T.green },
-                { label: fmtS(totalExp), color: T.blue },
-                { label: fmtS(totalPro), color: T.violet },
+                { label: fmtS(totalInc), color: CHART.inc },
+                { label: fmtS(totalExp), color: CHART.expS },
+                { label: fmtS(totalPro), color: CHART.profit },
               ].map(({ label, color }, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <span style={{ width: 10, height: 10, borderRadius: 3, background: color, display: "inline-block" }} />
@@ -477,22 +477,22 @@ function AccountingTab({ allInc, allExp, year, month }) {
           <AreaChart data={monthlyData}>
             <defs>
               <linearGradient id="aInc" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={T.green} stopOpacity={0.15}/><stop offset="95%" stopColor={T.green} stopOpacity={0}/>
+                <stop offset="5%" stopColor={CHART.inc} stopOpacity={0.18}/><stop offset="95%" stopColor={CHART.inc} stopOpacity={0}/>
               </linearGradient>
               <linearGradient id="aExp" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={T.blue} stopOpacity={0.15}/><stop offset="95%" stopColor={T.blue} stopOpacity={0}/>
+                <stop offset="5%" stopColor={CHART.expS} stopOpacity={0.15}/><stop offset="95%" stopColor={CHART.expS} stopOpacity={0}/>
               </linearGradient>
               <linearGradient id="aUtl" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={T.violet} stopOpacity={0.15}/><stop offset="95%" stopColor={T.violet} stopOpacity={0}/>
+                <stop offset="5%" stopColor={CHART.acc} stopOpacity={0.15}/><stop offset="95%" stopColor={CHART.acc} stopOpacity={0}/>
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false} />
             <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={60} />
             <Tooltip content={<Tip />} />
-            <Area type="monotone" dataKey="ingresos" name="Ingresos" stroke={T.green}  fill="url(#aInc)" strokeWidth={2} dot={false} />
-            <Area type="monotone" dataKey="egresos"  name="Egresos"  stroke={T.blue}   fill="url(#aExp)" strokeWidth={2} dot={false} />
-            <Area type="monotone" dataKey="utilidad" name="Utilidad" stroke={T.violet} fill="url(#aUtl)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="ingresos" name="Ingresos" stroke={CHART.inc}   fill="url(#aInc)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="egresos"  name="Egresos"  stroke={CHART.expS}  fill="url(#aExp)" strokeWidth={2} dot={false} />
+            <Area type="monotone" dataKey="utilidad" name="Utilidad" stroke={CHART.acc}   fill="url(#aUtl)" strokeWidth={2} dot={false} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -505,15 +505,15 @@ function AccountingTab({ allInc, allExp, year, month }) {
             <AreaChart data={last6Inc}>
               <defs>
                 <linearGradient id="aInc2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="95%" stopColor={T.violet} stopOpacity={0}/>
+                  <stop offset="5%" stopColor={T.green} stopOpacity={0.2}/><stop offset="95%" stopColor={T.green} stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={56} />
               <Tooltip content={<Tip />} />
-              <Area type="monotone" dataKey="egresos" name="Egresos" stroke={T.red}    fill="url(#aInc2)" strokeWidth={2} dot={false} />
-              <Area type="monotone" dataKey="cobrado" name="Cobrado" stroke={T.violet} fill="transparent" strokeWidth={2} strokeDasharray="4 2" dot={false} />
+              <Area type="monotone" dataKey="egresos" name="Egresos" stroke={CHART.expS}    fill="url(#aInc2)" strokeWidth={2} dot={false} />
+              <Area type="monotone" dataKey="cobrado" name="Cobrado" stroke={CHART.inc} fill="transparent" strokeWidth={2} strokeDasharray="4 2" dot={false} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -526,8 +526,8 @@ function AccountingTab({ allInc, allExp, year, month }) {
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={56} />
               <Tooltip content={<Tip />} />
-              <Bar dataKey="ingresos" name="Ingresos" fill={T.violet} radius={[3,3,0,0]} opacity={0.5} />
-              <Bar dataKey="cobrado"  name="Cobrado"  fill={T.violet} radius={[3,3,0,0]} />
+              <Bar dataKey="ingresos" name="Ingresos" fill={T.green} radius={[3,3,0,0]} opacity={0.5} />
+              <Bar dataKey="cobrado"  name="Cobrado"  fill={T.green} radius={[3,3,0,0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -617,7 +617,7 @@ function ProvisionTab({ allInc, allExp, year }) {
       {/* KPIs */}
       <div className="g3">
         {[
-          { title: "Total a apartar en el año", value: fmtS(totalProv), sub: `Al ${effectiveRate}% sobre utilidades`, color: T.violet, icon: PiggyBank },
+          { title: "Total a apartar en el año", value: fmtS(totalProv), sub: `Al ${effectiveRate}% sobre utilidades`, color: T.green, icon: PiggyBank },
           { title: "Utilidad gravable acumulada", value: fmtS(totalUtil), sub: "Solo meses con utilidad positiva", color: T.green, icon: TrendingUp },
           { title: "Promedio mensual a apartar", value: fmtS(promMensual), sub: `En ${provMes} meses con utilidad`, color: T.amber, icon: Calendar },
         ].map(({ title, value, sub, color, icon: Icon }) => (
@@ -632,18 +632,18 @@ function ProvisionTab({ allInc, allExp, year }) {
           <AreaChart data={data}>
             <defs>
               <linearGradient id="pAcum" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={T.violet} stopOpacity={0.2}/><stop offset="100%" stopColor={T.violet} stopOpacity={0}/>
+                <stop offset="0%" stopColor={T.green} stopOpacity={0.2}/><stop offset="100%" stopColor={T.green} stopOpacity={0}/>
               </linearGradient>
               <linearGradient id="pProv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={T.amber} stopOpacity={0.15}/><stop offset="100%" stopColor={T.amber} stopOpacity={0}/>
+                <stop offset="0%" stopColor={CHART.acc} stopOpacity={0.18}/><stop offset="100%" stopColor={CHART.acc} stopOpacity={0}/>
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="2 4" stroke={T.border} vertical={false}/>
             <XAxis dataKey="name" tick={{ fontSize: 11, fill: T.muted }} axisLine={false} tickLine={false}/>
             <YAxis tick={{ fontSize: 10, fill: T.muted, fontFamily: "'DM Mono',monospace" }} axisLine={false} tickLine={false} tickFormatter={v => fmtS(v)} width={66}/>
             <Tooltip content={<Tip />}/>
-            <Area type="monotone" dataKey="acumulado" name="Acumulado"  stroke={T.violet} strokeWidth={2.5} fill="url(#pAcum)" dot={{ r: 3, fill: T.violet, strokeWidth: 0 }} activeDot={{ r: 5 }}/>
-            <Area type="monotone" dataKey="provision" name="Este mes"   stroke={T.amber}  strokeWidth={1.5} fill="url(#pProv)" dot={false} strokeDasharray="4 2"/>
+            <Area type="monotone" dataKey="acumulado" name="Acumulado"  stroke={CHART.inc} strokeWidth={2.5} fill="url(#pAcum)" dot={{ r: 3, fill: CHART.inc, strokeWidth: 0 }} activeDot={{ r: 5 }}/>
+            <Area type="monotone" dataKey="provision" name="Este mes"   stroke={CHART.acc}  strokeWidth={1.5} fill="url(#pProv)" dot={false} strokeDasharray="4 2"/>
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -663,14 +663,14 @@ function ProvisionTab({ allInc, allExp, year }) {
             {data.map((d, i) => {
               const empty = d.ingresos === 0 && d.egresos === 0
               return (
-                <tr key={i} style={{ borderBottom: `1px solid ${T.border}`, background: d.provision > 0 ? T.violetBg : "transparent" }}>
+                <tr key={i} style={{ borderBottom: `1px solid ${T.border}`, background: d.provision > 0 ? T.greenBg : "transparent" }}>
                   <td style={{ padding: "13px 16px 13px 0", fontSize: 13, fontWeight: 600, color: empty ? T.muted : T.text }}>{MONTHS[i]}</td>
                   <td style={{ padding: "13px 16px 13px 0", fontSize: 12, color: T.green,  fontFamily: "'DM Mono',monospace" }}>{d.ingresos > 0 ? fmtS(d.ingresos) : "—"}</td>
                   <td style={{ padding: "13px 16px 13px 0", fontSize: 12, color: T.red,    fontFamily: "'DM Mono',monospace" }}>{d.egresos  > 0 ? fmtS(d.egresos)  : "—"}</td>
                   <td style={{ padding: "13px 16px 13px 0", fontSize: 13, fontWeight: 600, color: d.utilidad >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{empty ? "—" : fmtS(d.utilidad)}</td>
                   <td style={{ padding: "13px 16px 13px 0" }}>
                     {d.provision > 0 ? (
-                      <span style={{ fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace" }}>{fmtS(d.provision)}</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: T.green, fontFamily: "'DM Mono',monospace" }}>{fmtS(d.provision)}</span>
                     ) : (
                       <span style={{ fontSize: 11, color: T.muted }}>
                         {d.utilidad < 0 ? "Pérdida" : "—"}
@@ -687,7 +687,7 @@ function ProvisionTab({ allInc, allExp, year }) {
               <td style={{ padding: "13px 16px 4px 0", fontSize: 12, fontWeight: 700, color: T.muted, textTransform: "uppercase" }}>Total</td>
               <td colSpan={2} />
               <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: totalUtil >= 0 ? T.green : T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(totalUtil)}</td>
-              <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace" }}>{fmtS(totalProv)}</td>
+              <td style={{ padding: "13px 16px 4px 0", fontSize: 13, fontWeight: 700, color: T.green, fontFamily: "'DM Mono',monospace" }}>{fmtS(totalProv)}</td>
               <td />
             </tr>
           </tfoot>
@@ -708,11 +708,11 @@ function ProvisionTab({ allInc, allExp, year }) {
                       <span style={{ fontSize: 13, fontWeight: 600, color: T.text, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</span>
                       <div style={{ display: "flex", gap: 16, alignItems: "center", flexShrink: 0 }}>
                         <span style={{ fontSize: 11, color: T.muted, fontFamily: "'DM Mono',monospace" }}>{fmtS(total)}</span>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: T.violet, fontFamily: "'DM Mono',monospace", minWidth: 80, textAlign: "right" }}>{fmtS(provision)}</span>
+                        <span style={{ fontSize: 13, fontWeight: 700, color: T.green, fontFamily: "'DM Mono',monospace", minWidth: 80, textAlign: "right" }}>{fmtS(provision)}</span>
                       </div>
                     </div>
                     <div style={{ height: 5, borderRadius: 99, background: T.border, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${Math.min(100, pct)}%`, borderRadius: 99, background: T.violet, opacity: 0.7, transition: "width .4s" }} />
+                      <div style={{ height: "100%", width: `${Math.min(100, pct)}%`, borderRadius: 99, background: T.green, opacity: 0.7, transition: "width .4s" }} />
                     </div>
                   </div>
                 </div>
