@@ -5,21 +5,21 @@ import { LineChart, Line, ResponsiveContainer } from 'recharts'
 /* ── Card styles ── */
 export const card = {
   background: "#FFFFFF",
-  borderRadius: 16,
-  border: "1px solid #E5E2E1",
-  padding: "20px 24px",
-  boxShadow: "none",
+  borderRadius: 20,
+  border: "1px solid #EDEEE8",
+  padding: "22px 24px",
+  boxShadow: "0 1px 3px rgba(16,26,16,.04)",
 }
 export const cardFlat = {
-  background: "#F3F3F3",
-  borderRadius: 12,
-  border: "1px solid #E5E2E1",
+  background: T.surf2,
+  borderRadius: 14,
+  border: `1px solid ${T.border}`,
   padding: "12px 16px",
 }
 
 /* ── Form primitives ── */
 export const inp = {
-  width:"100%", padding:"10px 14px", borderRadius:12,
+  width:"100%", padding:"11px 14px", borderRadius:12,
   border:`1px solid ${T.border}`, fontSize:14, color:T.text,
   outline:"none", background:"#FFFFFF", boxSizing:"border-box",
   fontFamily:"inherit", transition:"border-color .15s, box-shadow .15s",
@@ -31,39 +31,42 @@ export const lbl = {
 
 /* ── Buttons ── */
 export const btnPrimary = {
-  background: "#000000", color: "#FFFFFF", border: "none",
-  borderRadius: 999, padding: "8px 20px", fontSize: 13,
+  background: T.accent, color: "#FFFFFF", border: "none",
+  borderRadius: 999, padding: "10px 20px", fontSize: 13,
   fontWeight: 600, cursor: "pointer", display: "flex",
   alignItems: "center", gap: 6, fontFamily: "inherit",
 }
-export const btnGreen = { ...btnPrimary, background: "#10B981" }
+/* income / primary CTA = dark forest green pill */
+export const btnGreen = { ...btnPrimary }
+/* lime accent pill — dark text on lime */
+export const btnLime = { ...btnPrimary, background: T.lime, color: T.limeText }
 export const btnRed = {
-  ...btnPrimary, background: "#FFFFFF", color: "#BA1A1A",
-  border: "1px solid #E5E2E1",
+  ...btnPrimary, background: "#FFFFFF", color: T.red,
+  border: `1px solid ${T.border}`,
 }
 export const btnGhost = {
-  ...btnPrimary, background: "#FFFFFF", color: "#4C4546",
-  border: "1px solid #E5E2E1",
+  ...btnPrimary, background: "#FFFFFF", color: T.subtle,
+  border: `1px solid ${T.border}`,
 }
-export const btnSmall = { ...btnPrimary, padding: "5px 14px", fontSize: 12 }
+export const btnSmall = { ...btnPrimary, padding: "6px 14px", fontSize: 12 }
 
 /* ── Semantic color themes ── */
 const THEME = {
-  green:   { bg:T.greenBg,   accent:T.green,   light:"rgba(16,185,129,.18)"  },
-  red:     { bg:T.redBg,     accent:T.red,     light:"rgba(186,26,26,.18)"   },
-  amber:   { bg:T.amberBg,   accent:T.amber,   light:"rgba(245,158,11,.18)"  },
-  blue:    { bg:T.blueBg,    accent:T.blue,    light:"rgba(37,99,235,.18)"   },
-  violet:  { bg:T.violetBg,  accent:T.violet,  light:"rgba(124,58,237,.18)"  },
+  green:   { bg:T.greenBg,   accent:T.green,   light:T.greenBg2  },
+  red:     { bg:T.redBg,     accent:T.red,     light:T.redBg2    },
+  amber:   { bg:T.amberBg,   accent:T.amber,   light:"rgba(224,160,48,.20)"  },
+  blue:    { bg:T.blueBg,    accent:T.blue,    light:"rgba(59,130,246,.18)"  },
+  violet:  { bg:T.violetBg,  accent:T.violet,  light:"rgba(124,92,252,.18)"  },
   default: { bg:T.surf2, accent:T.muted, light:T.surf3 },
 }
 function getTheme(color) {
   if (!color) return THEME.default
-  const c = color.toString()
-  if (c.includes("10B981")||c.includes("059669")||c.includes("16A34A")||c.includes("15803D")) return THEME.green
-  if (c.includes("BA1A1A")||c.includes("C2410C")||c.includes("EA580C")||c.includes("DC2626")) return THEME.red
-  if (c.includes("F59E0B")||c.includes("D97706")) return THEME.amber
-  if (c.includes("2563EB")||c.includes("3B82F6")) return THEME.blue
-  if (c.includes("7C3AED")||c.includes("8B5CF6")) return THEME.violet
+  const c = color.toString().toUpperCase()
+  if (c.includes("1E9E5A")||c.includes("157A45")||c.includes("10B981")||c.includes("16A34A")) return THEME.green
+  if (c.includes("E5484D")||c.includes("C53438")||c.includes("BA1A1A")||c.includes("DC2626")) return THEME.red
+  if (c.includes("E0A030")||c.includes("F59E0B")||c.includes("D97706")) return THEME.amber
+  if (c.includes("3B82F6")||c.includes("2563EB")) return THEME.blue
+  if (c.includes("7C5CFC")||c.includes("7C3AED")||c.includes("8B5CF6")) return THEME.violet
   return THEME.default
 }
 
@@ -74,8 +77,8 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
     const th = getTheme(color || T.green)
     return (
       <div style={{
-        background: "#FFFFFF", borderRadius: 16, padding: "22px 24px",
-        border: "1px solid #E5E2E1",
+        background: "#FFFFFF", borderRadius: 20, padding: "22px 24px",
+        border: "1px solid #EDEEE8", boxShadow: "0 1px 3px rgba(16,26,16,.04)",
         display:"flex", flexDirection:"column",
       }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16, gap:8 }}>
@@ -148,10 +151,10 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
 /* ── Pill status component ── */
 export function Pill({ s }) {
   const m = {
-    Pagado:    { bg:"rgba(16,185,129,.1)",  c:"#10B981" },
-    Pendiente: { bg:"rgba(245,158,11,.1)",  c:"#F59E0B" },
-    Parcial:   { bg:"rgba(37,99,235,.1)",   c:"#2563EB" },
-    Vencida:   { bg:"rgba(186,26,26,.1)",   c:"#BA1A1A" },
+    Pagado:    { bg:T.greenBg,  c:T.green },
+    Pendiente: { bg:T.amberBg,  c:T.amber },
+    Parcial:   { bg:T.blueBg,   c:T.blue  },
+    Vencida:   { bg:T.redBg,    c:T.red   },
   }
   const st = m[s]||m.Pendiente
   return (
@@ -165,7 +168,7 @@ export function Pill({ s }) {
 /* ── Status bar ── */
 export function StatusBar({ items }) {
   return (
-    <div style={{ display:"flex", background:"#FFFFFF", border:`1px solid ${T.border}`, borderRadius:16, overflow:"hidden" }}>
+    <div style={{ display:"flex", background:"#FFFFFF", border:`1px solid ${T.border}`, borderRadius:20, overflow:"hidden", boxShadow:"0 1px 3px rgba(16,26,16,.04)" }}>
       {items.map(({ label, value, color, bg }, i) => (
         <div key={label} style={{ flex:1, padding:"18px 24px", borderRight:i<items.length-1?`1px solid ${T.border}`:"none", background:bg||"#FFFFFF" }}>
           <div style={{ fontSize:11, fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".07em", marginBottom:8 }}>{label}</div>

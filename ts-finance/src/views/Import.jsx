@@ -128,7 +128,7 @@ export default function ImportView({ onImported }) {
     return true
   })
 
-  const card = { background:T.surf, border:`1px solid ${T.border}`, borderRadius:12, padding:'20px' }
+  const card = { background:T.surf, border:`1px solid ${T.border}`, borderRadius:18, padding:'20px', boxShadow:'0 1px 3px rgba(16,26,16,.04)' }
 
   if (step === 'upload') return (
     <div style={{ maxWidth:600, margin:'0 auto' }}>
@@ -190,7 +190,7 @@ export default function ImportView({ onImported }) {
         ))}
         <div style={{ flex:1 }} />
         <button onClick={()=>setStep('upload')} style={{ fontSize:12, padding:'6px 14px', borderRadius:8, border:`1px solid ${T.border}`, background:'transparent', color:T.muted, cursor:'pointer' }}>← Volver</button>
-        <button onClick={importar} style={{ fontSize:12, padding:'6px 18px', borderRadius:8, border:'none', background:T.green, color:'#000', fontWeight:700, cursor:'pointer' }}>
+        <button onClick={importar} style={{ fontSize:12, padding:'8px 18px', borderRadius:999, border:'none', background:T.accent, color:'#fff', fontWeight:700, cursor:'pointer' }}>
           Importar {active.length} transacciones →
         </button>
       </div>

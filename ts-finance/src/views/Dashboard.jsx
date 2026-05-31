@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   TrendingUp, TrendingDown, Clock, AlertCircle,
-  ArrowUpRight, CheckCircle2, Tag, ChevronRight,
+  ArrowUpRight, ArrowDownRight, CheckCircle2, Tag, ChevronRight,
   FileText, BarChart2, Wallet, Users, Circle,
   ArrowRight, Building2, Receipt, AlertTriangle,
 } from 'lucide-react'
@@ -10,7 +10,7 @@ import {
   PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { T, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
+import { T, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../constants.js'
 import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 /* ── Constants ─────────────────────────────────────────────────────────── */
@@ -32,7 +32,7 @@ function trendBadge(p, invertColors = false) {
   const positive = invertColors ? !up : up
   return {
     label: `${up ? "▲" : "▼"} ${Math.abs(p)}% vs mes ant.`,
-    bg: positive ? "rgba(68,178,107,.1)" : "rgba(215,43,32,.1)",
+    bg: positive ? T.greenBg : T.redBg,
     color: positive ? T.green : T.red,
   }
 }
@@ -436,13 +436,60 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-      {/* ── 0. Saludo editorial ────────────────────────────────────────── */}
-      <div style={{ paddingBottom: 4 }}>
-        <div style={{ fontSize: 22, fontWeight: 700, color: "#1C1C1A", letterSpacing: "-.3px", lineHeight: 1.2 }}>
-          {greeting}, tres Studio
-        </div>
-        <div style={{ fontSize: 13, color: "#6B6966", marginTop: 5 }}>
-          Mayo 2026 · Resumen financiero
+      {/* ── 0. Hero balance card (Fynix) ───────────────────────────────── */}
+      <div style={{
+        position: "relative", overflow: "hidden",
+        borderRadius: 24, padding: "26px 28px",
+        background: "linear-gradient(135deg, #B6EF7A 0%, #93E04E 55%, #7FD63C 100%)",
+        border: "1px solid rgba(26,46,31,.08)",
+      }}>
+        {/* decorative swirls */}
+        <div style={{ position: "absolute", right: -40, top: -60, width: 220, height: 220, borderRadius: "50%", background: "rgba(255,255,255,.22)" }} />
+        <div style={{ position: "absolute", right: 60, bottom: -90, width: 200, height: 200, borderRadius: "50%", background: "rgba(26,46,31,.06)" }} />
+
+        <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 20 }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: T.limeText, letterSpacing: "-.1px" }}>
+              {greeting}, tres Studio
+            </div>
+            <div style={{ fontSize: 12, color: "rgba(26,46,31,.6)", marginTop: 2, marginBottom: 18 }}>
+              {MONTHS[month]} {year} · posición de caja del mes
+            </div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(26,46,31,.7)", textTransform: "uppercase", letterSpacing: ".09em" }}>
+              Caja del mes
+            </div>
+            <div style={{ fontSize: 40, fontWeight: 800, color: T.text, fontFamily: "'DM Mono',monospace", letterSpacing: "-1.5px", lineHeight: 1.05, marginTop: 4 }}>
+              {fmtS(fin.caja)}
+            </div>
+            <div style={{ display: "flex", gap: 18, marginTop: 14 }}>
+              <div>
+                <div style={{ fontSize: 11, color: "rgba(26,46,31,.6)", fontWeight: 600 }}>Cobrado</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.cobr)}</div>
+              </div>
+              <div style={{ width: 1, background: "rgba(26,46,31,.14)" }} />
+              <div>
+                <div style={{ fontSize: 11, color: "rgba(26,46,31,.6)", fontWeight: 600 }}>Egresos</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: T.text, fontFamily: "'DM Mono',monospace" }}>{fmtS(fin.tE)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "stretch", minWidth: 150 }}>
+            <button onClick={() => onNavigate?.("ingresos")} style={{
+              background: "#FFFFFF", color: T.text, border: "none", borderRadius: 999,
+              padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 7, fontFamily: "inherit",
+            }}>
+              <ArrowDownRight size={15} />Ver cobros
+            </button>
+            <button onClick={() => onNavigate?.("flujo")} style={{
+              background: T.accent, color: "#FFFFFF", border: "none", borderRadius: 999,
+              padding: "11px 22px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 7, fontFamily: "inherit",
+            }}>
+              <ArrowUpRight size={15} />Flujo de caja
+            </button>
+          </div>
         </div>
       </div>
 
@@ -478,14 +525,12 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 2. KPI hero + grid ────────────────────────────────────────── */}
       {/* Hero: ingresos full-width mobile, 1.4fr desktop */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1fr", gap: 16 }} className="kpi-grid">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }} className="kpi-grid">
         <style>{`
           @media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr!important}}
           @media(max-width:768px){.kpi-grid{grid-template-columns:1fr!important}}
-          @media(max-width:768px){.kpi-grid>*:first-child{grid-column:1/-1}}
         `}</style>
         <KPI
-          hero
           title="Ingresos del mes"
           value={fmtS(fin.tI)}
           sub={incTrend ? incTrend.label : "Sin dato anterior"}
@@ -522,15 +567,15 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12,
+        background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 12,
         padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
         boxShadow: "0 1px 2px rgba(0,0,0,.05)",
       }}>
         <div style={{
-          background: "#EFEFED",
+          background: "#F4F5F1",
           display: "flex", flexDirection: "column", justifyContent: "center",
           padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 130,
-          borderRight: "1px solid #E8E6E2",
+          borderRight: "1px solid #E8E9E3",
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".09em" }}>
             Acumulado
@@ -557,7 +602,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #E8E6E2", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,
@@ -616,7 +661,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             <Bar dataKey="egresos" name="Egresos" fill={T.red} radius={[3, 3, 0, 0]} opacity={0.85} />
             <Area
               type="monotone" dataKey="utilidad" name="Utilidad"
-              fill="rgba(90,62,231,.07)" stroke={T.violet} strokeWidth={2} dot={false}
+              fill="rgba(124,92,252,.08)" stroke={T.violet} strokeWidth={2} dot={false}
             />
           </ComposedChart>
         </ResponsiveContainer>
@@ -734,8 +779,8 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
           <div style={{
             marginTop: 18, padding: "16px 16px", borderRadius: 12,
-            background: fin.ivaN >= 0 ? "rgba(215,43,32,.06)" : "rgba(68,178,107,.06)",
-            border: `1px solid ${fin.ivaN >= 0 ? "rgba(215,43,32,.18)" : "rgba(68,178,107,.18)"}`,
+            background: fin.ivaN >= 0 ? T.redBg : T.greenBg,
+            border: `1px solid ${fin.ivaN >= 0 ? "rgba(229,72,77,.2)" : "rgba(30,158,90,.2)"}`,
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
               <Building2 size={12} color={fin.ivaN >= 0 ? T.red : T.green} />

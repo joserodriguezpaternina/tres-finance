@@ -2,7 +2,8 @@ import { useState, useEffect, useMemo } from 'react'
 import {
   LayoutDashboard, TrendingUp, TrendingDown, BarChart2,
   RefreshCw, Plus, ChevronLeft, ChevronRight,
-  Bell, Menu, FileSpreadsheet, FileText, Users, X
+  Bell, Menu, FileSpreadsheet, FileText, Users, X,
+  Leaf, ChevronDown, Settings, HelpCircle, Search
 } from 'lucide-react'
 import { T, MONTHS, calcFin, filterM, uid } from './constants.js'
 import { hasSupabase } from './supabase.js'
@@ -172,38 +173,34 @@ export default function App() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Light.otf') format('opentype');font-weight:300;font-display:swap}
-        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Regular.otf') format('opentype');font-weight:400;font-display:swap}
-        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Medium.otf') format('opentype');font-weight:500;font-display:swap}
-        @font-face{font-family:'AcidGrotesk';src:url('/fonts/AcidGrotesk-Bold.otf') format('opentype');font-weight:700;font-display:swap}
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body,#root{height:100%;font-family:'Manrope','AcidGrotesk','Inter',sans-serif;background:#F9F9F9;color:#1B1B1B;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-        ::-webkit-scrollbar{width:4px;height:4px}
+        html,body,#root{height:100%;font-family:'Plus Jakarta Sans','Inter',sans-serif;background:#EEEFEA;color:#161A12;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+        ::-webkit-scrollbar{width:5px;height:5px}
         ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:#CFC4C5;border-radius:10px}
-        input,select{background:#FFFFFF;color:#1B1B1B;font-family:'Manrope','AcidGrotesk',sans-serif;border:1px solid #E5E2E1;border-radius:12px}
-        input:focus,select:focus{border-color:#000000!important;outline:none;box-shadow:0 0 0 3px rgba(0,0,0,.06)!important}
-        button{transition:opacity .15s;font-family:'Manrope','AcidGrotesk',sans-serif}
-        button:hover{opacity:.8}
-        ::placeholder{color:#7E7576}
+        ::-webkit-scrollbar-thumb{background:#D6D7D0;border-radius:10px}
+        input,select{background:#FFFFFF;color:#161A12;font-family:'Plus Jakarta Sans',sans-serif;border:1px solid #E8E9E3;border-radius:12px}
+        input:focus,select:focus{border-color:#1A2E1F!important;outline:none;box-shadow:0 0 0 3px rgba(26,46,31,.08)!important}
+        button{transition:opacity .15s;font-family:'Plus Jakarta Sans',sans-serif}
+        button:hover{opacity:.85}
+        ::placeholder{color:#8A8C82}
         @keyframes spin{to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
         @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         /* ─── Layout ─── */
-        .app-layout{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:240px;background:#F9F9F9;border-right:1px solid #E5E2E1;display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+        .app-layout{display:flex;height:100vh;overflow:hidden;background:#EEEFEA}
+        .sidebar{width:248px;background:#FBFBFA;border-right:1px solid #E8E9E3;display:flex;flex-direction:column;flex-shrink:0;z-index:100;transition:transform .28s cubic-bezier(.4,0,.2,1)}
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:99}
         .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-        .topbar{background:rgba(249,249,249,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #E5E2E1;padding:0 32px;height:64px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .topbar{background:rgba(238,239,234,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #E8E9E3;padding:0 28px;height:68px;display:flex;align-items:center;gap:10px;flex-shrink:0}
         .hactions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .menuBtn{display:none!important}
         .topbar-row2{display:none}
         .btnText{}
-        /* ─── Nav: Stitch black pill ─── */
-        .nav-item{border-radius:999px;color:#5C5F60;transition:background .15s,color .15s}
-        .nav-item:hover{background:#EEEEEE!important;color:#1B1B1B!important}
-        .nav-item-active{background:#1B1B1B!important;color:#FFFFFF!important;font-weight:600!important;border-radius:999px!important;border:none!important}
+        /* ─── Nav: lime active ─── */
+        .nav-item{border-radius:13px;color:#6B6D62;transition:background .15s,color .15s}
+        .nav-item:hover{background:#F1F2EC!important;color:#161A12!important}
+        .nav-item-active{background:#E9F6D6!important;color:#1A2E1F!important;font-weight:700!important;border-radius:13px!important;border:none!important}
         /* ─── Grid utilities ─── */
         .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
         .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -221,8 +218,8 @@ export default function App() {
         main.content{overflow-x:clip}
         /* ─── Page header ─── */
         .page-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
-        .page-title{font-size:24px;font-weight:700;color:#1B1B1B;letter-spacing:-.4px;line-height:1.2}
-        .page-sub{font-size:14px;color:#5C5F60;margin-top:4px}
+        .page-title{font-size:25px;font-weight:800;color:#161A12;letter-spacing:-.6px;line-height:1.15}
+        .page-sub{font-size:14px;color:#6B6D62;margin-top:4px}
         /* ─── Responsive 900px ─── */
         @media(max-width:900px){
           .g4{grid-template-columns:repeat(2,1fr)}
@@ -239,8 +236,8 @@ export default function App() {
           .overlay.open{display:block}
           .menuBtn{display:flex!important}
           .topbar{padding:0;flex-direction:column;height:auto}
-          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #E5E2E1}
-          .topbar-row2{display:flex!important;padding:8px 16px;gap:8px;background:#F3F3F3}
+          .topbar-row1{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid #E8E9E3}
+          .topbar-row2{display:flex!important;padding:8px 16px;gap:8px;background:#F4F5F1}
           .hactions{display:none!important}
           .g4{grid-template-columns:1fr 1fr;gap:10px}
           .g3{grid-template-columns:1fr 1fr;gap:10px}
@@ -262,10 +259,10 @@ export default function App() {
           .g4,.g3{grid-template-columns:1fr;gap:8px}
         }
         /* ─── Bottom nav ─── */
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#F9F9F9;border-top:1px solid #E5E2E1;height:64px;align-items:stretch}
+        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#FFFFFF;border-top:1px solid #E8E9E3;height:64px;align-items:stretch}
         .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;padding:6px 2px;font-family:inherit;min-width:0;position:relative}
-        .bnav-item:hover{background:#F3F3F3}
-        .bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:2px;background:#000000;border-radius:0 0 3px 3px}
+        .bnav-item:hover{background:#F4F5F1}
+        .bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:3px;background:#A6E96A;border-radius:0 0 3px 3px}
         /* ─── FAB ─── */
         .quick-fab{display:none;position:fixed;bottom:72px;right:16px;z-index:201}
       `}</style>
@@ -276,9 +273,28 @@ export default function App() {
         {/* ── SIDEBAR ── */}
         <aside className={`sidebar${sidebarOpen ? " open" : ""}`}>
           {/* Brand */}
-          <div style={{ padding: "24px 20px 20px" }}>
-            <div style={{ fontSize: 20, fontWeight: 700, color: "#1B1B1B", letterSpacing: "-.5px", lineHeight: 1.2 }}>tres Studio®</div>
-            <div style={{ fontSize: 12, color: "#5C5F60", marginTop: 2 }}>Creative Finance</div>
+          <div style={{ padding: "22px 18px 14px", display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 34, height: 34, borderRadius: 11, background: T.accent, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Leaf size={18} color={T.lime} strokeWidth={2.2} />
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 800, color: T.text, letterSpacing: "-.5px", lineHeight: 1 }}>tres Studio</div>
+          </div>
+
+          {/* Profile card */}
+          <div style={{ padding: "0 14px 8px" }}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: 10,
+              background: "#FFFFFF", border: `1px solid ${T.border}`,
+              borderRadius: 14, padding: "9px 11px",
+              boxShadow: "0 1px 3px rgba(16,26,16,.04)",
+            }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: T.sideAct, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, color: T.limeText, flexShrink: 0 }}>T</div>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: T.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>tres Studio</div>
+                <div style={{ fontSize: 11, color: T.muted }}>Cuenta empresa</div>
+              </div>
+              <ChevronDown size={15} color={T.muted} style={{ flexShrink: 0 }} />
+            </div>
           </div>
 
           {/* Nav */}
@@ -301,15 +317,15 @@ export default function App() {
                           cursor: "pointer", width: "100%", textAlign: "left",
                           fontSize: 14, fontFamily: "inherit",
                           background: "transparent",
-                          color: active ? "#FFFFFF" : "#5C5F60",
-                          fontWeight: active ? 600 : 400,
+                          color: active ? T.accent : T.sideM,
+                          fontWeight: active ? 700 : 500,
                           transition: "background .15s, color .15s",
                         }}
                       >
-                        <v.icon size={16} color={active ? "#FFFFFF" : "#7E7576"} strokeWidth={active ? 2.2 : 1.75} />
+                        <v.icon size={17} color={active ? T.accent : T.muted} strokeWidth={active ? 2.2 : 1.75} />
                         <span style={{ flex: 1 }}>{v.label}</span>
                         {v.id === "ingresos" && allPending > 0 && (
-                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? "rgba(255,255,255,.2)" : T.amberBg, color: active ? "#FFFFFF" : T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
+                          <span style={{ fontSize: 10, fontWeight: 700, background: active ? T.lime : T.amberBg, color: active ? T.limeText : T.amber, padding: "2px 6px", borderRadius: 8, minWidth: 18, textAlign: "center" }}>{allPending}</span>
                         )}
                         {v.id === "recurrentes" && recurring.filter(r => r.active).length > 0 && (
                           <span style={{ fontSize: 10, fontWeight: 600, background: T.surf2, color: T.muted, padding: "2px 6px", borderRadius: 8 }}>{recurring.filter(r => r.active).length}</span>
@@ -322,17 +338,26 @@ export default function App() {
             ))}
           </nav>
 
-          {/* Footer status */}
-          <div style={{ padding: "14px 18px", borderTop: `1px solid ${T.border}` }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.green : T.amber, flexShrink: 0 }} />
-                <span style={{ fontSize: 11, color: T.muted }}>{hasSupabase ? "Supabase conectado" : "Local (sin Supabase)"}</span>
+          {/* Footer status card */}
+          <div style={{ padding: "10px 14px 16px" }}>
+            <div style={{
+              background: T.accent, borderRadius: 16, padding: "16px 16px 14px",
+              position: "relative", overflow: "hidden",
+            }}>
+              <div style={{ position: "absolute", right: -18, top: -18, width: 70, height: 70, borderRadius: "50%", background: "rgba(166,233,106,.18)" }} />
+              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 8, position: "relative" }}>
+                <div style={{ width: 7, height: 7, borderRadius: "50%", background: hasSupabase ? T.lime : T.amber, flexShrink: 0 }} />
+                <span style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,.85)" }}>{hasSupabase ? "Supabase conectado" : "Modo local"}</span>
               </div>
               {!loading && (
-                <span style={{ fontSize: 10, color: incomes.length > 0 ? T.green : T.red, fontWeight: 600 }}>
-                  {incomes.length} ingresos · {expenses.length} egresos
-                </span>
+                <div style={{ position: "relative" }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#FFFFFF", fontFamily: "'DM Mono',monospace" }}>
+                    {incomes.length + expenses.length} <span style={{ fontWeight: 500, color: "rgba(255,255,255,.6)", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>movimientos</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,.55)", marginTop: 2 }}>
+                    {incomes.length} ingresos · {expenses.length} egresos
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -346,22 +371,23 @@ export default function App() {
                 <Menu size={16} color={T.subtle} />
               </button>
 
-              {/* Search / breadcrumb */}
-              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ position: "relative" }}>
+              {/* Search */}
+              <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 6, maxWidth: 380 }}>
+                <div style={{ position: "relative", width: "100%" }}>
+                  <Search size={15} color={T.muted} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)" }} />
                   <input
                     type="text"
-                    placeholder="Buscar..."
-                    style={{ paddingLeft: 36, paddingRight: 16, paddingTop: 8, paddingBottom: 8, background: "#F3F3F3", border: "1px solid #E5E2E1", borderRadius: 999, fontSize: 13, color: "#1B1B1B", outline: "none", width: 220, fontFamily: "inherit" }}
+                    placeholder="Buscar cualquier cosa…"
+                    style={{ paddingLeft: 40, paddingRight: 48, paddingTop: 10, paddingBottom: 10, background: "#FFFFFF", border: `1px solid ${T.border}`, borderRadius: 999, fontSize: 13, color: T.text, outline: "none", width: "100%", fontFamily: "inherit" }}
                     readOnly
                   />
-                  <svg style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", opacity: .45 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B1B1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                  <span style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", display: "flex", alignItems: "center", gap: 2, background: T.surf2, border: `1px solid ${T.border}`, borderRadius: 7, padding: "2px 7px", fontSize: 11, fontWeight: 600, color: T.muted }}>⌘F</span>
                 </div>
               </div>
 
               <div className="hactions">
                 {/* Month selector */}
-                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#EEEEEE", borderRadius: 999, padding: "7px 16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#FFFFFF", border: `1px solid ${T.border}`, borderRadius: 999, padding: "6px 14px" }}>
                   <button onClick={() => setMonth(m => (m - 1 + 12) % 12)} style={{ background: "none", border: "none", cursor: "pointer", color: T.muted, display: "flex", padding: 2 }}>
                     <ChevronLeft size={12} />
                   </button>
@@ -388,19 +414,24 @@ export default function App() {
                   <Plus size={14} />
                   <span className="btnText">Ingreso</span>
                 </button>
-                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnGhost, padding: "7px 16px", fontSize: 13, gap: 5, color: "#BA1A1A" }}>
+                <button onClick={() => setModal({ type: "expense" })} style={{ ...btnGhost, padding: "9px 16px", fontSize: 13, gap: 5, color: T.red }}>
                   <Plus size={14} />
                   <span className="btnText">Egreso</span>
                 </button>
 
-                {/* Bell + Avatar */}
-                <button style={{ position: "relative", width: 36, height: 36, borderRadius: 999, background: "transparent", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
-                  <Bell size={16} color={T.muted} />
+                {/* Icon actions + Avatar */}
+                {[Settings, HelpCircle].map((Ic, i) => (
+                  <button key={i} style={{ width: 36, height: 36, borderRadius: 999, background: "#FFFFFF", border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                    <Ic size={15} color={T.subtle} />
+                  </button>
+                ))}
+                <button style={{ position: "relative", width: 36, height: 36, borderRadius: 999, background: "#FFFFFF", border: `1px solid ${T.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+                  <Bell size={15} color={T.subtle} />
                   {allPending > 0 && (
-                    <span style={{ position: "absolute", top: 7, right: 7, width: 7, height: 7, borderRadius: "50%", background: T.amber, border: `2px solid #F9F9F9` }} />
+                    <span style={{ position: "absolute", top: 6, right: 6, width: 7, height: 7, borderRadius: "50%", background: T.red, border: `2px solid #FFFFFF` }} />
                   )}
                 </button>
-                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#EEEEEE", border: "1px solid #E5E2E1", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#1B1B1B", flexShrink: 0 }}>
+                <div style={{ width: 34, height: 34, borderRadius: "50%", background: T.accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 800, color: T.lime, flexShrink: 0 }}>
                   T
                 </div>
               </div>
@@ -420,7 +451,7 @@ export default function App() {
             </div>
           </header>
 
-          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "32px", background: "#F9F9F9", scrollbarWidth: "thin", scrollbarColor: "#CFC4C5 transparent" }}>
+          <main className="content" style={{ flex: 1, overflowY: "auto", padding: "32px", background: "#EEEFEA", scrollbarWidth: "thin", scrollbarColor: "#D6D7D0 transparent" }}>
             {loading ? (
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "60vh", flexDirection: "column", gap: 12 }}>
                 <div style={{ width: 28, height: 28, border: `2px solid ${T.border}`, borderTopColor: T.text, borderRadius: "50%", animation: "spin 1s linear infinite" }} />
@@ -458,7 +489,7 @@ export default function App() {
               style={{ position: 'relative' }}
             >
               <v.icon size={20} color={active ? T.accent : T.muted} strokeWidth={active ? 2.2 : 1.75} />
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? T.accentText : T.muted, letterSpacing: '-.1px' }}>
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 400, color: active ? T.accent : T.muted, letterSpacing: '-.1px' }}>
                 {v.label}
               </span>
               {v.id === "ingresos" && allPending > 0 && (

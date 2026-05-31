@@ -14,12 +14,12 @@ function ServiceIcon({ icon, name }) {
 
 function StatusBadge({ active }) {
   if (active) return (
-    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(16,185,129,.1)", color: "#10B981", fontSize: 12, fontWeight: 600 }}>
+    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(30,158,90,.12)", color: "#1E9E5A", fontSize: 12, fontWeight: 600 }}>
       Activo
     </span>
   )
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(245,158,11,.1)", color: "#F59E0B", fontSize: 12, fontWeight: 600 }}>
+    <span style={{ display: "inline-flex", alignItems: "center", padding: "3px 10px", borderRadius: 999, background: "rgba(224,160,48,.14)", color: "#E0A030", fontSize: 12, fontWeight: 600 }}>
       Pausado
     </span>
   )
@@ -87,7 +87,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
           },
         ].map(({ icon, label, value, sub }) => (
           <div key={label} style={{ ...card, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: "default", transition: "background .2s" }}
-            onMouseEnter={e => e.currentTarget.style.background = "#F3F3F3"}
+            onMouseEnter={e => e.currentTarget.style.background = "#F4F5F1"}
             onMouseLeave={e => e.currentTarget.style.background = "#FFFFFF"}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
@@ -103,9 +103,9 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
       </div>
 
       {/* Subscriptions list */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #E5E2E1", borderRadius: 16, overflow: "hidden" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 20, overflow: "hidden" }}>
         {/* Table header */}
-        <div style={{ padding: "16px 24px", borderBottom: "1px solid #E5E2E1", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(249,249,249,.5)" }}>
+        <div style={{ padding: "16px 24px", borderBottom: "1px solid #E8E9E3", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(244,245,241,.6)" }}>
           <span style={{ fontSize: 12, fontWeight: 600, color: T.text, textTransform: "uppercase", letterSpacing: ".05em" }}>Detalle de Suscripciones</span>
           {/* Filter tabs */}
           <div style={{ display: "flex", gap: 4 }}>
@@ -113,9 +113,9 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
               <button key={val} onClick={() => setFilter(val)} style={{
                 padding: "5px 12px", borderRadius: 999,
                 border: "1px solid",
-                borderColor: filter === val ? "#000000" : "#E5E2E1",
+                borderColor: filter === val ? "#1A2E1F" : "#E8E9E3",
                 fontSize: 12, fontWeight: filter === val ? 700 : 400, cursor: "pointer",
-                background: filter === val ? "#000000" : "transparent",
+                background: filter === val ? "#1A2E1F" : "transparent",
                 color: filter === val ? "#FFFFFF" : T.muted,
                 fontFamily: "inherit", transition: "all .15s",
               }}>
@@ -145,13 +145,13 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   padding: "16px 24px",
-                  borderBottom: isLast ? "none" : "1px solid #E5E2E1",
+                  borderBottom: isLast ? "none" : "1px solid #E8E9E3",
                   opacity: r.active ? 1 : 0.6,
                   transition: "background .2s",
                   background: "transparent",
                   position: "relative",
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = "#F9F9F9"}
+                onMouseEnter={e => e.currentTarget.style.background = "#F4F5F1"}
                 onMouseLeave={e => { e.currentTarget.style.background = "transparent"; setOpenMenu(null) }}
               >
                 {/* Left: icon + name */}
@@ -161,7 +161,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                     <div style={{ fontSize: 15, fontWeight: 600, color: T.text }}>{r.name}</div>
                     <div style={{ fontSize: 12, color: T.muted, marginTop: 2 }}>
                       {r.cat}
-                      {expCount > 0 && <span style={{ marginLeft: 8, color: "#7C3AED", fontWeight: 600 }}>· {expCount} egreso{expCount > 1 ? "s" : ""}</span>}
+                      {expCount > 0 && <span style={{ marginLeft: 8, color: "#7C5CFC", fontWeight: 600 }}>· {expCount} egreso{expCount > 1 ? "s" : ""}</span>}
                     </div>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                     {openMenu === r.id && (
                       <div style={{
                         position: "absolute", right: 0, top: "calc(100% + 4px)", zIndex: 50,
-                        background: "#FFFFFF", border: "1px solid #E5E2E1", borderRadius: 12,
+                        background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 12,
                         padding: "6px", minWidth: 160,
                         boxShadow: "0 8px 24px rgba(0,0,0,.1)",
                       }}>
@@ -265,8 +265,8 @@ export default function RecurringView({ recurring, expenses = [], onAdd, onEdit,
                         <span style={{ fontSize: 13, fontWeight: 700, color: T.red, fontFamily: "'DM Mono',monospace" }}>{fmtS(val)}</span>
                       </div>
                     </div>
-                    <div style={{ height: 3, background: "#EEEEEE", borderRadius: 999, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct}%`, background: "#1B1B1B", borderRadius: 999, transition: "width .4s" }} />
+                    <div style={{ height: 3, background: "#EBECE6", borderRadius: 999, overflow: "hidden" }}>
+                      <div style={{ height: "100%", width: `${pct}%`, background: "#1A2E1F", borderRadius: 999, transition: "width .4s" }} />
                     </div>
                   </div>
                 )

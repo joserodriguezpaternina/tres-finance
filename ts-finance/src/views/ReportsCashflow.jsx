@@ -372,7 +372,7 @@ function CashFlowTab({ allInc, allExp, year }) {
                           <div style={{ height: "100%", width: `${pct}%`, borderRadius: 99, background: d.neto >= 0 ? T.green : T.red }} />
                         </div>
                         <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 7px", borderRadius: 20,
-                          background: d.neto >= 0 ? "rgba(68,178,107,.1)" : "rgba(215,43,32,.1)",
+                          background: d.neto >= 0 ? "rgba(30,158,90,.1)" : "rgba(229,72,77,.1)",
                           color: d.neto >= 0 ? T.green : T.red,
                         }}>{d.neto >= 0 ? "+" : "−"}</span>
                       </div>
