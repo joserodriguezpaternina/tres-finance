@@ -91,9 +91,9 @@ function ReportsTab({ allInc, allExp, year }) {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {[
-                    { label: "Ingresos", value: t.inc,  color: active ? "#A6E96A" : T.green },
+                    { label: "Ingresos", value: t.inc,  color: active ? "#9FE870" : T.green },
                     { label: "Egresos",  value: t.exp,  color: active ? "#f87171" : T.red },
-                    { label: "Utilidad", value: t.util, color: active ? (t.util >= 0 ? "#8FD94A" : "#f87171") : (t.util >= 0 ? T.green : T.red) },
+                    { label: "Utilidad", value: t.util, color: active ? (t.util >= 0 ? "#87D455" : "#f87171") : (t.util >= 0 ? T.green : T.red) },
                   ].map(({ label, value, color }) => (
                     <div key={label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <span style={{ fontSize: 11, color: active ? "rgba(255,255,255,.5)" : T.muted }}>{label}</span>
@@ -104,7 +104,7 @@ function ReportsTab({ allInc, allExp, year }) {
                 {t.inc > 0 && (
                   <div style={{ marginTop: 12 }}>
                     <div style={{ height: 3, borderRadius: 99, background: active ? "rgba(255,255,255,.15)" : T.border }}>
-                      <div style={{ height: "100%", borderRadius: 99, width: `${Math.min(100, Math.max(0, margin))}%`, background: active ? "#8FD94A" : T.green, transition: "width .4s" }} />
+                      <div style={{ height: "100%", borderRadius: 99, width: `${Math.min(100, Math.max(0, margin))}%`, background: active ? "#87D455" : T.green, transition: "width .4s" }} />
                     </div>
                     <div style={{ fontSize: 10, color: active ? "rgba(255,255,255,.4)" : T.muted, marginTop: 4 }}>{margin.toFixed(1)}% margen</div>
                   </div>
@@ -125,7 +125,7 @@ function ReportsTab({ allInc, allExp, year }) {
           </div>
           <div style={{ display: "flex", gap: 24 }}>
             {[
-              { label: "IVA cobrado", value: totals.ivaC, color: "#A6E96A" },
+              { label: "IVA cobrado", value: totals.ivaC, color: "#9FE870" },
               { label: "IVA pagado",  value: totals.ivaP, color: "#f87171" },
             ].map(({ label, value, color }) => (
               <div key={label}>
@@ -143,7 +143,7 @@ function ReportsTab({ allInc, allExp, year }) {
                 {t.ivaN > 0 && <AlertCircle size={13} color="#f87171" />}
               </div>
               <div style={{ fontSize: 17, fontWeight: 700, fontFamily: "'DM Mono',monospace", letterSpacing: "-.5px",
-                color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#A6E96A" : "rgba(255,255,255,.3)"
+                color: t.ivaN > 0 ? "#f87171" : t.ivaN < 0 ? "#9FE870" : "rgba(255,255,255,.3)"
               }}>
                 {t.ivaN !== 0 ? fmt(Math.abs(t.ivaN)) : "—"}
               </div>

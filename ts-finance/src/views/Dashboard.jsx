@@ -14,8 +14,8 @@ import { T, CHART, MONTHS, MONTHS_SHORT, fmtS, calcFin, filterM } from '../const
 import { KPI, Pill, Tip, card } from '../ui.jsx'
 
 /* ── Constants ─────────────────────────────────────────────────────────── */
-
-const PIE_COLORS = CHART.scale
+/* CHART es un Proxy theme-aware: leerlo en render, no a nivel de módulo */
+const PIE_COLORS = { get colors() { return CHART.scale }, at(i) { return CHART.scale[i % CHART.scale.length] } }
 
 const NOW = new Date()
 
@@ -429,6 +429,24 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
     [allInc, allExp, year]
   )
 
+  /* ── Indicadores ejecutivos ── */
+  const margen = annualFin.tIb > 0 ? Math.round((annualFin.util / annualFin.tIb) * 100) : 0
+  const dso = useMemo(() => {
+    if (!allPendingInc.length) return 0
+    const tot = allPendingInc.reduce((s, i) => s + Number(i.amount), 0)
+    if (!tot) return 0
+    return Math.round(allPendingInc.reduce((s, i) => s + Math.max(daysAgo(i.date), 0) * Number(i.amount), 0) / tot)
+  }, [allPendingInc])
+  const avgExp3 = useMemo(() => {
+    const last3 = spark6.slice(-3).map(d => d.ve).filter(v => v > 0)
+    return last3.length ? last3.reduce((s, v) => s + v, 0) / last3.length : 0
+  }, [spark6])
+  const runway = avgExp3 > 0 && annualFin.caja > 0 ? annualFin.caja / avgExp3 : null
+  const ticketProm = useMemo(() => {
+    const yr = allInc.filter(i => new Date(i.date).getFullYear() === year)
+    return yr.length ? annualFin.tI / yr.length : 0
+  }, [allInc, annualFin, year])
+
   /* ── Greeting ── */
   const hour = NOW.getHours()
   const greeting = hour < 12 ? "Buenos días" : hour < 19 ? "Buenas tardes" : "Buenas noches"
@@ -566,15 +584,15 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
 
       {/* ── 3. Annual summary strip ───────────────────────────────────── */}
       <div style={{
-        background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 12,
+        background: "var(--surf)", border: "1px solid var(--border)", borderRadius: 12,
         padding: 0, overflow: "hidden", display: "flex", flexDirection: "row",
         boxShadow: "0 1px 2px rgba(0,0,0,.05)",
       }}>
         <div style={{
-          background: "#F4F5F1",
+          background: "var(--surf2)",
           display: "flex", flexDirection: "column", justifyContent: "center",
           padding: "18px 24px", gap: 2, flexShrink: 0, minWidth: 130,
-          borderRight: "1px solid #E8E9E3",
+          borderRight: "1px solid var(--border)",
         }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: T.muted, textTransform: "uppercase", letterSpacing: ".09em" }}>
             Acumulado
@@ -588,6 +606,10 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
             { label: "Ingresos totales", value: fmtS(annualFin.tI), note: `Cobrados: ${fmtS(annualFin.cobr)}`, color: T.green },
             { label: "Egresos totales", value: fmtS(annualFin.tE), color: T.red },
             { label: "Utilidad acumulada", value: fmtS(annualFin.util), color: annualFin.util >= 0 ? T.green : T.red },
+            { label: "Margen neto", value: `${margen}%`, note: "sobre ingresos base", color: margen >= 0 ? T.green : T.red },
+            { label: "DSO cartera", value: `${dso} días`, note: "promedio de cobro", color: dso > 45 ? T.amber : T.text },
+            { label: "Runway", value: runway === null ? "—" : `${runway.toFixed(1)} m`, note: "caja / egreso promedio", color: runway !== null && runway < 2 ? T.red : T.text },
+            { label: "Ticket promedio", value: fmtS(ticketProm), note: "por factura emitida" },
             { label: "IVA neto DIAN", value: fmtS(Math.abs(annualFin.ivaN)), note: annualFin.ivaN >= 0 ? "A pagar" : "A favor", color: annualFin.ivaN >= 0 ? T.red : T.green },
           ].map(({ label, value, note, color }, i, arr) => (
             <div key={label} style={{
@@ -601,7 +623,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
       </div>
 
       {/* ── 4. Main chart ─────────────────────────────────────────────── */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #E8E9E3", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
+      <div style={{ background: "var(--surf)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 2px rgba(0,0,0,.05)" }}>
         <div style={{
           display: "flex", alignItems: "flex-start", justifyContent: "space-between",
           marginBottom: 20, flexWrap: "wrap", gap: 12,
@@ -705,7 +727,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
                     dataKey="value" paddingAngle={3}
                   >
                     {catData.map((_, i) => (
-                      <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                      <Cell key={i} fill={PIE_COLORS.at(i)} />
                     ))}
                   </Pie>
                   <Tooltip content={<PieTip />} />
@@ -718,7 +740,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
                     <div key={i}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-                          <span style={{ width: 8, height: 8, borderRadius: 2, background: PIE_COLORS[i % PIE_COLORS.length], display: "inline-block", flexShrink: 0 }} />
+                          <span style={{ width: 8, height: 8, borderRadius: 2, background: PIE_COLORS.at(i), display: "inline-block", flexShrink: 0 }} />
                           <span style={{ fontSize: 12, color: T.text2 }}>{item.name}</span>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -727,7 +749,7 @@ export default function Dashboard({ fin, incomes, expenses, allInc, allExp, mont
                         </div>
                       </div>
                       <div style={{ height: 3, borderRadius: 4, background: T.surf3, overflow: "hidden" }}>
-                        <div style={{ height: "100%", width: `${share}%`, background: PIE_COLORS[i % PIE_COLORS.length], borderRadius: 4 }} />
+                        <div style={{ height: "100%", width: `${share}%`, background: PIE_COLORS.at(i), borderRadius: 4 }} />
                       </div>
                     </div>
                   )

@@ -14,8 +14,8 @@ function ModalShell({ title, sub, onClose, children }) {
       zIndex: 200, padding: 20,
     }}>
       <div style={{
-        background: "#FFFFFF", borderRadius: 16,
-        border: "1px solid #E8E9E3",
+        background: "var(--surf)", borderRadius: 16,
+        border: "1px solid var(--border)",
         padding: 0, width: "100%", maxWidth: 520,
         maxHeight: "90vh", overflowY: "auto",
         boxShadow: "0 20px 60px rgba(0,0,0,.15)",
@@ -23,14 +23,14 @@ function ModalShell({ title, sub, onClose, children }) {
         {/* Modal header */}
         <div style={{
           display: "flex", justifyContent: "space-between", alignItems: "flex-start",
-          padding: "24px", borderBottom: "1px solid #E8E9E3",
+          padding: "24px", borderBottom: "1px solid var(--border)",
         }}>
           <div>
             <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: T.text, letterSpacing: "-.3px" }}>{title}</h2>
             {sub && <p style={{ margin: "4px 0 0", fontSize: 12, color: T.muted }}>{sub}</p>}
           </div>
           <button onClick={onClose} style={{
-            background: "#F4F5F1", border: "1px solid #E8E9E3", borderRadius: 8,
+            background: "var(--surf2)", border: "1px solid var(--border)", borderRadius: 8,
             width: 32, height: 32, cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
             flexShrink: 0, marginLeft: 12,

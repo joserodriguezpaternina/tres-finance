@@ -4,9 +4,9 @@ import { LineChart, Line, ResponsiveContainer } from 'recharts'
 
 /* ── Card styles ──────────────────────────────────────────────────────── */
 export const card = {
-  background: "#FFFFFF",
+  background: "var(--surf)",
   borderRadius: 14,
-  border: "1px solid #E6E6E3",
+  border: "1px solid var(--border)",
   padding: "20px 22px",
 }
 export const cardFlat = {
@@ -20,7 +20,7 @@ export const cardFlat = {
 export const inp = {
   width:"100%", padding:"10px 13px", borderRadius:10,
   border:`1px solid ${T.border}`, fontSize:13, color:T.text,
-  outline:"none", background:"#FFFFFF", boxSizing:"border-box",
+  outline:"none", background:"var(--surf)", boxSizing:"border-box",
   fontFamily:"inherit", transition:"border-color .15s, box-shadow .15s",
 }
 export const lbl = {
@@ -37,8 +37,8 @@ export const btnPrimary = {
 }
 export const btnGreen  = { ...btnPrimary }
 export const btnLime   = { ...btnPrimary, background: T.lime, color: T.limeText }
-export const btnRed    = { ...btnPrimary, background: "#FFFFFF", color: T.red, border: `1px solid ${T.border}` }
-export const btnGhost  = { ...btnPrimary, background: "#FFFFFF", color: T.subtle, border: `1px solid ${T.border}` }
+export const btnRed    = { ...btnPrimary, background: "var(--surf)", color: T.red, border: `1px solid ${T.border}` }
+export const btnGhost  = { ...btnPrimary, background: "var(--surf)", color: T.subtle, border: `1px solid ${T.border}` }
 export const btnSmall  = { ...btnPrimary, padding: "6px 12px", fontSize: 11 }
 
 /* ── Semantic theme map ──────────────────────────────────────────────── */
@@ -66,7 +66,7 @@ export function KPI({ title, value, sub, icon:Icon, color, badge, spark, trend, 
   const th = getTheme(color)
   if (hero) {
     return (
-      <div style={{ background:"#FFFFFF", borderRadius:14, padding:"20px 22px", border:"1px solid #E6E6E3", display:"flex", flexDirection:"column" }}>
+      <div style={{ background:"var(--surf)", borderRadius:14, padding:"20px 22px", border:"1px solid var(--border)", display:"flex", flexDirection:"column" }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:14, gap:8 }}>
           <span style={{ fontSize:10, fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".09em", lineHeight:1.4, minWidth:0 }}>{title}</span>
           {Icon && (
@@ -150,7 +150,7 @@ export function Pill({ s }) {
 /* ── Status bar ─────────────────────────────────────────────────────── */
 export function StatusBar({ items }) {
   return (
-    <div style={{ display:"flex", background:"#FFFFFF", border:`1px solid ${T.border}`, borderRadius:14, overflow:"hidden" }}>
+    <div style={{ display:"flex", background:"var(--surf)", border:`1px solid ${T.border}`, borderRadius:14, overflow:"hidden" }}>
       {items.map(({ label, value, color, bg }, i) => (
         <div key={label} style={{ flex:1, padding:"16px 20px", borderRight:i<items.length-1?`1px solid ${T.border}`:"none", background:bg||"#FFFFFF" }}>
           <div style={{ fontSize:10, fontWeight:600, color:T.muted, textTransform:"uppercase", letterSpacing:".07em", marginBottom:6 }}>{label}</div>

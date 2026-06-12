@@ -7,12 +7,22 @@
     <meta name="theme-color" content="#062F28" />
     <meta name="description" content="tres Finance® — Sistema operativo financiero de tres Studio® S.A.S." />
     <title>tres Finance®</title>
+    <script>
+      /* Tema antes del primer paint — evita flash */
+      try {
+        var t = localStorage.getItem("tf_theme")
+        if (t !== "dark" && t !== "light") t = "light"
+        document.documentElement.dataset.theme = t
+      } catch (e) { document.documentElement.dataset.theme = "light" }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
       *,*::before,*::after{box-sizing:border-box}
-      html,body{margin:0;padding:0;height:100%;background:#EEECEA}
+      html{background:#EEECEA}
+      html[data-theme="dark"]{background:#0C1210}
+      html,body{margin:0;padding:0;height:100%}
       #root{height:100%}
     </style>
   </head>
